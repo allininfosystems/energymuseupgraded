@@ -1,0 +1,32 @@
+<?php
+$tags = $this->getAllTags();
+$store_Id = Mage::app()->getStore()->getId();
+$tag_number = Mage::getStoreConfig('faq/general/tag_number',$store_Id);
+if($tag_number==null || $tag_number==0) $tag_number = 20;
+$count = 0;
+?>
+<?php if(count($tags)): ?>
+    <div id="magestore-box-tags" class="magestore-faq-tags">
+        <div class="ms-popular-title">
+            <strong><span><?php echo $this->__('Popular Tags') ?></span></strong>
+        </div>
+        <?php foreach($tags as $tag): ?>
+            <?php if($count<$tag_number){ ?>
+                <a title="<?php echo $this->stripTags($tag);?>" onclick="moveright(this);loadfaq(this,'tag','<?php echo $tag ?>',1)" class="faq-tag faq-link"><?php echo $this->stripTags($tag); ?></a>
+            <?php }else{?>
+                <a style="display:none" title="<?php echo $this->stripTags($tag);?>" onclick="moveright(this);loadfaq(this,'tag','<?php echo $tag ?>',1)" class="faq-tag faq-link ms-extra-tags"><?php echo $this->stripTags($tag); ?></a>
+            <?php } ?>
+        <?php $count++; endforeach; ?>
+        <?php if($count>$tag_number){ ?>
+            <div id="ms-action-tags"><a class="ms-view-all-tags" title="View All Tags" onclick="showAllTags()"><?php echo $this->__('View All Tags') ?></a></div>
+        <?php } ?>
+    </div>
+<?php endif; ?>
+<script>
+    function showAllTags(){
+        $('ms-action-tags').hide();
+        for(i=0;i<$$('.ms-extra-tags').length;i++){
+            $$('.ms-extra-tags')[i].style.display = 'block';
+        }
+    }
+</script>

@@ -1,0 +1,235 @@
+<?php
+/**
+ * Unirgy_Giftcert extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * @category   Unirgy
+ * @package    Unirgy_Giftcert
+ * @copyright  Copyright (c) 2008 Unirgy LLC
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+/**
+ * @category   Unirgy
+ * @package    Unirgy_Giftcert
+ * @author     Boris (Moshe) Gurevich <moshe@unirgy.com>
+ */
+?>
+<?php
+/* @var $this Unirgy_Giftcert_Block_Product_Type */
+$_product = $this->getProduct();
+$_amountConfig = $this->getAmountConfig('ugiftcert_amount_config');
+$buy_req = $this->getBuyRequest();
+if($buy_req) {
+    $amount = $buy_req->getData('amount');
+    $recType = $buy_req->getData('recipient_type');
+    $recName = $buy_req->getData('recipient_name');
+    $recEmail = $buy_req->getData('recipient_email');
+    $recMsg = $buy_req->getData('recipient_message');
+    $recAddr = $buy_req->getData('recipient_address');
+
+    $toSelfPrinted = $buy_req->getData('toself_printed');
+}
+
+$_currency = Mage::app()->getStore()->getCurrentCurrency();
+?>
+
+<div class="gift-card-info">
+<?php if ($_amountConfig['type']=='range'): ?>
+
+    <p><label for="amount"><?php echo $this->__('Enter Amount')?>:</label><br/>
+    <?php
+    $_from = $_amountConfig['from'];
+    $_to = $_amountConfig['to'];
+    $_class = 'validate-number-range from-'.$_currency->convert($_from).'-to-'.$_currency->convert($_to);
+    ?>
+    <?php echo str_replace('%s', '', $_currency->getOutputFormat()) ?>
+    <input type="text" id="amount" name="amount" class="input-text required-entry validate-number <?php echo $_class?>" <?php echo isset($amount) ? 'value="' . $amount . '"' : ''; ?>/>
+    (<?php echo $_currency->format($_from) ?> - <?php echo $_currency->format($_to) ?>)
+    </p>
+
+<?php elseif ($_amountConfig['type']=='any'): ?>
+
+    <p><label for="amount"><?php echo $this->__('Enter Amount')?>:</label><br/>
+    <?php echo str_replace('%s', '', $_currency->getOutputFormat()) ?>
+    <input type="text" id="amount" name="amount" class="input-text required-entry validate-number" <?php echo isset($amount) ? 'value="' . $amount . '"' : ''; ?>/>
+    </p>
+
+<?php elseif ($_amountConfig['type']=='dropdown'): ?>
+
+    <p><label for="amount"><?php echo $this->__('Select Amount')?>:</label><br/>
+    <select id="amount" name="amount" class="select required-entry">
+    <?php foreach ($_amountConfig['options'] as $_v): ?>
+        <option value="<?php echo $_v ?>" <?php echo isset($amount) && $amount == $_v ? 'selected="selected"' : ''; ?>><?php echo !$_v ? $this->__('Please select') : $_currency->format($_v) ?></option>
+    <?php endforeach; ?>
+    </select>
+    </p>
+
+<?php elseif ($_amountConfig['type']=='fixed'): ?>
+
+    <p><label><?php echo $this->__('Amount')?>: <?php echo $_currency->format($_amountConfig['amount']) ?></label></p>
+    <input type="hidden" name="amount" value="<?php echo $_amountConfig['amount'] ?>"/>
+
+<?php endif; ?>
+
+    <?php if ($this->getAllowEmail() || $this->getAllowAddress()): ?>
+    <?php echo $this->__('Send this gift certificate(s)')?>:<br/>
+    <label for="recipient_type_myself"><input class="recipient_type" type="radio" name="recipient_type" id="recipient_type_myself" onclick="toggleGiftcertRecipient('myself')" value="0"
+        <?php echo isset($recType) && $recType == 0 ? 'checked="checked"' : !isset($recType) ? 'checked="checked"' : ''; ?>/>  <?php echo $this->__('To myself')?></label>
+    &nbsp;&nbsp;&nbsp;
+    <label for="recipient_type_someone"><input class="recipient_type" type="radio" name="recipient_type" id="recipient_type_someone" onclick="toggleGiftcertRecipient('someone')" value="1"
+        <?php echo isset($recType) && $recType == 1 ? 'checked="checked"' : ''; ?>/> <?php echo $this->__('Directly to someone else')?></label>
+
+    <?php if ($this->getAllowAddress()): ?>
+    <div id="recipient_myself" style="margin-top:10px">
+        <label for="toself_printed"><input type="checkbox" name="toself_printed" id="toself_printed" value="<?php echo $this->__('Yes') ?>"
+            <?php echo isset($toSelfPrinted) && $toSelfPrinted == 'Yes' ? 'checked="checked"' : ''; ?> onchange="toggleCustomMessage(this.checked)"/> <?php echo $this->__('I want to order printed gift certificate(s)')?></label>
+    </div>
+    <?php endif; ?>
+
+    <div id="recipient_info" style="display:none; margin-top:10px;">
+        <p><label for="recipient_name"><?php echo $this->__("Recipient's Name:")?></label><br/>
+        <input type="text" id="recipient_name" name="recipient_name" class="input-text" style="width:100%" <?php echo isset($recName) ? 'value="' . $recName . '"' : ''; ?>/></p>
+
+    <?php if ($this->getAllowEmail()): ?>
+        <p><label for="recipient_email"><?php echo $this->__("Recipient's Email Address:")?></label><br/>
+        <input type="text" id="recipient_email" name="recipient_email" class="input-text validate-email validate-recipient-address" style="width:100%"
+            <?php echo isset($recEmail) ? 'value="' . $recEmail . '"' : ''; ?>/></p>
+    <?php endif; ?>
+
+    <?php if ($this->getAllowAddress()): ?>
+        <p><label for="recipient_address"><?php echo $this->__("Recipient's Postal Address (optional):")?></label><br/>
+        <textarea id="recipient_address" name="recipient_address" class="textarea validate-recipient-address" style="width:100%"><?php echo isset($recAddr) ? $recAddr : ''; ?></textarea></p>
+    <?php endif; ?>
+
+    </div>
+    <?php endif; ?>
+
+    <?php if ($this->getAllowMessage()): ?>
+    <div id="recipient_message_container" style="display:none">
+        <p style="margin-top:10px"><label for="recipient_message"><?php echo $this->__("Add Unique Message (optional):")?></label><br/>
+        <textarea id="recipient_message" name="recipient_message" onkeyup="processMessage(this)" class="textarea" style="width:100%"><?php echo isset($recMsg) ? $recMsg : ''; ?></textarea><br/>
+        <?php if ($this->getMessageMaxLength()): ?>
+        <small class="accent-gray"><?php echo $this->__('Characters Remaining:')?> <span id="gift-card-message-length"><?php echo $this->getMessageMaxLength() ?></span></small>
+        <?php endif; ?>
+        </p>
+    </div>
+    <?php endif; ?>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+
+function toggleGiftcertRecipient(type)
+{
+    var myself = $('recipient_myself'), someone = $('recipient_info'), print = $('toself_printed');
+    var name = $('recipient_name'), email = $('recipient_email'), address = $('recipient_address');
+    var msgBox = $('recipient_message_container'), msg = $('recipient_message');
+
+    if (type=='myself') {
+        $$('#recipient_info input, #recipient_info textarea').each(function(el){ el.value = '' });
+        processMessage();
+
+        myself && myself.show();
+        someone && someone.hide();
+
+        name.removeClassName('required-entry');
+        email && email.removeClassName('required-entry');
+        address && address.removeClassName('required-entry');
+
+        if (print) {
+            print.checked = msg.value ? true : false;
+            if (print.checked) {
+                msgBox && msgBox.show();
+            } else {
+                msgBox && msgBox.hide();
+            }
+        } else {
+            msgBox && msgBox.hide();
+        }
+    } else {
+        if (print) {
+            print.checked = false;
+        }
+
+        myself && myself.hide();
+        someone && someone.show();
+        msgBox && msgBox.show();
+
+        name.addClassName('required-entry');
+        if (!(email && address)) {
+            email && email.addClassName('required-entry');
+            address && address.addClassName('required-entry');
+        }
+    }
+}
+
+function toggleCustomMessage(show)
+{
+    var msg = $('recipient_message_container');
+    if (show) {
+        msg && msg.show();
+    } else {
+        msg && msg.hide();
+        var msg = $('recipient_message');
+        msg && (msg.value = '');
+        processMessage();
+    }
+}
+
+var lastValidMessage = '';
+
+function processMessage()
+{
+    var message = $('recipient_message');
+
+<?php if ($this->getMessageMaxLength()): ?>
+    var maxLength = <?php echo $this->getMessageMaxLength() ?>;
+    var remaining = maxLength-message.value.length;
+    if (remaining<0) {
+        message.value = lastValidMessage;
+        remaining = maxLength-message.value.length;
+    } else {
+        lastValidMessage = message.value;
+    }
+    $('gift-card-message-length').innerHTML = remaining;
+<?php endif; ?>
+
+    var preview = $('gift-card-message-preview');
+    preview && (preview.innerHTML = message.value.replace(/\n/g, '<br/>'));
+}
+
+Validation.addAllThese([
+    ['validate-number-range', '<?php echo addslashes($this->__('Amount is not within the specified range.'))?>', function (v, el) {
+        var m = el.className.match(/\Wfrom-([0-9.]+)-to-([0-9.]+)\W/);
+        if (!m) return true;
+        v = parseNumber(v);
+        return v>=m[1] && v<=m[2];
+    }],
+
+    ['validate-recipient-address', '<?php echo addslashes($this->__("Please enter recipient's email or postal address"))?>', function (v, el) {
+        var email = $('recipient_email');
+        var addr = $('recipient_address');
+        if (!$('recipient_type_someone').checked || !(email && addr)) {
+            return true;
+        }
+        return email.value || addr.value;
+    }]
+]);
+
+Event.observe(window, 'load', function(e){
+    var rec_types = $$('.recipient_type');
+    rec_types.each(function(el){
+       var radio = $(el);
+        if(radio.readAttribute('checked')) {
+            var target = radio.identify().sub('recipient_type_', '');
+            toggleGiftcertRecipient(target);
+        }
+    });
+});
+</script>

@@ -1,0 +1,161 @@
+<?php
+    $store_Id = Mage::app()->getStore()->getId();
+    $type = $this->getRequest()->getParam('faqType');
+    $categories = $this->getAllCategory();
+    $page_size = Mage::getStoreConfig('faq/general/page_size_number',$store_Id);
+    $id = $this->getRequest()->getParam('id');
+?>
+<div class="ms-faq">
+        <div class="faq-title form-group">
+            <div class="row" style="padding-bottom:20px"><h5 style="line-height:20px"><?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('faq_header')->toHtml(); ?></h5></div>
+            <div class="row">
+                <div class="col-md-3 col-sm-4 col-xs-12 text-center">
+                <h1 style="margin-top: 0px"><?php echo($this->__("FAQ Topics"));?></h1>
+                </div>
+                <div class="col-md-offset-1 col-sm-7 col-xs-12 text-center">
+                   
+                                <div class="row">
+                                    <div class="col-xs-8 col-sm-10">
+                                        <input type="text" name="keyword" id="keyword"placeholder="<?php echo $this->__('Search FAQ') ?>" class="form-control input-text required-entry" size="30" maxlength="150" />
+                                    </div>
+                                    <div class="col-xs-4 col-sm-2 text-left">
+                                        <button type="button" onclick="ajaxSearch()" class="btnSearch btn btn-primary" title="<?php echo $this->__('Search FAQ');?>"><span><span><?php echo $this->__('Search');?></span></span></button> 
+                                    </div>
+                                    <div class="col-xs-12 validation-advice text-left" id="faq-validation" style="display:none"><?php echo $this->__('Please fill your keyword in Search box.');?></div>
+                                </div>      
+                  
+                </div>
+            </div>
+        </div>
+        <div class="form-group faq-container">
+            <div class="row row-container">
+                <div id="faq-container"<?php if($this->getRequest()->getParam('id')): ?>class="active"<?php endif;?>>
+                    <div class="faq-left col-md-3 col-sm-4 col-xs-6">
+                        <ul class="form-group">
+                            <li onclick="moveright(this)"><a title="<?php echo $this->__('Most FAQs');?>" onclick="loadfaq(this,'most',null,1)" class="faq-link faq-navigator first<?php if(!$id&&($type=='most'|| $type== null)): ?> active<?php endif;?>"><span class="glyphicon small glyphicon-chevron-right">&nbsp;</span><?php echo $this->__("Most FAQs")  ?></a></li>
+                            <!--li><a title="<?php //echo $this->__('All Frequently Asked Questions');?>" onclick="loadfaq(this,'all',null,1)" class="faq-link faq-navigator"><span class="glyphicon small glyphicon-chevron-right">&nbsp;</span><?php //echo $this->__("All FAQs")  ?></a></li-->
+                            <?php $i=1; foreach($categories as $category):?>
+                            <li onclick="moveright(this)"><a title="<?php echo $this->stripTags($category->getName());?>" onclick="loadfaq(this,'category',<?php echo $category->getId();?>,1)" class="faq-link faq-navigator <?php if($i>=count($categories)):?> last<?php endif; ?>"><span class="glyphicon small glyphicon-chevron-right">&nbsp;</span><?php echo $this->stripTags($category->getName());  ?></a></li></li>
+                            <?php $i++; endforeach;?>
+                        </ul>
+                        <div class="faq-tags form-group">
+                            <?php echo $this->getChildHtml('faq.tags');?>
+                        </div>
+                    </div>
+                    <div class="faq-main col-md-9 col-sm-8 col-xs-6" id="faq-main">
+                        <a onclick="moveback()" id="title-back" class="hidden-lg hidden-md hidden-sm form-group text-center"><span class="glyphicon small glyphicon-chevron-left">&nbsp;</span><?php if($this->getRequest()->getParam('id')) echo $this->__("Back");?></a>
+                        <div class="form-group" id="faq_listing">
+                            <?php echo $this->getChildHtml('faq.listing'); ?>
+                        </div>
+                        <div class="faq-fade" id="faq-fade" style="display: none;"></div>
+                        <input type="hidden" value='most' id="faqtype" name="type"/> 
+                        <input type="hidden" value='' id="faqid" name="categoryId"/> 
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+<script type="text/javascript">
+    function loadfaq(el,type,category_id,page){
+        $('faqtype').value= type;
+        $('faqid').value = category_id;
+        if(!el.hasClassName('active')){
+            var url = '<?php echo $this->getUrl('faq/index/ajaxview') ?>';
+            var param = {faqType: type, faqId: category_id,page:page};
+            var link = $$('.faq-link');
+            link.each(function(link){
+                link.removeClassName('active');
+            });
+            el.addClassName('active');
+            $('faq-fade').show();
+            new Ajax.Request(url, {
+                method:'get',
+                parameters:param,
+                onComplete: function(transport) {
+                  document.getElementById("faq_listing").innerHTML = transport.responseText.evalJSON();
+                  $('faq-fade').hide();
+                }
+              });
+        }
+    }
+    function ajaxSearch(){
+        if(!$('keyword').value.trim()){
+            $('faq-validation').show();
+            $('keyword').addClassName('validation-failed');
+        }else{ 
+            moveright(null);
+            var url = '<?php echo $this->getUrl('faq/index/ajaxview') ?>';
+            var param = {faqType: 'search', faqId: $('keyword').value,page:1};
+            $('faq-fade').show();  
+            new Ajax.Request(url, {
+                method: 'get',
+                parameters:param,
+                onComplete: function(transport){
+                    document.getElementById("faq_listing").innerHTML = transport.responseText.evalJSON(); 
+                    var link = $$('.faq-link');
+                    link.each(function(link){
+                        link.removeClassName('active');
+                    }); 
+                    $('faq-validation').hide();
+                    $('keyword').removeClassName('validation-failed');
+                    $('faq-fade').hide();
+                },
+            });
+        }
+	return false;
+    }
+    function loadpage(el,type,category_id,page){
+        if(!el.hasClassName('active')){
+            var url = '<?php echo $this->getUrl('faq/index/ajaxview') ?>';
+            var param = {faqType: type, faqId: category_id,page:page};
+            var link = $$('.faq-page');
+            $('faq-fade').show();
+            new Ajax.Request(url, {
+                method:'get',
+                parameters:param,
+                onComplete: function(transport) {
+                  document.getElementById("faq_listing").innerHTML = transport.responseText.evalJSON();
+                  $('faq-fade').hide();
+                }
+              });
+            if(screen.width < 768)     
+              window.scroll(0,$('faq-container').cumulativeOffset().top)
+        }
+    }
+    function faqOpen(el){    
+        if($('faq-question-'+el).hasClassName('active')){
+            $('faq-question-'+el).removeClassName('active'); 
+        }else{
+            $('faq-question-'+el).addClassName('active'); 
+        }
+        Effect.toggle('faq-content-'+el, 'blind', { duration: 0.1 });
+     }
+     $('keyword').observe('keypress', submitSearch);
+     function submitSearch(event){
+         if(event.keyCode == 13){
+             ajaxSearch();
+         }
+     }
+     function moveright(el){
+         if(el == null){
+            var title = 'Search results';
+            var $html = '<span class="glyphicon small glyphicon-chevron-left">&nbsp;</span>'+title;
+            document.getElementById("title-back").innerHTML = $html;
+            $('faq-container').addClassName('active');
+         }else{
+            if(el.readAttribute('title'))
+                var title = el.readAttribute('title');
+            else
+               var title = el.down('a').readAttribute('title');
+            var $html = '<span class="glyphicon small glyphicon-chevron-left">&nbsp;</span>'+title;
+            document.getElementById("title-back").innerHTML = $html;
+            $('faq-container').addClassName('active');
+         }
+     }
+     function moveback(){
+         $('faq-container').removeClassName('active');
+     }
+     window.onresize = function(){
+         if(screen.width > 767) moveback();
+     }
+</script>

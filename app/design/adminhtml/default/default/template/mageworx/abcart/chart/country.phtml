@@ -1,0 +1,21 @@
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+<script type='text/javascript'>
+    google.load('visualization', '1', {'packages': ['geochart']});
+    google.setOnLoadCallback(drawRegionsMap);
+
+    function drawRegionsMap() {
+        var data = google.visualization.arrayToDataTable(<?php echo Zend_Json::encode($this->getSeriesData()) ?>);
+
+        var options = {
+            'colorAxis':{
+                minValue: 0,
+                colors: ['#ffffff', '#ff6000']
+            }
+        };
+
+        var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    };
+</script>
+
+<div id="chart_div" style="width: 70%; left: 15%"></div>

@@ -1,0 +1,108 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="page-title">
+    <h1><?php echo $this->__('Your order has been received') ?></h1>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<p><strong><?php echo $this->__('Thank you for your purchase!') ?></strong></p>
+
+<?php $_customerId = Mage::getSingleton('customer/session')->getCustomerId(); $lastOrderId = Mage::getSingleton('checkout/session')->getLastOrderId(); $order = Mage::getSingleton('sales/order'); $order->load($lastOrderId); $_totalData =$order->getData(); $_sub = $_totalData['subtotal']; ?> 
+<img src="https://shareasale.com/sale.cfm?tracking=<?php echo $this->getOrderId() ?>&amount=<?php echo $_sub ?>&transtype=sale&merchantID=14777" width="1" height="1">
+
+<?php 
+
+$lastOrderId = Mage::getSingleton('checkout/session')->getLastOrderId();
+$order = Mage::getSingleton('sales/order');
+$order->load($lastOrderId);
+
+$order = Mage::getModel('sales/order')->load($lastOrderId);
+foreach ($order->getAllItems() as $item) {
+
+$categoryIds = $item->getCategoryIds();
+$categoryName = "";
+
+foreach($categoryIds as $categoryId){
+$category = Mage::getModel('catalog/category')->load($categoryId);
+$categoryName = $category->getName();
+}
+
+$productArray[] = array(
+"product_sku" => $item->getSku(),
+"product_magento_id" => $item->getProductId(),
+"product_name" => $item->getName(),
+"product_qty" => $item->getQtyOrdered(),
+"product_price" => $item->getPrice(),
+"product_category" => $categoryName!=""?$categoryName:"default",
+"product_discount_amount" => $item->getDiscountAmount(),
+"product_row_price" => $item->getPrice() - $item->getDiscountAmount(),
+);
+};
+
+$_totalData = $order->getData();
+$_subtotal = $_totalData['subtotal'];
+$_orderID = $_totalData['increment_id'];
+
+?>
+
+<iframe src="//adserver.veruta.com/track.fcgi?merchantid=2257725618&eventid=1&ifmode=1&category=<?php $array = array();foreach($productArray as $key):echo $array[] = $key['product_sku'];endforeach; ?>&itemid=<?php $array = array();foreach($productArray as $key):echo $array[] = $key['product_magento_id'];endforeach; ?>" scrolling="no" width="1" height="1" marginheight="0" marginwidth="0" frameborder="0"></iframe>
+
+
+<?php if ($this->getOrderId()):?>
+<?php if ($this->getCanViewOrder()) :?>
+
+
+
+    <p><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
+<?php  else :?>
+    <p><?php echo $this->__('Your order # is: %s.', $this->escapeHtml($this->getOrderId())) ?>.</p>
+<?php endif;?>
+    <p><?php echo $this->__('You will receive an order confirmation email with details of your order and a link to track its progress.') ?></p>
+<?php if ($this->getViewOrder() && $this->getCanPrintOrder()) :?>
+    <p>
+        <?php echo $this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
+        <?php echo $this->getChildHtml() ?>
+    </p>
+<?php endif;?>
+<?php endif;?>
+
+<?php if ($this->getAgreementRefId()): ?>
+    <p><?php echo $this->__('Your billing agreement # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getAgreementUrl()), $this->escapeHtml($this->getAgreementRefId())))?></p>
+<?php endif;?>
+
+<?php if ($profiles = $this->getRecurringProfiles()):?>
+<p><?php echo $this->__('Your recurring payment profiles:'); ?></p>
+<ul>
+<?php foreach($profiles as $profile):?>
+<?php $profileIdHtml = ($this->getCanViewProfiles() ? sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getProfileUrl($profile)), $this->escapeHtml($this->getObjectData($profile, 'reference_id'))) : $this->escapeHtml($this->getObjectData($profile, 'reference_id')));?>
+    <li><?php echo $this->__('Payment profile # %s: "%s".', $profileIdHtml, $this->escapeHtml($this->getObjectData($profile, 'schedule_description')))?></li>
+<?php endforeach;?>
+</ul>
+<?php endif;?>
+
+<div class="buttons-set">
+    <button type="button" class="button" title="<?php echo $this->__('Continue Shopping') ?>" onclick="window.location='http://energymuse.com/'"><span><span><?php echo $this->__('Continue Shopping') ?></span></span></button>
+</div>

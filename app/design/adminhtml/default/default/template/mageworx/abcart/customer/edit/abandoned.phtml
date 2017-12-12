@@ -1,0 +1,31 @@
+<div class="entry-edit">
+    <div class="entry-edit-head"><h4 class="icon-head head-customer-sales-statistics"><?php echo Mage::helper('customer')->__('Sales Statistics') ?></h4></div>
+    <div class="grid">
+        <table cellspacing="0" class="data">
+            <thead>
+                <tr class="headings">
+                    <th><?php echo Mage::helper('catalog')->__('Website') ?></th>
+                    <th><?php echo Mage::helper('catalog')->__('Store') ?></th>
+                    <th><?php echo Mage::helper('catalog')->__('Store View') ?></th>
+                    <th><?php echo Mage::helper('mageworx_abcart')->__('Lifetime Sales') ?></th>
+                </tr>
+            </thead>
+            <?php if ($this->getRows()): ?>
+            <tbody>
+                <tr>
+                    <td><?php echo $this->formatCurrency($_row->getLifetime(), $_row->getWebsiteId()) ?></td>
+                    <td><?php echo $this->formatCurrency($_row->getAvgsale(), $_row->getWebsiteId()) ?></td>
+                    <td><?php echo $this->formatCurrency($_row->getAvgsale(), $_row->getWebsiteId()) ?></td>
+                    <td><?php echo $this->formatCurrency($_row->getAvgsale(), $_row->getWebsiteId()) ?></td>
+                </tr>
+            </tbody>
+            <?php else: ?>
+            <tbody>
+            <tr class="no-display"><td colspan="5"></td></tr>
+            </tbody>
+            <?php endif; ?>
+        </table>
+    </div>
+</div>
+<div class="clear"></div>
+<br/>

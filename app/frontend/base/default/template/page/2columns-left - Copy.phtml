@@ -1,0 +1,137 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Template for Mage_Page_Block_Html
+ */
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->getLang() ?>" lang="<?php echo $this->getLang() ?>">
+<head>
+<?php echo $this->getChildHtml('head') ?>
+
+<script type="text/javascript">
+function showElement(layer){
+	var myLayer = document.getElementById(layer);
+	if(myLayer.style.display=="none"){
+		myLayer.style.display="block";
+		myLayer.backgroundPosition="top";
+	} else { 
+		myLayer.style.display="none";
+	}
+}
+</script>
+
+</head>
+<body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
+<?php echo $this->getChildHtml('after_body_start') ?>
+<div class="wrapper">
+    <?php echo $this->getChildHtml('global_notices') ?>
+    <div class="page">
+        <?php echo $this->getChildHtml('header') ?>
+        <div class="main-container col2-left-layout">
+            <div class="main">
+               <div id="overlay_shopping_container">
+                 <?php //echo $this->getChildHtml('breadcrumbs') ?>
+                 <div class="col-main">
+                    <?php echo $this->getChildHtml('global_messages') ?>
+                    <?php echo $this->getChildHtml('content') ?>
+                 </div>
+                 <div id="overlay_shoppingnav" class="content">
+                  <!-- <div class="col-left sidebar"> -->
+                 <h3>&nbsp;&nbsp;OUR JEWELRY</h3>
+                 <h4>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo Mage::getBaseUrl() ?>women-s-jewelry.html">Women</a></h4>
+                 <h4>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo Mage::getBaseUrl() ?>men-s-jewelry.html">Men</a></h4>
+                 <h4>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo Mage::getBaseUrl() ?>bracelets.html">Bracelets</a></h4>
+                 <h4>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo Mage::getBaseUrl() ?>earrings.html">Earrings</a></h4>
+                 <h4>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo Mage::getBaseUrl() ?>necklaces.html">Necklaces</a></h4>
+                 <h4>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo Mage::getBaseUrl() ?>belts.html">Belts</a></h4>
+                 <h4>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo Mage::getBaseUrl() ?>coin-jewelry.html">Coin Jewelry</a></h4>
+                 <h4>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo Mage::getBaseUrl() ?>pendant-jewelry.html">Pendant Jewelry</a></h4>
+                 <h4>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo Mage::getBaseUrl() ?>top-customer-picks.html">Top Customer Picks</a></h4>
+				 <h4><a href="#" class="button" onclick="javascript:showElement('v-menu1')">&nbsp;&nbsp;&nbsp;&nbsp;Shop by Collection</a></h4>
+                	 <ul id="v-menu1" class="v-menu1" style="display: none;">
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-collection/chakra-collection.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Chakra" Collection</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-collection/discover-yourself-collection.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Discover Yourself" Collection</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-collection/elements-collection.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Elements" Collection</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-collection/expressions-collection.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Expressions" Collection</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-collection/goddess-collection.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Goddess" Collection</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-collection/miracles-collection.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Miracles" Collection</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-collection/sacred-charms-collection.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Sacred Charms" Collection</a></li>
+                        <li>&nbsp;</li>
+					 </ul>
+				<h4><a href="#" class="button" onclick="javascript:showElement('v-menu2')">&nbsp;&nbsp;&nbsp;&nbsp;Shop by Color</a></h4>
+                	 <ul id="v-menu2" class="v-menu2" style="display: none;">
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/black.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Black</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/blue.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Blue</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/brown.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brown/Beige</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/clear.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clear(Quartz)</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/gold.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gold</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/gray.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gray</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/green.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Green</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/orange.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Orange</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/pink.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pink</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/purple.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Purple</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/red.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Red</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/silver.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Silver</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/white.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;White</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-color/yellow.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yellow</a></li>
+                        <li>&nbsp;</li>
+					 </ul>
+				 <h4><a href="#" class="button" onclick="javascript:showElement('v-menu3')">&nbsp;&nbsp;&nbsp;&nbsp;Shop by Intention</a></h4>
+                	 <ul id="v-menu3" class="v-menu3" style="display: none;">
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-intention/balance-and-focus.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Balance and Focus</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-intention/health-and-wellness.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Health & Performance</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-intention/love-romance.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Love & Romance</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-intention/new-beginnings.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New Beginnings</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-intention/passion-creativity.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Passion & Creativity</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-intention/spirituality-faith.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Spirituality & Faith</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-intention/wealth-success.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wealth & Success</a></li>
+                        <li>&nbsp;</li>
+					 </ul>
+				 <h4><a href="#" class="button" onclick="javascript:showElement('v-menu4')">&nbsp;&nbsp;&nbsp;&nbsp;Shop by Price</a></h4>
+                	 <ul id="v-menu4" class="v-menu4" style="display: none;">
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-price/under-100.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Under $100</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-price/100-to-199-99.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$100 to $199.99</a></li>
+                        <li><a href="<?php echo Mage::getBaseUrl() ?>shop-by-price/200-and-over.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$200 and Over</a></li>
+                        <li>&nbsp;</li>
+					 </ul>
+				 <h4>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo Mage::getBaseUrl() ?>special-items.html">Special Items</a></h4>
+                 <h4>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo Mage::getBaseUrl() ?>apothia-if-scents.html">Apothia "IF" Scents</a></h4>
+                 <h4>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo Mage::getBaseUrl() ?>discontinued-clearance-items.html">Clearance Items</a></h4>
+                 <br />
+				 <?php echo $this->getChildHtml('left') ?></div>
+               </div>  
+            </div>
+        </div>
+        <?php echo $this->getChildHtml('footer') ?>
+        <?php echo $this->getChildHtml('before_body_end') ?>
+    </div>
+</div>
+<?php echo $this->getAbsoluteFooter() ?>
+</body>
+</html>

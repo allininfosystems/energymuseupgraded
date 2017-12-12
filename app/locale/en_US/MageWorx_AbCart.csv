@@ -1,0 +1,94 @@
+Abandoned,Abandoned
+"Abandoned Again","Abandoned Again"
+"Abandoned At","Abandoned At"
+"Abandoned Cart Recovery","Abandoned Cart Recovery"
+"Abandoned Cart Reminder #1","Abandoned Cart Reminder #1"
+"Abandoned Cart Reminder #2","Abandoned Cart Reminder #2"
+"Abandoned Cart Reminder #3","Abandoned Cart Reminder #3"
+"Abandoned Carts","Abandoned Carts"
+"Abandoned Carts Alert Rules","Abandoned Carts Alert Rules"
+"Abandoned Rate","Abandoned Rate"
+"Abandoned Revenue","Abandoned Revenue"
+"Abandonment Rate","Abandonment Rate"
+Active,Active
+"Add New Rule","Add New Rule"
+"Alert Email Rules","Alert Email Rules"
+"Alert Status","Alert Status"
+"Alerts Log","Alerts Log"
+"Apply the rule only to cart items matching the following conditions (leave blank for all items)","Apply the rule only to cart items matching the following conditions (leave blank for all items)"
+"Apply to","Apply to"
+"Attribute Value","Attribute Value"
+"Cancellation Event","Cancellation Event"
+"Cart Overview","Cart Overview"
+"Cart Status","Cart Status"
+"Cart Total","Cart Total"
+"Carts Abandoned","Carts Abandoned"
+"Carts Abandoned Store Views","Carts Abandoned Store Views"
+"Carts Abandoned by Customer Groups","Carts Abandoned by Customer Groups"
+"Carts Abandoned in Locations","Carts Abandoned in Locations"
+"Carts Abandoned on Store Views","Carts Abandoned on Store Views"
+"Carts Abandoned with Devices","Carts Abandoned with Devices"
+"Carts Recovered","Carts Recovered"
+"Carts Started","Carts Started"
+Completed,Completed
+"Completed Manually","Completed Manually"
+Conditions,Conditions
+Coupon,Coupon
+Credit,Credit
+"Customer Email","Customer Email"
+"Customer Group","Customer Group"
+"Customer Groups","Customer Groups"
+"Customer Location","Customer Location"
+"Customer Name","Customer Name"
+"Delete Rule","Delete Rule"
+Deleted,Deleted
+Desktop,Desktop
+"Device Type","Device Type"
+"Edit Rule '%s'","Edit Rule '%s'"
+"Email Settings","Email Settings"
+"Email Template","Email Template"
+"Email Templates","Email Templates"
+"Email Templates Report","Email Templates Report"
+"Emails Sent","Emails Sent"
+"Email settings","Email settings"
+"Enable E-mail Sending","Enable E-mail Sending"
+"Enable Login Customer From E-mail","Enable Login Customer From E-mail"
+Inactive,Inactive
+"Lifetime Sales","Lifetime Sales"
+"Link Clicked","Link Clicked"
+"Lost Revenue","Lost Revenue"
+"MageWorx &gt; Abandoned Cart Recovery","MageWorx &gt; Abandoned Cart Recovery"
+"Main Settings","Main Settings"
+"Manage Rules","Manage Rules"
+Mobile,Mobile
+"New Rule","New Rule"
+"No Coupon","No Coupon"
+"Order #","Order #"
+"Order Placed","Order Placed"
+"Pending Alerts","Pending Alerts"
+"Please select alert(s) to delete.","Please select alert(s) to delete."
+"Quote cannot be recovered","Quote cannot be recovered"
+Recovered,Recovered
+"Recovered At","Recovered At"
+"Recovered Carts","Recovered Carts"
+"Recovered Revenue","Recovered Revenue"
+Reports,Reports
+Rule,Rule
+"Rule Information","Rule Information"
+"Rule Name","Rule Name"
+Rules,Rules
+Sales,Sales
+"Sales Statistics","Sales Statistics"
+"Save Rule","Save Rule"
+"Scheduled At","Scheduled At"
+"Send In (hours)","Send In (hours)"
+Sent,Sent
+"Sent At","Sent At"
+"Show Report","Show Report"
+"Store View","Store View"
+Tablet,Tablet
+Total,Total
+"Total of %d alert(s) have been deleted.","Total of %d alert(s) have been deleted."
+"Wrong rule specified.","Wrong rule specified."
+"Your cart was successfully recovered","Your cart was successfully recovered"
+n/a,n/a

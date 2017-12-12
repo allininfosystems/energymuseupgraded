@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/storelocator.css</stylesheet></action>
+		</reference>
+		<reference name="footer_links">
+            <action method="addLink" translate="label title" module="storelocator"><label>Store Locator</label><url>storelocator</url><title>Store Locator</title><prepare>true</prepare></action>
+        </reference>
+    </default>
+    <storelocator_index_index>
+        <reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+		</reference>
+		<reference name="content">
+            <block type="storelocator/store" name="storelocator" template="storelocator/storelocator.phtml" />
+        </reference>
+    </storelocator_index_index>
+	<storelocator_view_detail>
+        <reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+		</reference>
+		<reference name="content">
+            <block type="storelocator/store" name="storelocator" template="storelocator/view.phtml" />
+        </reference>
+    </storelocator_view_detail>
+</layout> 

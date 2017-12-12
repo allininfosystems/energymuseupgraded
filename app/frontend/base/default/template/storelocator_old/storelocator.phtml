@@ -1,0 +1,155 @@
+<?php
+$country = Array();
+$collection = Mage::getModel('storelocator/storelocator')->getStores();
+foreach($collection as $item){
+	$country_state[$item->getCountry()][] = $item->getState();
+}
+?>
+<div class="page-title">
+	<h1><?php echo $this->__('Retail Locator') ?></h1>
+</div>
+<div class="page-content">
+	<div class="page-select">
+		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+		<tr>
+			<td>
+				<select name="store_country" id="store_country" onchange="validate(this.value);">
+					<option value=""><?php echo $this->__('Select Country'); ?></option>
+					<?php foreach($country_state as $key=>$val){?>
+					<option value="<?php echo $key; ?>"><?php echo $key; ?></option>
+					<?php } ?>
+				</select>
+			</td>
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+		<tr>
+			<td>
+				<select name="store_state" id="store_state" onchange="getObjects_state(this.value);">
+					<option value=""><?php echo $this->__('Select State');?></option>
+				</select>
+			</td>
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+		<tr>
+			<td>
+				<select name="store_pin" id="store_pin" onchange="getObjects_pin(this.value);">
+					 <option value=""><?php echo $this->__('PIN/ZIP');?></option>
+				</select>
+			</td>
+		</tr>
+		</table>
+	</div>
+	<div class="page-result">
+	<div id="page-content-country">
+		<div class="space">
+			<h3><?php echo $this->__('Retail Locations') ?></h3>
+			<ul class="stores" id="stores">
+				<?php $i=0;foreach($collection as $item){ if($i== $item->getDisplay_limit()) {echo "Restricted By Admin ! Please Pick Country/State/PIN";break;} ?>
+				<li class="shop">
+					<table border="0" cellpadding="0" cellspacing="0" width="100%">
+					<tr>
+						<td valign="top" width="204"><img src="<?php echo Mage::getBaseUrl('media').'stores/'.$item->getImage();?>" alt="" width="204" height="150" /></td>
+						<td class="desc">
+							<table border="0" cellpadding="0" cellspacing="0">
+								<tr><td><strong><a href="<?php echo $this->getUrl('storelocator/view/detail/').'id/'.$item->getId().'/';?>"><?php echo $item->getTitle();?></a></strong></td></tr>
+								<tr><td><?php echo $item->getCountry();?></td></tr>
+								<tr><td><?php echo $item->getState();?></td></tr>
+								<tr><td><?php echo $item->getCity();?></td></tr>
+								<tr><td><?php echo $item->getAddress();?></td></tr>
+								<tr><td><?php echo $this->__('Postcode') ?> : <?php echo $item->getPincode();?></td></tr>
+								<tr><td><?php echo $this->__('Tel') ?> : <?php echo $item->getPhone();?></td></tr>
+							</table>
+						</td>
+					</tr>
+					</table>
+				</li>
+				<?php 
+				$i++;
+				} ?>
+			</ul>
+		</div>
+	</div>
+	</div>
+</div>
+<script type="text/javascript">
+if(window.XMLHttpRequest)
+{
+var http=new XMLHttpRequest();
+}
+else
+{
+var http=new ActiveXObject("Microsoft.XMLHTTP");
+}
+function validate(name)
+	{
+document.getElementById('page-content-country').innerHTML='<img src="<?php echo $this->getSkinUrl('images/data-loader.gif');?>" />';
+document.getElementById('store_state').innerHTML='<option value="">Loading ...</option>';
+	http.abort();
+	http.open("GET","<?php echo $this->getSkinUrl('storelocator/fetch_country.php?c_id='); ?>"+name,true);
+	http.onreadystatechange=function()
+	     {
+		if(http.readyState==4)
+			{
+				document.getElementById('page-content-country').innerHTML=http.responseText;
+				state_get(name);
+			}
+		 }
+	  http.send(null);
+	}
+function state_get(name)
+	{
+	http.abort();
+    http.open("GET","<?php echo $this->getSkinUrl('storelocator/fetch_state.php?c_id='); ?>"+name,true);
+	http.onreadystatechange=function()
+	     {
+		if(http.readyState==4)
+			{
+			document.getElementById('store_state').innerHTML=http.responseText;
+			}
+		 }
+	  http.send(null);
+	}
+function getObjects_state(state)
+	{
+document.getElementById('page-content-country').innerHTML='<img src="<?php echo $this->getSkinUrl('images/data-loader.gif');?>" />';
+document.getElementById('store_pin').innerHTML='<option value="">Loading ...</option>';
+	http.abort();
+	http.open("GET","<?php echo $this->getSkinUrl('storelocator/fetch_state_des.php?c_id='); ?>"+state,true);
+	http.onreadystatechange=function()
+	     {
+		if(http.readyState==4)
+			{
+				document.getElementById('page-content-country').innerHTML=http.responseText;
+				get_pin(state);
+			}
+		 }
+	  http.send(null);
+	}
+function get_pin(name)
+	{
+	http.abort();
+    http.open("GET","<?php echo $this->getSkinUrl('storelocator/fetch_pin.php?c_id='); ?>"+name,true);
+	http.onreadystatechange=function()
+	     {
+		if(http.readyState==4)
+			{
+			document.getElementById('store_pin').innerHTML=http.responseText;
+			}
+		 }
+	  http.send(null);
+	}
+function getObjects_pin(state)
+	{
+document.getElementById('page-content-country').innerHTML='<img src="<?php echo $this->getSkinUrl('images/data-loader.gif');?>" />';
+	http.abort();
+	http.open("GET","<?php echo $this->getSkinUrl('storelocator/fetch_pin_des.php?c_id='); ?>"+state,true);
+	http.onreadystatechange=function()
+	     {
+		if(http.readyState==4)
+			{
+				document.getElementById('page-content-country').innerHTML=http.responseText;
+			}
+		 }
+	  http.send(null);
+	}
+</script>

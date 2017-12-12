@@ -1,0 +1,138 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="page-title">
+    <h1><?php echo $this->__('Your order has been received.') ?></h1>
+</div>
+<?php echo $this->getMessagesBlock()->toHtml() ?>
+<h2 class="sub-title"><?php echo $this->__('Thank you for your purchase!') ?></h2>
+
+<?php if ($this->getOrderId()):?>
+<?php if ($this->getCanViewOrder()) :?>
+    <p><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
+<?php  else :?>
+    <p><?php echo $this->__('Your order # is: %s.', $this->escapeHtml($this->getOrderId())) ?></p>
+<?php endif;?>
+    <p><?php echo $this->__('You will receive an order confirmation email with details of your order and a link to track its progress.') ?></p>
+<?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
+    <p>
+        <?php echo $this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
+        <?php echo $this->getChildHtml() ?>
+    </p>
+<?php endif;?>
+<?php endif;?>
+
+<?php if ($this->getAgreementRefId()): ?>
+    <p><?php echo $this->__('Your billing agreement # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getAgreementUrl()), $this->escapeHtml($this->getAgreementRefId())))?></p>
+<?php endif;?>
+
+<?php if ($profiles = $this->getRecurringProfiles()):?>
+<p><?php echo $this->__('Your recurring payment profiles:'); ?></p>
+<ul class="disc">
+<?php foreach($profiles as $profile):?>
+<?php $profileIdHtml = ($this->getCanViewProfiles() ? sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getProfileUrl($profile)), $this->escapeHtml($this->getObjectData($profile, 'reference_id'))) : $this->escapeHtml($this->getObjectData($profile, 'reference_id')));?>
+    <li><?php echo $this->__('Payment profile # %s: "%s".', $profileIdHtml, $this->escapeHtml($this->getObjectData($profile, 'schedule_description')))?></li>
+<?php endforeach;?>
+</ul>
+<?php endif;?>
+
+<div class="buttons-set">
+    <button type="button" class="button" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Continue Shopping')) ?>" onclick="window.location='<?php echo $this->getUrl() ?>'"><span><span><?php echo $this->__('Continue Shopping') ?></span></span></button>
+</div>
+
+
+<?php
+$_customerId = Mage::getSingleton('customer/session')->getCustomerId();
+$lastOrderId = Mage::getSingleton('checkout/session')->getLastOrderId();
+$order = Mage::getSingleton('sales/order');
+$order->load($lastOrderId);
+$_totalData =$order->getData();
+$_sub = $_totalData['subtotal'];
+?>
+
+<!-- Google Code for Revenue Conversion Page -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1022256772;
+var google_conversion_language = "en";
+var google_conversion_format = "3";
+var google_conversion_color = "ffffff";
+var google_conversion_label = "oYgvCPKuy14QhM255wM";
+var google_conversion_value = <?php echo $_sub ?>;
+var google_conversion_currency = "USD";
+var google_remarketing_only = false;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+<div style="display:inline;">
+<img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/1022256772/?value=1.00&amp;currency_code=USD&amp;label=oYgvCPKuy14QhM255wM&amp;guid=ON&amp;script=0"/>
+</div>
+</noscript>
+
+
+<!-- begin ShareASale.com affiliate tracking -->
+<?php
+$merchantid = 14777;
+
+$orderId = $this->getOrderId(); 
+$order = Mage::getModel('sales/order')->loadByIncrementId($orderId); 
+$total = $order->getGrandTotal(); //not used
+$subtotal = $order->getSubtotal();
+$discount = $order->getDiscountAmount(); 
+$affiliateTotal = ($subtotal + $discount);
+
+$ordered_items = $order->getAllVisibleItems();
+$skulist = ''; //setup empty skulist param
+$pricelist = ''; //setup empty pricelist param
+$quantitylist = ''; //setup empty quantitylist param
+
+$last_index = array_search(end($ordered_items), $ordered_items, true);
+foreach($ordered_items as $index => $item){
+    $delimiter = $index === $last_index ? '' : ',';
+    $skulist .= $item->getSku() . $delimiter;
+    $quantitylist .= ceil($item->getQtyOrdered()) . $delimiter;
+    //append correct item base price, before any kind of cart or product discount
+    $pricelist .= ($item->getProduct()->getFinalPrice() - ($item->getDiscountAmount() / $item->getQtyOrdered())) . $delimiter;
+}
+//Magento has only one customer coupon code allowed, so no comma-separated list to make...
+$couponcodes = $order->getCouponCode(); 
+
+$newcustomer = ''; //setup newcustomer param
+$customer = $order->getCustomerId();
+if($customer){
+    $_orders = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_id', $customer);                        
+    $_orderCnt = $_orders->count(); //orders count
+    //if customer has more than an order, they're not new. Some developers will use another method, like matching an email address or credit card number.
+    $newcustomer = ($_orderCnt > 1 ? 0 : 1);
+}
+//setup currency code
+$currency = $order->getOrderCurrencyCode();
+//render pixel below
+?>
+<img src="https://shareasale.com/sale.cfm?tracking=<?php echo $orderId ?>&amp;amount=<?php echo $affiliateTotal ?>&amp;transtype=sale&amp;merchantID=<?php echo $merchantid ?>&amp;couponcode=<?php echo $couponcodes ?>&amp;skulist=<?php echo $skulist ?>&amp;quantitylist=<?php echo $quantitylist ?>&amp;pricelist=<?php echo $pricelist ?>&amp;newcustomer=<?php echo $newcustomer ?>&amp;currency=<?php echo $currency ?>" width="1" height="1">
+<!-- end ShareASale.com affiliate tracking -->

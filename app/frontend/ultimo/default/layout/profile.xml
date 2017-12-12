@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+    </default>
+    <profile_celebs_index>
+        <reference name="content">
+            <block type="profile/profile" name="profile" template="profile/celebs.phtml"/>
+        </reference>
+    </profile_celebs_index>
+    <profile_celebs_read>
+        <reference name="content">
+            <block type="profile/profile" name="profile" template="profile/readcelebs.phtml"/>
+        </reference>
+    </profile_celebs_read>
+
+    <profile_print_index>
+        <reference name="content">
+            <block type="profile/profile" name="profile" template="profile/print.phtml"/>
+        </reference>
+    </profile_print_index>
+    
+    <profile_videos_index>
+        <reference name="content">
+            <block type="profile/profile" name="profile" template="profile/videos.phtml"/>
+        </reference>
+    </profile_videos_index>
+    <profile_videos_read>
+        <reference name="content">
+            <block type="profile/profile" name="profile" template="profile/readvideos.phtml"/>
+        </reference>
+    </profile_videos_read>
+    
+    <profile_online_index>
+        <reference name="content">
+            <block type="profile/profile" name="profile" template="profile/online.phtml"/>
+        </reference>
+    </profile_online_index>
+</layout>

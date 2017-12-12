@@ -1,0 +1,52 @@
+<?php
+
+$items = $this->getItems();
+
+?>
+
+<?php if ($items): ?>
+
+<div>
+    <table style="border: 1px solid #BEBCB7; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #DEE5E8;">
+                <th rowspan="1" style="border: 1px solid #BEBCB7; padding: 3px 10px;">&nbsp;</th>
+                <th rowspan="1" style="border: 1px solid #BEBCB7; padding: 3px 10px;"><span>Product Name</span></th>
+                <th colspan="1" style="border: 1px solid #BEBCB7; padding: 3px 10px;"><span>Unit Price</span></th>
+                <th rowspan="1" style="border: 1px solid #BEBCB7; padding: 3px 10px;">Qty</th>
+                <th colspan="1" style="border: 1px solid #BEBCB7; padding: 3px 10px;">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($items as $_item): ?>
+            <tr style="background-color: #F8F7F5">
+                <td style="border: 1px solid #BEBCB7; padding: 3px 10px;">
+                    <a href="<?php echo $_item->getProduct()->setStore(2)->getProductUrl() ?>">
+                        <img src="<?php echo $this->helper('catalog/image')->init($_item->getProduct(), 'thumbnail')->resize(75); ?>" width="75" height="75" alt="<?php echo $_item->getName() ?>">
+                    </a>
+                </td>
+                <td style="border: 1px solid #BEBCB7; padding: 3px 10px; text-align: left; vertical-align: middle;">
+                    <h2 style="color: #1E7EC8; font-size: 1em;">
+                        <a href="<?php echo $_item->getProduct()->setStore(1)->getProductUrl() ?>"><?php echo $_item->getName() ?></a>
+                    </h2>
+                </td>
+                <td style="border: 1px solid #BEBCB7; padding: 3px 10px; text-align: center; vertical-align: middle;">
+                    <span class="cart-price">
+                        <span class="price"><?php echo Mage::helper('core')->currency($_item->getPrice()); ?></span>
+                    </span>
+                </td>
+                <td style="border: 1px solid #BEBCB7; padding: 3px 10px; text-align: center; vertical-align: middle;">
+                    <?php echo $_item->getQty(); ?>
+                </td>
+                <td style="border: 1px solid #BEBCB7; padding: 3px 10px; text-align: center; vertical-align: middle;">
+                    <span class="cart-price">
+                        <span class="price"><?php echo Mage::helper('core')->currency($_item->getRowTotal()); ?></span>
+                    </span>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<?php endif; ?>

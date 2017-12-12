@@ -1,0 +1,262 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * @var Mage_Page_Block_Html_Header $this
+ */
+?>
+<!-- 8 Horizontal Overlays Not Including Footer -->
+		<!-- Overlays from top to bottom numbered 1-8 -->
+		<div class="centered">
+			<div id="page-header">
+			<!-- Header, Title, Navi bar, search -->
+				<div id="header-image-link">
+					<a href="/"><img src="/images/layout/header_logo.png" /></a>
+				</div>
+
+
+
+				<div id="header-right-content">
+					<div id="topright_navi">
+
+						CALL US TOLL FREE 1-866-674-4367 <img class="topnav_linklistDIVIDER" src="/images/layout/topnav_linklistDIVIDER.png"/>
+						<a href="<?php echo Mage::getBaseUrl() ?>customer/account/login/">MY ACCOUNT</a> <img class="topnav_linklistDIVIDER" src="/images/layout/topnav_linklistDIVIDER.png" />
+						<?php 
+							$cart = Mage::getModel('checkout/cart')->getQuote()->getData();
+							$cart_qty = (isset($cart['items_qty'])) ? (int)$cart['items_qty'] : 0;
+							$cart_qty_text = '';
+							if($cart_qty > 0) {
+								$cart_qty_text = '(' . $cart_qty . ')';
+							}
+						?>
+						<a href="<?php echo Mage::getBaseUrl() ?>checkout/cart/">CART <?php echo $cart_qty_text; ?> / CHECKOUT</a> <?php if (Mage::getSingleton('customer/session')->isLoggedIn()): ?><img class="topnav_linklistDIVIDER" src="/images/layout/topnav_linklistDIVIDER.png" /><?php endif; ?>
+						<?php if (Mage::getSingleton('customer/session')->isLoggedIn()): ?>
+						<a href="<?php echo Mage::getBaseUrl() ?>customer/account/logout/">LOGOUT</a>
+						<?php endif; ?>
+					</div>
+					<div id="topnav_searchbar">
+						<?php echo $this->getChildHtml('topSearch') ?>
+						
+						<div class="share content">
+							<div class="header-social"><a target="_blank" href="http://instagram.com/energymuse"><img src="/images/layout/social-instagram.png"/></a></div>
+							<div class="header-social"><a target="_blank" href="http://twitter.com/energymuse"><img src="/images/layout/social-twitter.png"/></a></div>
+							<div class="header-social"><a target="_blank" href="http://www.facebook.com/energymuse"><img src="/images/layout/social-facebook.png"/></a></div>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</div>
+				<div class="clear"></div>
+
+<script>
+jQuery(document).ready(function() {
+	jQuery('#top-nav a').click(function() {
+		if(jQuery(this).attr('href') == "") {
+			return false;
+		} else {
+			return true;
+		}
+	});
+	jQuery('#top-nav li').hover(function() {
+		if(jQuery(this).children('ul').length > 0) {
+			jQuery(this).children('ul:first').css('display', 'block');
+		}
+		if(jQuery(this).children('a').length > 0) {
+			var a = jQuery(this).children('a:first');
+			if(!a.hasClass('active')) {
+				a.addClass('active');
+			}
+		}
+	}, function () {
+		if(jQuery(this).children('ul').length > 0) {
+			jQuery(this).children('ul:first').css('display', 'none');
+		}
+		if(jQuery(this).children('a').length > 0) {
+			jQuery(this).children('a:first').removeClass('active');
+		}
+	});
+});
+</script>
+				<div id="nav-search-container">
+					<div id="topnav_linklist">
+						<ul id="top-nav">
+							<li><a href="">ABOUT</a>
+						  <ul class="nav-second" style="width: 135px;">
+									<li><a href="/company/aboutus">Our Story</a></li>
+									<li><a href="/company/aboutgems">Crystal Energies</a></li>
+                    <li><a href="/company/jewelry_cleansing">Jewelry Cleansing</a></li>
+									<li><a href="/company/secret_chinese_coin">Chinese Coins</a></li>
+									<li><a href="/company/stonereading">Stone Reading</a></li>
+									<li><a href="/company/testimonials">Testimonials</a></li>
+									<li><a href="/store/wholesale-inquiries/">Wholesale Inquiries</a></li>
+								</ul>
+							</li>
+							<li><a href="/store/what-s-new.html">WHAT'S NEW</a>
+							</li>
+							<li><a href="/store/top-customer-picks.html">BESTSELLERS</a>
+							</li>
+							<li><a href="">SHOP BY</a>
+								<ul class="nav-second" style="width: 120px;">
+									<li class="sub"><a href="">Collection</a>
+										<ul class="nav-third" style="width: 165px;">
+											<li><a href="/store/shop-by-collection/the-bali-coin-collection.html?menu=v-menu1&m=m1a">Bali Coin</a></li>
+                                            <li><a href="/store/shop-by-collection/beauty-wraps.html">Beauty Wraps</a></li>
+                                            <li><a href="/store/shop-by-collection/bliss-collection.html?menu=v-menu1&m=m1a">Bliss</a></li>
+                                            <li><a href="/store/shop-by-collection/bottles-of-energy.html">Bottles of Energy</a></li>
+                                            <li><a href="/store/shop-by-collection/california-aloha-collection.html?menu=v-menu1&m=m1a">California Aloha</a></li>
+                                            <li><a href="/store/shop-by-collection/chakra-collection.html?menu=v-menu1&m=m1a">Chakra</a></li>
+											<li><a href="/store/shop-by-collection/crystal-energy-wraps.html?menu=v-menu1&m=m1a">Crystal Energy Wraps</a></li>
+											<li><a href="/store/shop-by-collection/discover-yourself-collection.html?menu=v-menu1&m=m1b">Discover Yourself</a></li>
+											<li><a href="/store/shop-by-collection/expressions-collection.html?menu=v-menu1&m=m1d">Expressions</a></li>
+                                            <li><a href="/store/shop-by-collection/fertility-pregnancy-collection.html">Fertility & Pregnancy</a></li>
+											<li><a href="/store/shop-by-collection/goddess-collection.html?menu=v-menu1&m=m1e">Goddess</a></li>
+                                            <li><a href="/store/shop-by-collection/kabbalah-collection.html">Kabbalah</a></li>
+                                            <li><a href="/store/shop-by-collection/keep-it-simple.html">Keep It Simple</a></li>
+                                            <li><a href="/store/shop-by-collection/love-collection.html">Love</a></li>
+                                            <li><a href="/store/shop-by-collection/the-wisdom-keepers.html">The Wisdom Keepers</a></li>
+										</ul>
+							    </li>
+									<li class="sub"><a href="">Color</a>
+										<ul class="nav-third" style="width: 100px;">
+											<li><a href="/store/shop-by-color/black.html?menu=v-menu2&m=m2a">Black</a></li>
+											<li><a href="/store/shop-by-color/blue.html?menu=v-menu2&m=m2b">Blue</a></li>
+											<li><a href="/store/shop-by-color/brown.html?menu=v-menu2&m=m2c">Brown/Beige</a></li>
+											<li><a href="/store/shop-by-color/clear.html?menu=v-menu2&m=m2d">Clear</a></li>
+											<li><a href="/store/shop-by-color/gold.html?menu=v-menu2&m=m2e">Gold</a></li>
+											<li><a href="/store/shop-by-color/gray.html?menu=v-menu2&m=m2f">Gray</a></li>
+											<li><a href="/store/shop-by-color/green.html?menu=v-menu2&m=m2g">Green</a></li>
+											<li><a href="/store/shop-by-color/orange.html?menu=v-menu2&m=m2h">Orange</a></li>
+											<li><a href="/store/shop-by-color/pink.html?menu=v-menu2&m=m2i">Pink</a></li>
+											<li><a href="/store/shop-by-color/purple.html?menu=v-menu2&m=m2j">Purple</a></li>
+											<li><a href="/store/shop-by-color/red.html?menu=v-menu2&m=m2k">Red</a></li>
+											<li><a href="/store/shop-by-color/silver.html?menu=v-menu2&m=m2l">Silver</a></li>
+											<li><a href="/store/shop-by-color/white.html?menu=v-menu2&m=m2m">White</a></li>
+											<li><a href="/store/shop-by-color/yellow.html?menu=v-menu2&m=m2n">Yellow</a></li>
+										</ul>
+									</li>
+									<li class="sub"><a href="">Intention</a>
+										<ul class="nav-third" style="width: 140px;">
+											<li><a href="/store/shop-by-intention/balance-and-focus.html?menu=v-menu3&m=m3a">Balance & Focus</a></li>
+											<li><a href="/store/shop-by-intention/health-and-wellness.html?menu=v-menu3&m=m3b">Health & Performance</a></li>
+											<li><a href="/store/shop-by-intention/love-romance.html?menu=v-menu3&m=m3c">Love & Romance</a></li>
+											<li><a href="/store/shop-by-intention/new-beginnings.html?menu=v-menu3&m=m3d">New Beginnings</a></li>
+											<li><a href="/store/shop-by-intention/passion-creativity.html?menu=v-menu3&m=m3e">Passion & Creativity</a></li>
+											<li><a href="/store/shop-by-intention/spirituality-faith.html?menu=v-menu3&m=m3f">Spirituality & Faith</a></li>
+											<li><a href="/store/shop-by-intention/wealth-success.html?menu=v-menu3&m=m3g">Wealth & Success</a></li>
+										</ul>
+                                    </li>
+									<li class="sub"><a href="">Gemstone</a>
+										<ul class="nav-third" style="width: 100px;">
+											<li><a href="/store/shop-by-gemstone/agate.html?menu=v-menu2&m=m2a">Agate</a></li>
+											<li><a href="/store/shop-by-gemstone/amethyst.html?menu=v-menu2&m=m2b">Amethyst</a></li>
+											<li><a href="/store/shop-by-gemstone/aquamarine.html?menu=v-menu2&m=m2c">Aquamarine</a></li>
+											<li><a href="/store/shop-by-gemstone/aventurine.html?menu=v-menu2&m=m2d">Aventurine</a></li>
+											<li><a href="/store/shop-by-gemstone/bloodstone.html?menu=v-menu2&m=m2e">Bloodstone</a></li>
+											<li><a href="/store/shop-by-gemstone/carnelian.html?menu=v-menu2&m=m2f">Carnelian</a></li>
+											<li><a href="/store/shop-by-gemstone/citrine.html?menu=v-menu2&m=m2g">Citrine</a></li>
+											<li><a href="/store/shop-by-gemstone/clear-quartz.html?menu=v-menu2&m=m2h">Clear Quartz</a></li>
+											<li><a href="/store/shop-by-gemstone/garnet.html?menu=v-menu2&m=m2j">Garnet</a></li>
+											<li><a href="/store/shop-by-gemstone/hematine.html?menu=v-menu2&m=m2k">Hematine</a></li>
+											<li><a href="/store/shop-by-gemstone/jade.html?menu=v-menu2&m=m2l">Jade</a></li>
+											<li><a href="/store/shop-by-gemstone/jasper.html?menu=v-menu2&m=m2m">Jasper</a></li>
+											<li><a href="/store/shop-by-gemstone/malachite.html?menu=v-menu2&m=m2n">Malachite</a></li>
+                                            <li><a href="/store/shop-by-gemstone/moonstone.html?menu=v-menu2&m=m2n">Moonstone</a></li>
+                                            <li><a href="/store/shop-by-gemstone/onyx.html?menu=v-menu2&m=m2n">Onyx</a></li>
+                                            <li><a href="/store/shop-by-gemstone/pearls.html?menu=v-menu2&m=m2i">Pearls</a></li>
+                                            <li><a href="/store/shop-by-gemstone/peridot.html?menu=v-menu2&m=m2n">Peridot</a></li>
+                                            <li><a href="/store/shop-by-gemstone/pyrite.html?menu=v-menu2&m=m2n">Pyrite</a></li>
+                                            <li><a href="/store/shop-by-gemstone/rose-quartz.html?menu=v-menu2&m=m2n">Rose Quartz</a></li>
+                                            <li><a href="/store/shop-by-gemstone/smoky-quartz.html?menu=v-menu2&m=m2n">Smoky Quartz</a></li>
+                                            <li><a href="/store/shop-by-gemstone/sodalite.html?menu=v-menu2&m=m2n">Sodalite</a></li>
+                                            <li><a href="/store/shop-by-gemstone/tigers-eye.html?menu=v-menu2&m=m2n">Tiger's Eye</a></li>
+                                            <li><a href="/store/shop-by-gemstone/turquoise.html?menu=v-menu2&m=m2n">Turquoise</a></li>
+										</ul>
+									</li>
+									<li class="sub"><a href="">Price</a>
+										<ul class="nav-third" style="width: 100px;">
+											<li><a href="/store/shop-by-price/under-50.html?menu=v-menu4&m=m4a">Under $50</a></li>
+                                                                                        <li><a href="/store/shop-by-price/under-100.html?menu=v-menu4&m=m4a">$50 - $100</a></li>
+											<li><a href="/store/shop-by-price/100-to-199-99.html?menu=v-menu4&m=m4b">$100 - $200</a></li>
+											<li><a href="/store/shop-by-price/200-and-over.html?menu=v-menu4&m=m4c">$200+</a></li>
+										</ul>
+									</li>
+									<li><a href="/store/shop-by-charity.html">Charity</a></li>
+								</ul>
+							</li>
+					  <li><a href="/store/women-s-jewelry.html">WOMEN</a>
+								<ul class="nav-second" style="width: 135px;">
+									<li><a href="/store/necklaces-1.html">Necklaces</a></li>
+									<li><a href="/store/bracelets-1.html">Bracelets</a></li>
+                                    <li><a href="/store/earrings-1.html">Earrings</a></li>
+									<li><a href="/store/coin-jewelry.html">Coin Jewelry</a></li>
+									<li><a href="/store/pendant-jewelry.html">Pendant Jewelry</a></li>
+								</ul>
+							</li>
+							<li><a href="/store/men-s-jewelry.html">MEN</a>
+								<ul class="nav-second" style="width: 135px;">
+									<li><a href="/store/men-s-jewelry/mens-necklaces.html">Necklaces</a></li>
+									<li><a href="/store/men-s-jewelry/mens-bracelets.html">Bracelets</a></li>
+									<li><a href="/store/men-s-jewelry/mens-coin-jewelry.html">Coin Jewelry</a></li>
+								</ul>
+							</li>
+							<li><a href="/store/treasures/limited-finds.html">SALE</a>
+							</li>
+					  <li><a href="">TREASURES</a>
+								<ul class="nav-second" style="width: 135px;">
+									<li><a href="/store/apothia-if-scents.html">Apothia</a></li>
+                                    <li><a href="/store/treasures/crystal-healing-bags.html">Crystal Bags</a></li>
+                                    <li><a href="/store/treasures/crystal-shop.html">Crystal Shop</a></li>
+                                    <li><a href="/store/treasures/crystal-soaps.html">Crystal Soaps</a></li>
+                                    <li><a href="/store/treasures/dharma-collection.html">Dharma Charms</a></li>
+                                    <li><a href="/store/treasures/energy-charms.html">Energy Charms</a></li>
+									<li><a href="/store/treasures/energy-paws.html">Energy Paws</a></li>
+									<li><a href="/store/treasures/manifestation-crystals.html">Manifestation Crystals</a></li>
+                                    <li><a href="/store/treasures/zodiac-mandala-sets.html">Zodiac Mandalas</a></li>
+								</ul>
+							</li>
+							<li><a href="">PRESS</a>
+								<ul class="nav-second" style="width: 100px;">
+							    <li><a href="/celebrities">Celebrities</a></li>
+									<li><a href="/press/print">Print</a></li>
+									<li><a href="/press/online">Online</a></li>
+									<li><a href="/press/video">Video</a></li>
+								</ul>
+							</li>
+							<li style="background: none;"><a href=http://blog.energymuse.com class="" target="blank">BLOG</a>
+							</li>
+						</ul>
+						
+					</div>
+
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="clear"></div>
+
+
+		<div id="overlay_shopping">
+			<div class="centered">
+			

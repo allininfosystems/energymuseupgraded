@@ -1,0 +1,84 @@
+<?php
+$_helper = Mage::helper('events');
+/* date settings */
+$month = (int) date('m');
+$year = (int) date('Y');
+$date = (int) date('d');
+if ($this->getRequest()->getParam('month')) {
+    $month = (int) $this->getRequest()->getParam('month');
+}
+
+if ($this->getRequest()->getParam('year')) {
+    $year = (int) $this->getRequest()->getParam('year');
+}
+
+/* days and weeks vars now ... */
+$runningDay = date('w', mktime(0, 0, 0, $month, 1, $year));
+$daysInMonth = date('t', mktime(0, 0, 0, $month, 1, $year));
+$lastDayOfPrevMonth = date('d', strtotime('last day of previous month'));
+//$weeksInMonth = date("w", mktime(0,0,0,$month,$lastDayOfPrevMonth,$year));  
+//$weeksInMonth = Mage::helper('events')->getWeeksInMonth($month, $year);
+
+$daysInThisWeek = 1;
+$day_counter = 0;
+$dates_array = array();
+?>
+<style type="text/css">
+    @import "<?php echo Mage::getBaseUrl('js') . 'events' . DS . 'opentip' . DS; ?>opentip.css";
+    /*.test {
+                            border: 1px solid silver;
+                            margin: 10px 15px;
+                            display: inline-block;
+                            width: auto;
+                            padding: 5px 10px;
+                            background: #eeeeee;
+                            -moz-border-radius: 3px;
+                            -webkit-border-radius: 3px;
+                    }*/
+</style>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js') . 'events' . DS . 'opentip' . DS; ?>opentip.js"></script>
+<script src="<?php echo Mage::getBaseUrl('js') . 'events' . DS . 'opentip' . DS; ?>excanvas.js"></script>
+<script type="text/javascript">
+//        Opentip.useCss3Transitions = false;
+//        Opentip.useScriptaculousTransitions = true;
+    Opentip.debugging = true;
+// 		Opentip.defaultStyle = 'rounded';
+    Opentip.styles.codeSample = {
+        showOn: 'click',
+        hideOn: 'click',
+        targetJoint: ['right', 'middle'],
+        tipJoint: ['left', 'middle'],
+        stem: true
+    }
+</script>
+
+<?php
+?>        
+
+<div class="fme_events_calendar">
+<?php echo Mage::helper('events/calendar')->calenderControls(); ?>
+    <table id="header-table">
+        <tbody>
+            <tr>
+                <td><?php echo date('M, Y', strtotime($date . '-' . $month . '-' . $year)) ?></td>
+            </tr>
+<!--            <tr>
+                <td>Your date with a Cold Beer is tomorrow</td>
+            </tr>-->
+        </tbody>
+    </table>
+    <table id="day-names">
+        <tbody>
+            <tr>
+                <td><?php echo $_helper->__('Sunday'); ?></td>
+                <td><?php echo $_helper->__('Monday'); ?></td>
+                <td><?php echo $_helper->__('Tuesday'); ?></td>
+                <td><?php echo $_helper->__('Wednesday'); ?></td>
+                <td><?php echo $_helper->__('Thursday'); ?></td>
+                <td><?php echo $_helper->__('Friday'); ?></td>
+                <td><?php echo $_helper->__('Saturday'); ?></td>
+            </tr>
+        </tbody>
+    </table>
+<?php echo Mage::helper('events/calendar')->drawCalendar($month, $year); ?>
+</div>

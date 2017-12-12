@@ -1,0 +1,246 @@
+<?php
+ 
+if(isset($_POST['email'])) {
+ 
+         // EDIT THE 2 LINES BELOW AS REQUIRED
+    $email_to = "sales@energymuse.com"; 
+    $email_subject = "Energy Muse Wholesale Form Submission";    
+ 
+    function died($error) {
+        // your error code can go here
+        echo "We are very sorry, but there were error(s) found with the form you submitted. ";
+        echo "These errors appear below.<br /><br />";
+        echo $error."<br /><br />";
+        echo "Please go back and fix these errors.<br /><br />";
+        die();
+    }
+ 
+    // validation expected data exists
+    if(!isset($_POST['first_name']) ||
+        !isset($_POST['last_name']) ||
+        !isset($_POST['email']) ||
+        !isset($_POST['telephone']))
+        //!isset($_POST['comments'])) 
+    {
+        //died('We are sorry, but there appears to be a problem with the form you submitted.');       
+    }
+  
+    //$first_name = $_POST['first_name']; // required
+    //$last_name = $_POST['last_name']; // required
+    //$email_from = $_POST['email']; // required
+    //$telephone = $_POST['telephone']; // not required 
+    //$comments = $_POST['comments']; // required
+ 
+    //$error_message = "";
+ 
+    //$email_exp = '/^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/';
+ 
+  //if(!preg_match($email_exp,$email_from)) {
+    //$error_message .= 'The Email Address you entered does not appear to be valid.<br />';
+  ///}
+ 
+    //$string_exp = "/^[A-Za-z .'-]+$/";
+ 
+  //if(!preg_match($string_exp,$first_name)) {
+    //$error_message .= 'The First Name you entered does not appear to be valid.<br />';
+  //}
+ 
+  //if(!preg_match($string_exp,$last_name)) {
+    //$error_message .= 'The Last Name you entered does not appear to be valid.<br />';
+  //}
+ 
+  //if(strlen($comments) < 2) {
+    //$error_message .= 'The Comments you entered do not appear to be valid.<br />';
+  //}
+ 
+  //if(strlen($error_message) > 0) {
+    //died($error_message);
+  //}
+ 
+    $email_message = "Energy Muse Wholesale Form Request Details:\n\n";
+ 
+    function clean_string($string) {
+      $bad = array("content-type","bcc:","to:","cc:","href");
+      return str_replace($bad,"",$string);
+    }
+ 
+     
+    $email_message .= "First Name: ".$_POST['first_name']."\n";
+    $email_message .= "Last Name: ".$_POST['last_name']."\n";
+    $email_message .= "Email: ".$_POST['email']."\n";
+    $email_message .= "Telephone: ".$_POST['telephone']."\n";
+    $email_message .= "Business Name: ".$_POST['businessname']."\n";
+    $email_message .= "DBA: ".$_POST['DBA']."\n";
+    $email_message .= "Years In Business: ".$_POST['yearsinbusiness']."\n";
+    $email_message .= "Website: ".$_POST['website']."\n";
+    $email_message .= "Resale Number: ".$_POST['resale_number']."\n";
+    $email_message .= "How Heard About: ".$_POST['heard_about']."\n";
+    $email_message .= "\n";
+    $email_message .= "Billing Address: ".$_POST['billing_street']."\n";
+    $email_message .= "Billing City: ".$_POST['billing_city']."\n";
+    $email_message .= "Billing State: ".$_POST['billing_state']."\n";
+    $email_message .= "Billing Zip: ".$_POST['billing_zip']."\n";
+    $email_message .= "\n";
+    $email_message .= "Shipping Address: ".$_POST['shipping_street']."\n";
+    $email_message .= "Shipping City: ".$_POST['shipping_city']."\n";
+    $email_message .= "Shipping State: ".$_POST['shipping_state']."\n";
+    $email_message .= "Shipping Zip: ".$_POST['shipping_zip']."\n";
+    $email_message .= "\n";
+    $email_message .= "Current Lines Carried: ".$_POST['currentLines']."\n";
+
+
+    //$email_message .= "Comments: ".clean_string($comments)."\n";
+
+// create email headers
+$headers = 'From: sales@energymuse.com' ."\r\n".
+'Reply-To: sales@energmuse.com' . "\r\n" .
+'Cc: kevin@ckdproductions.com' . "\r\n" .  
+'X-Mailer: PHP/' . phpversion();
+@mail($email_to, $email_subject, $email_message, $headers);  
+?>
+ 
+
+<!-- include your own success html here -->
+<h4>Thank you for filling out our Wholesale Inquiry form. We will be in touch with you very soon.</h4>
+ 
+<?php 
+} else {
+?>
+
+<style>
+.containerDiv {clear:both; padding:10px 0;}
+.leftDiv {width:250px; float:left; padding-top:8px;}
+.rightDiv {float:left;width:262px;}
+.input-text {width:262px;}
+</style>
+
+<h4>If you would like information about our Wholesaler program, please fill out our form below, and a representative will contact you.</h4>
+
+<h4>Please be sure to fill in ALL fields.</h4>
+
+<hr style="margin:20px 0;" />
+
+<form id="contactForm" method="post" action="">
+
+<h4>Contact Information:</h4>
+
+<div class="containerDiv">
+	<div class="leftDiv">First Name:</div> 
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="first_name" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">Last Name:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="last_name" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">Email Address:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="email" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">Phone Number:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry"name="telephone" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">Business Name:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="businessname" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">DBA (if applicable):</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="DBA" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">How many years have you been in business:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="yearsinbusiness" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">Website:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="website" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">CA Resale #:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="resale_number" value=""></div>
+</div>
+
+<div class="containerDiv">
+    <div class="leftDiv">How did you hear about us?</div>
+    <div class="rightDiv"><input type="text" class="input-text required-entry" name="heard_about" value=""></div>
+</div>
+
+
+<div class="containerDiv">
+	<p><h4>Business Address:</h4></p>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">Street:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="billing_street" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">City:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="billing_city" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">State:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="billing_state" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">Zip Code:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="billing_zip" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<p><h4>Shipping Address:</h4></p>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">Street:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="shipping_street" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">City:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="shipping_city" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">State:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="shipping_state" value=""></div>
+</div>
+
+<div class="containerDiv">
+	<div class="leftDiv">Zip:</div>
+	<div class="rightDiv"><input type="text" class="input-text required-entry" name="shipping_zip" value=""></div>
+</div>
+
+<br /><br/>
+
+<div class="containerDiv">
+	<div class="leftDiv">Please tell us about some of the lines you currently carry.</div>
+	<div class="rightDiv"><textarea name="currentLines" rows="4" cols="50" class="input-text required-entry"></textarea></div>
+</div>
+
+<div class="containerDiv">
+	<input type="text" name="hideit" id="hideit" value="" style="display:none !important;" />
+	<button type="submit" title="Submit" class="button"><span><span>Submit</span></span></button>
+</div>
+
+</form>
+
+<script type="text/javascript">
+//<![CDATA[
+    var contactForm = new VarienForm('contactForm', true);
+//]]>
+</script>
+
+<?php } ?>

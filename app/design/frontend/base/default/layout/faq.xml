@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">  
+            <action method="addCss">
+                <stylesheet>css/magestore/faqlibrary.css</stylesheet>
+            </action>          
+            <action method="addCss">
+                <stylesheet>css/magestore/faq.css</stylesheet>
+            </action>		
+        </reference>		
+        <reference name="right">
+            <block type="faq/sidebar" name="sidebar.right" >
+                <action method="setSidebarPosition">
+                    <sidebar_position>sidebar-right</sidebar_position>
+                </action>
+            </block>
+        </reference>
+        <reference name="left">
+            <block type="faq/sidebar" name="sidebar.left" >
+                <action method="setSidebarPosition">
+                    <sidebar_position>sidebar-left</sidebar_position>
+                </action>
+            </block>
+        </reference>
+		
+    </default>
+    <faq_index_index>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>            
+        </reference>
+        <reference name="head">
+             <action method="setTitle" translate="title"><title>Frequently Asked Questions</title></action>
+        </reference>	
+        <reference name="content">
+            <block type="faq/overview" name="faq" template="faq/faq.phtml" >
+                <block type="faq/tag" name="faq.tags" template="faq/tags.phtml" />
+                <block type="faq/list" name="faq.listing" template="faq/list.phtml" />
+            </block>
+        </reference>
+    </faq_index_index>
+</layout> 

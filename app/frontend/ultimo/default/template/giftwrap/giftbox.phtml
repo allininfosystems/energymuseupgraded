@@ -1,0 +1,6 @@
+<div id="scroll-gift" style="position:fixed; height:0px; background:black; top:300px; width:100%; left:0px;"></div>
+<?php $switched_template = Mage::helper('giftwrap')->getSwitchedTemplate(__FILE__) ?>
+<?php $cssfile=$this->getSkinUrl(Mage::helper('giftwrap')->getSwitchedSkinFile());?>
+<link rel="stylesheet" type="text/css" href='<?php echo $cssfile;?>' media="all" />
+<?php include ($switched_template) ?>
+

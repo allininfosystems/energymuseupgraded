@@ -1,0 +1,121 @@
+<?php
+/**
+ * Mason Web Development
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2009 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+
+<?php
+//get all Profiles 
+$pressarticles = $this->getPrint();
+?>
+<script type="text/javascript" src="<? echo $this->getSkinUrl("js/modalbox/modalbox.js") ?>"></script>
+<style>
+#MB_overlay {
+	position: absolute;
+	margin: auto;
+	top: 0;	left: 0;
+	width: 100%; height: 100%;
+	z-index: 9999;
+	background-color: grey!important;
+}
+#MB_overlay[id] { position: fixed; }
+
+#MB_window {
+	position:absolute;
+	top: 0;
+	border: 0 solid;
+	text-align:left;
+	z-index:10000;
+}
+#MB_window[id] { position: fixed!important; }
+
+#MB_frame {
+	position:relative;
+	background-color: #FFF;
+	height:100%;
+}
+
+#MB_header {
+	margin:0;
+	height: 28px;
+}
+
+#MB_content {
+	padding: 6px .75em;
+	overflow:auto;
+}
+
+#MB_caption {
+	font: bold 85% "Verdana", Arial, sans-serif;
+	/*text-shadow: #FFF 0 1px 0;*/
+	padding: .5em 2em 0 .75em;
+	margin: 0;
+	text-align: left;
+}
+
+#MB_close {
+	display:block;
+	position:absolute;
+	right:5px; top:4px;
+	padding:2px 3px;
+	font-weight:bold;
+	text-decoration:none;
+	font-size:13px;
+}
+#MB_close:hover {
+	background:transparent;
+}
+
+#MB_loading {
+	padding: 1.5em;
+	text-indent: -10000px;
+	background: transparent url(spinner.gif) 50% 0 no-repeat;
+}
+
+/* Color scheme */
+#MB_window {
+	background-color: #000;
+	color: grey;
+}
+#MB_content { border-top: 1px solid #F9F9F9; }
+#MB_header {
+  background-color: grey;
+  border-bottom: 1px solid #CCC;
+}
+#MB_caption { color:#FFF }
+#MB_close { color:#154C7C }
+#MB_close:hover { color: grey }
+
+
+/* Alert message */
+.MB_alert {
+	margin: 10px 0;
+	text-align: center;
+}
+</style>
+
+<h1>Printed Press</h1>
+<style>
+.press li h4 {font-size:12px;}
+.press li {float:left; text-align:center;}
+</style>
+
+<ul class="press">
+<?php foreach($pressarticles as $n): ?>
+	<?php if ($n->getData("is_active")):?>
+	<?php $pressarticlesUrl = $this->getUrl('*/*/read', array("id" => $n->getData("profile_id"))); ?>
+	<li>
+		<a href="<? echo $pressarticlesUrl ?>" title="<?php echo $n->getData("content_heading"); ?>" onclick="Modalbox.show(this.href, {title: this.title, transitions: false,  width: 700, height: 600}); return false;">
+			<p><img src ="<?php echo "/media/" . $n->getThumbnail(); ?>" /></p>
+			<h4><?php echo $n->getData("content_heading"); ?><!--<br /><?php //echo $this->formatDate($n->getData("creation_time"), 'long'); ?>--></h4>
+			<!--<p><?php //echo $n->getContent(); ?></p>-->
+		</a>
+	</li>
+	<?php endif; ?>
+<?php endforeach; ?>
+</ul>

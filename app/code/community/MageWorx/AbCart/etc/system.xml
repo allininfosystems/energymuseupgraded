@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MageWorx
+ * Abandoned Cart Recovery
+ *
+ * @category   MageWorx
+ * @package    MageWorx_AbCart
+ * @copyright  Copyright (c) 2015 MageWorx (http://www.mageworx.com/)
+ */
+ -->
+<config>
+    <sections>
+        <mageworx_abcart translate="label" module="mageworx_abcart">
+            <label>Abandoned Cart Recovery</label>
+            <tab>mageworx</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>600</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <main_settings translate="label">
+                    <label>Main Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <send_enabled translate="label">
+                            <label>Enable E-mail Sending</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </send_enabled>
+                        <cart_lifetime translate="label,comment">
+                            <label>Cart Lifetime (minutes)</label>
+                            <comment>The time after which shopping cart gets abandoned</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cart_lifetime>
+                        <login_customer translate="label">
+                            <label>Enable Login Customer From E-mail</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </login_customer>
+                        <max_email_lateness translate="label">
+                            <label>Max email lateness (days)</label>
+                            <comment>The time after which emails don't send</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </max_email_lateness>
+                        <forever_abandoned_time translate="label">
+                            <label>Forever abandoned in (days)</label>
+                            <comment>Don't set cart status abandoned if it was created(days ago)</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </forever_abandoned_time>
+                    </fields>
+                </main_settings>
+            </groups>
+        </mageworx_abcart>
+    </sections>
+</config>

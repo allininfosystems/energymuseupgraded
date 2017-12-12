@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MageWorx
+ * Abandoned Cart Recovery
+ *
+ * @category   MageWorx
+ * @package    MageWorx_AbCart
+ * @copyright  Copyright (c) 2015 MageWorx (http://www.mageworx.com/)
+ */
+ -->
+<config>
+    <modules>
+        <MageWorx_AbCart>
+            <version>1.1.1</version>
+        </MageWorx_AbCart>
+    </modules>
+
+    <global>
+        <blocks>
+            <mageworx_abcart>
+                <class>MageWorx_AbCart_Block</class>
+            </mageworx_abcart>
+        </blocks>
+        <helpers>
+            <mageworx_abcart>
+                <class>MageWorx_AbCart_Helper</class>
+            </mageworx_abcart>
+            <mobiledetect>
+                <class>MageWorx_AbCart_Helper_Mobiledetect</class>
+            </mobiledetect>
+
+        </helpers>
+        <models>
+            <mageworx_abcart>
+                <class>MageWorx_AbCart_Model</class>
+                <resourceModel>mageworx_abcart_resource</resourceModel>
+            </mageworx_abcart>
+            <mageworx_abcart_resource>
+                <class>MageWorx_AbCart_Model_Resource</class>
+                <entities>
+                    <cart_log>
+                        <table>mageworx_abandoned_cart_log</table>
+                    </cart_log>
+                    <alert_rule>
+                        <table>mageworx_abandoned_cart_alert_rule</table>
+                    </alert_rule>
+                    <alert>
+                        <table>mageworx_abandoned_cart_alert</table>
+                    </alert>
+                </entities>
+            </mageworx_abcart_resource>
+        </models>
+        <resources>
+            <mageworx_abcart_setup>
+                <setup>
+                    <module>MageWorx_AbCart</module>
+                </setup>
+            </mageworx_abcart_setup>
+        </resources>
+        <events>
+            <clear_expired_quotes_before>
+                <observers>
+                    <mageworx_abcart_clear_quotes_before>
+                        <class>mageworx_abcart/observer</class>
+                        <method>clearQuotesBefore</method>
+                    </mageworx_abcart_clear_quotes_before>
+                </observers>
+            </clear_expired_quotes_before>
+        </events>
+        <template>
+            <email>
+                <mageworx_abcart_main_settings_email_temlate_1 translate="label" module="mageworx_abcart">
+                    <label>Abandoned Cart Reminder #1</label>
+                    <file>mageworx/abcart/abandoned_cart_email_1.html</file>
+                    <type>html</type>
+                </mageworx_abcart_main_settings_email_temlate_1>
+                <mageworx_abcart_main_settings_email_temlate_2 translate="label" module="mageworx_abcart">
+                    <label>Abandoned Cart Reminder #2</label>
+                    <file>mageworx/abcart/abandoned_cart_email_2.html</file>
+                    <type>html</type>
+                </mageworx_abcart_main_settings_email_temlate_2>
+                <mageworx_abcart_main_settings_email_temlate_3 translate="label" module="mageworx_abcart">
+                    <label>Abandoned Cart Reminder #3</label>
+                    <file>mageworx/abcart/abandoned_cart_email_3.html</file>
+                    <type>html</type>
+                </mageworx_abcart_main_settings_email_temlate_3>
+            </email>
+        </template>
+    </global>
+
+    <frontend>
+        <translate>
+            <modules>
+                <MageWorx_AbCart>
+                    <files>
+                        <default>MageWorx_AbCart.csv</default>
+                    </files>
+                </MageWorx_AbCart>
+            </modules>
+        </translate>
+        <routers>
+            <mageworx_abcart>
+                <use>standard</use>
+                <args>
+                    <module>MageWorx_AbCart</module>
+                    <frontName>abcart</frontName>
+                </args>
+            </mageworx_abcart>
+        </routers>
+        <events>
+            <sales_quote_save_before>
+                <observers>
+                    <mageworx_abcart_log_started_cart>
+                        <class>mageworx_abcart/observer</class>
+                        <method>logStartedCart</method>
+                    </mageworx_abcart_log_started_cart>
+                </observers>
+            </sales_quote_save_before>
+        </events>
+    </frontend>
+
+    <adminhtml>
+        <translate>
+            <modules>
+                <MageWorx_AbCart>
+                    <files>
+                        <default>MageWorx_AbCart.csv</default>
+                    </files>
+                </MageWorx_AbCart>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <mageworx_abcart>
+                    <file>mageworx_abcart.xml</file>
+                </mageworx_abcart>
+            </updates>
+        </layout>
+        <events>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <mageworx_abcart>
+                        <class>mageworx_abcart/observer</class>
+                        <method>addCartOverviewBlock</method>
+                    </mageworx_abcart>
+                </observers>
+            </core_block_abstract_to_html_after>
+            <core_block_abstract_prepare_layout_after>
+                <observers>
+                    <mageworx_abcart_dashboard_tab>
+                        <class>mageworx_abcart/observer</class>
+                        <method>addDashboardTab</method>
+                    </mageworx_abcart_dashboard_tab>
+                </observers>
+            </core_block_abstract_prepare_layout_after>
+            <controller_action_postdispatch_adminhtml_dashboard_ajaxBlock>
+                <observers>
+                    <mageworx_abcart_dashboard_tab_update>
+                        <class>mageworx_abcart/observer</class>
+                        <method>updateDashboardTab</method>
+                    </mageworx_abcart_dashboard_tab_update>
+                </observers>
+            </controller_action_postdispatch_adminhtml_dashboard_ajaxBlock>
+        </events>
+    </adminhtml>
+
+    <admin>
+         <routers>
+            <adminhtml>
+                 <args>
+                    <modules>
+                        <MageWorx_AbCart after="Mage_Adminhtml">MageWorx_AbCart_Adminhtml</MageWorx_AbCart>
+                    </modules>
+                 </args>
+            </adminhtml>
+         </routers>
+     </admin>
+
+    <default>
+        <mageworx_abcart>
+            <main_settings>
+                <send_enabled>0</send_enabled>
+                <cart_lifetime>30</cart_lifetime>
+                <login_customer>0</login_customer>
+            </main_settings>
+        </mageworx_abcart>
+    </default>
+
+    <crontab>
+        <jobs>
+            <abandoned_cart_check>
+                <schedule>
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>mageworx_abcart/observer::checkAbandonedCarts</model>
+                </run>
+            </abandoned_cart_check>
+            <abandoned_cart_schedule>
+                <schedule>
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>mageworx_abcart/observer::scheduleAlerts</model>
+                </run>
+            </abandoned_cart_schedule>
+            <abandoned_cart_send>
+                <schedule>
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>mageworx_abcart/observer::sendAlerts</model>
+                </run>
+            </abandoned_cart_send>
+        </jobs>
+    </crontab>
+</config>

@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MageWorx
+ * Abandoned Cart Recovery
+ *
+ * @category   MageWorx
+ * @package    MageWorx_AbCart
+ * @copyright  Copyright (c) 2015 MageWorx (http://www.mageworx.com/)
+ */
+ -->
+<config>
+    <menu>
+        <sales>
+            <children>
+                <mageworx_abcart translate="title" module="mageworx_abcart">
+                    <title>Abandoned Cart Recovery</title>
+                    <sort_order>50</sort_order>
+                    <children>
+                        <rules translate="title" module="mageworx_abcart">
+                            <title>Rules</title>
+                            <sort_order>10</sort_order>
+                            <action>adminhtml/mageworx_abcart_rule</action>
+                        </rules>
+                        <alert translate="title" module="mageworx_abcart">
+                            <title>Pending Alerts</title>
+                            <sort_order>20</sort_order>
+                            <action>adminhtml/mageworx_abcart_alert</action>
+                        </alert>
+                        <alert_log translate="title" module="mageworx_abcart">
+                            <title>Alerts Log</title>
+                            <sort_order>30</sort_order>
+                            <action>adminhtml/mageworx_abcart_alert/log</action>
+                        </alert_log>
+                    </children>
+                </mageworx_abcart>
+            </children>
+        </sales>
+        <report>
+            <children>
+                <shopcart>
+                    <children>
+                        <mageworx_abcart_customer_group translate="title" module="mageworx_abcart">
+                            <title>Customer Group</title>
+                            <sort_order>10</sort_order>
+                            <action>adminhtml/mageworx_abcart_report/customerGroup</action>
+                        </mageworx_abcart_customer_group>
+                        <mageworx_abcart_customer_storeview translate="title" module="mageworx_abcart">
+                            <title>Store View</title>
+                            <sort_order>20</sort_order>
+                            <action>adminhtml/mageworx_abcart_report/storeview</action>
+                        </mageworx_abcart_customer_storeview>
+                        <mageworx_abcart_customer_location translate="title" module="mageworx_abcart">
+                            <title>Customer Location</title>
+                            <sort_order>30</sort_order>
+                            <action>adminhtml/mageworx_abcart_report/location</action>
+                        </mageworx_abcart_customer_location>
+                        <mageworx_abcart_device_type translate="title" module="mageworx_abcart">
+                            <title>Device Type</title>
+                            <sort_order>40</sort_order>
+                            <action>adminhtml/mageworx_abcart_report/device</action>
+                        </mageworx_abcart_device_type>
+                        <mageworx_abcart_email_template translate="title" module="mageworx_abcart">
+                            <title>Email Templates</title>
+                            <sort_order>50</sort_order>
+                            <action>adminhtml/mageworx_abcart_report/template</action>
+                        </mageworx_abcart_email_template>
+                    </children>
+                </shopcart>
+            </children>
+        </report>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <sales>
+                        <children>
+                            <mageworx_abcart translate="title" module="mageworx_abcart">
+                                <title>Abandoned Cart Recovery</title>
+                                <sort_order>50</sort_order>
+                                <children>
+                                    <rules translate="title" module="mageworx_abcart">
+                                        <title>Rules</title>
+                                    </rules>
+                                    <alert translate="title" module="mageworx_abcart">
+                                        <title>Pending Alerts</title>
+                                    </alert>
+                                    <alert_log translate="title" module="mageworx_abcart">
+                                        <title>Alerts Log</title>
+                                    </alert_log>
+                                </children>
+                            </mageworx_abcart>
+                        </children>
+                    </sales>
+                    <report>
+                        <children>
+                            <shopcart>
+                                <children>
+                                    <mageworx_abcart_customer_group translate="title" module="mageworx_abcart">
+                                        <title>Customer Group</title>
+                                    </mageworx_abcart_customer_group>
+                                    <mageworx_abcart_customer_storeview translate="title" module="mageworx_abcart">
+                                        <title>Store View</title>
+                                    </mageworx_abcart_customer_storeview>
+                                    <mageworx_abcart_customer_location translate="title" module="mageworx_abcart">
+                                        <title>Customer Location</title>
+                                    </mageworx_abcart_customer_location>
+                                    <mageworx_abcart_device_type translate="title" module="mageworx_abcart">
+                                        <title>Device Type</title>
+                                    </mageworx_abcart_device_type>
+                                    <mageworx_abcart_email_template translate="title" module="mageworx_abcart">
+                                        <title>Email Templates</title>
+                                    </mageworx_abcart_email_template>
+                                </children>
+                            </shopcart>
+                        </children>
+                    </report>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <mageworx_abcart translate="title" module="mageworx_abcart">
+                                        <title>MageWorx &gt; Abandoned Cart Recovery</title>
+                                        <sort_order>600</sort_order>
+                                        <children>
+                                            <main_settings translate="title">
+                                                <title>Main Settings</title>
+                                                <sort_order>1</sort_order>
+                                            </main_settings>
+                                        </children>
+                                    </mageworx_abcart>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

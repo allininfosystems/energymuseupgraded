@@ -1,0 +1,512 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2009 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+<style>
+	/*Start PopUp*/
+	#backgroundPopup{
+		display:none;
+		position:fixed;
+		_position:absolute; /* hack for internet explorer 6*/
+		height:100%;
+		width:100%;
+		top:0;
+		left:0;
+		background:#000000; 
+		z-index:1;
+	}
+	/*
+	#PopUpForm *{
+	border:0pt none;
+	margin:0pt;
+	padding:0pt;
+	color:#333333;
+	text-align:left;
+	}
+	#PopUpForm body{
+	background:#fff none repeat scroll 0%;
+	line-height:1;
+	font-size: 12px;
+	margin:0pt;
+	height:100%;
+	}*/
+
+	#PopUpForm{
+	background-color:#ffffff;
+	display:none;
+	position:fixed;
+	_position:absolute; /* hack for internet explorer 6*/
+	height:520px;
+	width:500px;
+	border:10px solid #999999;
+	z-index:2;
+	-moz-border-radius: 9px;
+	-webkit-border-radius: 9px;
+	}
+	#fc-form{
+		background-color:#ffffff;
+		width:100%;
+		height:100%;
+		margin:0px auto;
+	}
+	#fc-formheader{
+		width:100%;
+		height:20px;
+		background-color:#e8e8e8;
+		border-bottom:1px solid #cccccc;
+	}
+	#fc-formheader h1{
+		float:left;
+		margin-left:5px;
+		margin-top:2px;
+		font-size:12px;
+		font-weight:bold;
+		color:#5F4021;
+	}
+	#fc-formheader a{
+		float:right;
+		margin-right:5px;
+		margin-top:4px;
+		font-weight:bold;
+		color:#999999;
+		cursor:pointer;
+	}
+	#fc-formbody{
+		background-color:#ffffff;
+		width:480px;
+		height:320px;
+		padding-top:5px;
+		padding-left:5px;
+		margin:0px auto;
+		font-size:10px;
+		font-weight:bold;
+		color:#5382bf;	
+	}
+	#fc-formfooter{
+		width:100%;
+		height:20px;
+		background-color:#e8e8e8;
+		border-top:1px solid #cccccc;
+		text-align:right;
+	}
+	/*frm review*/
+	.input-box{
+		float:right;
+	}
+	/*End PopUp*/
+	
+	 #shareit{
+		float:left;
+		/*margin:68px 25% 0 25%;*/
+	}
+	.sharrre .button{
+		float:left;
+		width:61px;
+	}
+	
+	.sharrre .button.pinterest{
+		margin-top: -20px;
+		width: 47px;
+	}
+	.sharrre .button.pinterest span{
+		display:none;
+	}
+	.sharrre .button.facebook{
+		width:52px;
+		margin-top: 1px;
+	}
+	.count-o{
+		display:none;
+	}
+	.pluginCountBox{
+		display:none!important;
+	}
+	#widget_bounds{
+		display:none;
+	}
+	#Navigation a.current:first-letter{
+		text-transform: uppercase;
+	}
+</style>
+<?php
+    $_helper = $this->helper('catalog/output');
+    $_product = $this->getProduct();
+?>
+
+<?php $prodId = $this->getProduct()->getId(); ?>
+
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+<script type="text/javascript">
+			/*var scroller  = null;
+			var scrollbar = null;
+
+			window.onload = function () {
+			  scroller  = new jsScroller(document.getElementById("News"), 400, 180);
+			  scrollbar = new jsScrollbar (document.getElementById("Scrollbar-Container"), scroller, true, scrollbarEvent);
+			}
+
+			function scrollbarEvent (o, type) {
+				if (type == "mousedown") {
+					if (o.className == "Scrollbar-Track")
+					{
+					
+						 o.style.backgroundColor = "#e8e5d3";
+
+						 
+					}
+					//else o.style.backgroundColor = "#5f4020";
+				} else {
+					if (o.className == "Scrollbar-Track")
+					{
+						o.style.backgroundColor = "#e8e5d3";
+
+					}
+					//else o.style.backgroundColor = "#5f4020";
+				}
+			}*/
+
+			function swapIt(o) {
+				o.blur();
+				if (o.className == "current") return false;
+			  
+				var list = document.getElementById("Navigation").getElementsByTagName("a");
+				for (var i = 0; i < list.length; i++) {
+					if (list[i].className == "current") {
+						list[i].className = "";
+						document.getElementById(list[i].title).y = -scroller._y;
+					}
+					if (list[i].title == o.title) o.className = "current";
+				}
+			  
+				list = document.getElementById("Container").childNodes;
+				for (var i = 0; i < list.length; i++) {
+					if (list[i].tagName == "DIV") list[i].style.display = "none";
+				}
+			  
+				var top = document.getElementById(o.title);
+				top.style.display = "block";
+				scrollbar.swapContent(top);
+				if (top.y) scrollbar.scrollTo(0, top.y);
+			  
+				return false;
+			}
+			
+			/*for light box*/
+			
+			jQuery(document).ready(function(){
+
+				
+				$rev=jQuery("#a_review");
+				
+				$rev.click(function(e){
+
+					//loadPopUp('http://localhost/projects/christopher/magento_final_1/addreview.php?prodid=<?php echo $prodId; ?>',true);
+					loadPopUp('http://www.energymuse.com/store/addreview.php?prodid=<?php echo $prodId; ?>',true);
+
+				});
+				
+				//when you click the bg of the popup form,it will close the popup form..
+				jQuery('#backgroundPopup').livequery("click",function(e){
+					disablePopUp();
+				});
+				//close pop up form
+				jQuery('#fc-formheader a').livequery("click",function(e){
+					disablePopUp();
+					return false;
+				});	
+				
+				jQuery(document).keypress(function(e)
+				{
+					if(e.keyCode==27)//Disable popup on pressing `ESC`
+					{
+						disablePopUp();
+					}
+				});
+
+
+				function loadPopUp(content,ispage)
+				{
+					disablePopUp();
+					var ran= new Date();
+					if(ispage==true)
+					{
+								var cont='<div id="backgroundPopup"></div>';
+								cont=cont+'<div id="PopUpForm"></div>';			
+								jQuery('#overlay_shopping').prepend(cont);
+
+								jQuery('#backgroundPopup').css({'opacity':'0.5'});
+								jQuery('#backgroundPopup').fadeIn('normal');
+								jQuery('#PopUpForm').fadeIn('normal');
+										
+								centerPopUp();				
+								
+								jQuery('#PopUpForm').load(content);//+'?nocache='+ran.getTime());
+								
+					}else
+					{
+						jQuery('#overlay_shopping').prepend(content);
+						jQuery('#backgroundPopup').css({'opacity':'0.5'});
+						jQuery('#backgroundPopup').fadeIn('fast');
+						jQuery('#PopUpForm').fadeIn('fast');
+						
+						centerPopUp();
+					}
+				}
+
+				//center popUP
+				function centerPopUp()
+				{
+					var winHeight=document.documentElement.clientHeight;
+					var winWidth=document.documentElement.clientWidth;
+					
+					var popUpHeight=362;//JQuery('#PopUpForm').height();
+
+					var popUpWidth=450;//jQuery('#PopUpForm').width();
+					
+					var popUpTopMargin=winHeight/2 - popUpHeight/2;
+					var popUpLeftMargin=winWidth/2 - popUpWidth/2;
+					
+					jQuery("#PopUpForm").css({"position": "absolute","left":popUpLeftMargin,"top":popUpTopMargin});
+					jQuery("#backgroundPopup").css({"height": winHeight});	
+				}
+
+				//hide or remove PopUp
+				function disablePopUp(){
+					jQuery("#PopUpForm").fadeOut('slow');
+					jQuery("#backgroundPopup").fadeOut('slow');
+					jQuery("#PopUpForm").remove();
+					jQuery("#backgroundPopup").remove();	
+				}
+				
+				jQuery('#News .Scroller-Container').slimscroll({
+				  height: '160px',
+				  width: '445px',
+				  color: '#442915',
+				  railColor: '#442915',
+				  alwaysVisible: false
+				});
+				
+			});
+			
+			</script>
+            
+            
+    
+    
+
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+
+
+<div id="product_detail_container"><div class="centered">
+				
+				<div id="detail_top2">
+					<div id="detail_top_left2">
+					  <div class="product-img-box">
+                          <?php echo $this->getChildHtml('media') ?>
+                      </div>
+					</div>
+					<div id="detail_top_right2">
+						<div class="product-name">
+                			<h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+                        </div>
+						<div style="margin-left:10px;margin-top:0px;font-size:14px;color:#666666;">
+						   <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
+                        </div>
+                        <form action="<?php echo $this->getAddToCartUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+						<?php //echo $this->getChildHtml('product_type_data') ?>
+                            
+                     
+                       
+						     <div style="background: url('<?php echo $this->getSkinUrl('images/img_tabbg.png') ?>') no-repeat right center;height:180px;width:475px;padding-bottom:43px;">
+						
+								<!--tab-->
+
+<?php
+	$content_placeholder = array('Not available at this time', 'Not available at this time.');
+
+	$about_content = '';
+	if(Mage::getStoreConfig('easy_tabs/custom/customtabid')){
+		$about_method = 'get' . ucfirst(Mage::getStoreConfig('easy_tabs/custom/customtabid'));
+		$about_content = nl2br($this->getProduct()->$about_method());
+		if(in_array(trim($about_content), $content_placeholder)) {
+			$about_content = '';
+		}
+	}
+	$extra_content = '';
+	if(Mage::getStoreConfig('easy_tabs/custom/customtabid1')){
+		$extra_method = 'get' . ucfirst(Mage::getStoreConfig('easy_tabs/custom/customtabid1'));
+		$extra_content = nl2br($this->getProduct()->$extra_method());
+		if(in_array(trim($extra_content), $content_placeholder)) {
+			$extra_content = '';
+		}
+	}
+?>
+
+<div id="Navigation">
+  <a href="#" onclick="return swapIt(this)" title="News" class="current">description</a>
+  <?php if($about_content != '') : ?><a href="#" onclick="return swapIt(this)" title="About">video</a><?php endif; ?>
+  <?php if($extra_content != '') : ?><a href="#" onclick="return swapIt(this)" title="Extra">press</a><?php endif; ?>
+</div>
+
+<div id="Container">
+  <div id="News">
+    <div class="Scroller-Container" >
+	<div style="width: 435px;">
+      <?php $_description = $this->getProduct()->getDescription(); ?>
+<?php if ($_description): ?>
+        <?php echo $this->helper('catalog/output')->productAttribute($this->getProduct(), nl2br($_description), 'description') ?>
+<?php endif; ?><br /><br /><br />
+	</div>
+    </div>
+
+  </div>
+  <div id="About">
+    <div class="Scroller-Container">
+      <?php if($about_content != ''){ echo $about_content; } ?>
+	  <br /><br />
+    </div>
+
+  </div>
+  <div id="Extra">
+    <div class="Scroller-Container">
+      <?php if($extra_content != ''){ echo $extra_content; } ?>
+	  <br /><br />
+    </div>
+  </div>
+</div>
+
+<!--<div id="Scrollbar-Container">
+  <div class="Scrollbar-Up"></div>
+
+  <div class="Scrollbar-Down"></div>
+  <div class="Scrollbar-Track">
+    <div class="Scrollbar-Handle"></div>
+  </div>
+</div>-->
+</div>
+<div id="tab_overlay" style="padding-top:30px;">
+    <div class="foot">
+        
+        <div class="no-display">
+            <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+            <input type="hidden" name="related_product" id="related-products-field" value="" />
+        </div>
+            <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
+            <?php //echo $this->getChildHtml('alert_urls') ?>
+            
+            <?php //echo $this->getTierPriceHtml() ?>
+        <?php if (!$this->hasOptions()):?>
+                    <?php echo $this->getChildHtml('product_type_data') ?>    
+                    <div style="padding:10px;">            	
+                    <?php if($_product->isSaleable()): ?>
+                        <?php echo $this->getChildHtml('addtocart') ?>
+                    <?php endif; ?>
+                          <?php //echo $this->getChildHtml('addto') ?>
+                            <?php else:?>
+                               <?php //echo $this->getChildHtml('addto') ?>
+                    <?php endif; ?>
+                    </div>
+         </form>   
+             <script type="text/javascript">
+    //<![CDATA[
+            var productAddToCartForm = new VarienForm('product_addtocart_form');
+            productAddToCartForm.submit = function(){
+                    if (this.validator.validate()) {
+                            this.form.submit();
+                    }
+            }.bind(productAddToCartForm);
+    //]]>
+    </script>
+	</div>
+	<div style="float:left;margin:12px 0 0 5px;font-size:12px;font-weight:bold;">
+		<?php if ($this->helper('wishlist')->isAllow()) : ?>
+   <span style="float:left;"><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist">Add to Wish List</a></span>
+<?php endif; ?> <!--<span style="float:left; padding:0px 3px;"> | </span>--><?php /** if ($this->canEmailToFriend()): ?><a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>">Email a Friend</a>
+            <?php endif; **/?>
+			<span style="float:left;">
+				<div id="shareit">
+					<div id="shareme" data-media="<?php echo Mage::helper("catalog/image")->init(Mage::registry("current_product"), "small_image")->resize(700,700);?>" data-url="<?php echo $this->helper('core/url')->getCurrentUrl(); ?>" data-text="<?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?>"></div>
+				</div>
+			</span>
+
+</div><div style="float:right;margin:10px 5px 0 0;">
+			<?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
+            
+            		
+	     </div>
+            <br/>
+            
+            
+            
+            <?php //echo $this->getLayout()->createBlock('review/form')->setBlockId('product.review.form')->toHtml() ?> 
+</div>
+	<!--<br style="clear:both;"/>
+    <div style="margin-top:35px;margin-left:12px;">
+
+
+   <iframe src="http://www.facebook.com/plugins/like.php?href=<?php echo $this->helper('core/url')->getCurrentUrl(); ?>&layout=standard&show_faces=true&width=450&action=like&colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:450px;height:23px"></iframe> 
+
+    </div>-->
+	<br style="clear:both;"/>
+
+</div>
+						
+								<!---end tab--->
+						
+						
+						</div>
+					</div>
+					<div style="clear:both;"></div>
+				</div>
+				
+				<?php echo $this->getChildHtml('related'); ?>
+                    
+				<div id="detail_top4">
+					
+				    <?php echo $this->getChildHtml('reviews') ?>
+                    
+                    
+                    <div id="review_form" style="display:none;"> 
+					  <?php echo $this->getLayout()->createBlock('review/form')->setBlockId('product.review.form')->toHtml() ?> 
+					</div>
+				</div><br/><br/>				
+				<div id="detail_top5">
+				</div>
+        </div></div>
+
+<iframe src="//adserver.veruta.com/track.fcgi?merchantid=2257725618&eventid=0&ifmode=1&category=<?php echo $this->getProduct()->getSku(); ?>&itemid=<?php echo $this->getProduct()->getId(); ?>" scrolling="no" width="1" height="1" marginheight="0" marginwidth="0" frameborder="0"></iframe>
+
+ 
+
+    

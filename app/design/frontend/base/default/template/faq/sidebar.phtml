@@ -1,0 +1,20 @@
+<?php
+$most_frequently = $this->getMostFrequently();
+$store_Id = Mage::app()->getStore()->getId();
+?>
+<?php if($most_frequently->getsize() && Mage::getStoreConfig('faq/general/active',$store_Id)): ?>
+<div class="ms-faq">
+<div class="faq-sidebar">
+    <div class="sidebar-title col-xs-12 form-group">
+        <h3><?php echo $this->__('FAQs'); ?></h3>
+    </div>
+        <div class="col-xs-12">
+            <?php  foreach($most_frequently as $question): ?>
+                <a class="col-xs-12 form-group" href="<?php echo Mage::getBaseUrl() . $question->getUrlKey();?>" title="<?php echo $this->stripTags($question->getTitle());?>">
+                    <span class="glyphicon glyphicon-question-sign" style="margin-right: 5px;"></span><?php echo $this->stripTags($question->getTitle());?>
+                </a>
+            <?php endforeach;?>
+        </div>
+</div>
+</div>
+<?php endif; ?>

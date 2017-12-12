@@ -1,0 +1,96 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+		<div style="clear:both;"></div>
+		
+		<div class="centered">
+			<div id="footer">
+				<div id="footer-columns">
+					<ul class="first">
+						<li class="link-header">Shop</li>
+						<li><a href="/">Home Page</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>women-s-jewelry.html">Women</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>men-s-jewelry.html">Men</a></li>
+						<li><a href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>shop-by-intention.html">Shop by Intention</a></li>
+						<!--<li><a href="#">Accessories (***)</a></li>-->
+						<li><a href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>top-customer-picks.html">Favorites</a></li>
+					</ul>
+					<div class="footer-spacer"><img src="/images/layout/footer-column-spacer.jpg" /></div>
+					<ul>
+						<li class="link-header">Company</li>
+						<li><a href="/company/aboutus">About Us</a></li>
+                        <li><a href="/company/testimonials">Testimonials</a></li>
+						<li><a href="/celebrities">Who's Wearing Us</a></li>
+						<li><a href="/company/newsletter">Newsletter</a></li>
+						<!-- <li><a href="/company/stores">Stores</a></li> -->
+						<li><a href="/store/storelocator">Store Locations</a></li>
+                        <li><a href="/store/wholesale-inquiries/">Wholesale</a></li>
+						<li><a href="/company/contact">Contact Us</a></li>
+					</ul>
+					<div class="footer-spacer"><img src="/images/layout/footer-column-spacer.jpg" /></div>
+					<ul>
+						<li class="link-header">Resources</li>
+						<li><a href="https://www.energymuse.com/store/ugiftcert/customer/balance/">Gift Cert Balance</a></li>
+						<li><a href="/company/repairs">Repairs</a></li>
+						<li><a href="/resources/faq">Help/FAQ</a></li>
+						<li><a href="/company/affiliates">Affiliates</a></li>
+						<li><a href="/company/catalog">Catalog</a></li>
+						<li><a href="/company/sales">Sales & Promos</a></li>
+						<li><a href="/company/privacy">Privacy</a></li>
+					</ul>
+					<div class="footer-spacer"><img src="/images/layout/footer-column-spacer.jpg" /></div>
+					<ul class="last">
+						<li class="link-header">Follow Us</li>
+						<li><div class="footer-social"><a href="http://www.facebook.com/energymuse"><img src="/images/layout/social-facebook-sm.png" /></a></div>
+							<div class="footer-social"><a href="http://twitter.com/energymuse"><img src="/images/layout/social-twitter-sm.png" /></a></div>
+							<div class="footer-social"><a href="http://pinterest.com/energymuse"><img src="/images/layout/social-pinterest-sm.png" /></a></div>
+                            <div class="footer-social"><a href="http://instagram.com/energymuse"><img src="/images/layout/social-instagram-sm.png" /></a></div>
+                            <div class="footer-social"><a href="http://www.youtube.com/energymuse"><img src="/images/layout/social-youtube-sm.png" /></a></div>
+							<div class="clear"></div>
+						</li>
+						<li class="footer-address">
+							Energy Muse Jewelry<br />
+							2301 W. 205th St., Suite 104<br />
+							Torrance, CA 90501<br />
+							866-674-4367
+						</li>
+					</ul>
+					<div class="footer-spacer"><img src="/images/layout/footer-column-spacer.jpg" /></div>
+					<ul id="twitter_update_list" class="twitter-column"></ul>
+						<script src="/store/js/extjs/twitter_placement.js" type="text/javascript"></script>
+						<script src="http://twitter.com/statuses/user_timeline/energymuse.json?callback=twitterCallback2&count=1" type="text/javascript"></script>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<div id="footer-copyright"><span>Copyright 2012 Energy Muse Jewelry Inc. All Rights Reserved.</span></div>
+		</div>
+		<!-- removed old google analytics code // lcmarques 20/10/2012 -->
+
+		<?php $prefix = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http"; ?>
+		<iframe src="<?php echo $prefix; ?>://adserver.veruta.com/track.fcgi?merchantid=2257725618&eventid=1&ifmode=1&category=&itemid=" scrolling="no" width="1" height="1" marginheight="0" marginwidth="0" frameborder="0"></iframe>
+
+	</div>
+</div>

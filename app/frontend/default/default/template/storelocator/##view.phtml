@@ -1,0 +1,37 @@
+<?php
+$stores = array();
+$stores = Mage::registry('storelocator');
+if(count($stores) > 0): ?>
+<div class="page-title">
+	<h2>DW Sports <?php echo $stores['title']; ?> Store</h2>
+</div>
+<div class="content">
+	<!--div class="store-img"><img src="<?php echo Mage::getBaseUrl('media').'stores/'.$stores['image'];?>" alt="" width="204" height="150" /></div-->
+	<div class="store-address">
+		<h2><?php echo $this->__('Address');?></h2>
+		<div>
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+				<tr><td><?php echo $stores['country']; ?></td></tr>
+				<tr><td><?php echo $stores['state']; ?></td></tr>
+				<tr><td><?php echo $stores['city']; ?></td></tr>
+				<tr><td><?php echo $stores['address']; ?></td></tr>
+				<tr><td><?php echo $this->__('Postcode') ?> : <?php echo $stores['pincode']; ?></td></tr>
+				<tr><td><?php echo $this->__('Tel') ?> : <?php echo $stores['phone']; ?></td></tr>
+			</table>
+		</div>
+	</div>
+	<div class="clearer"></div>
+	<br />
+	<div>
+		<h2><?php echo $this->__('Description');?></h2>
+		<div><?php echo $stores['description']; ?></div>
+	</div>
+	<br />
+	<div>
+		<h2><?php echo $this->__('Location Map');?></h2>
+		<div><?php echo $stores['map_code']; ?></div>
+	</div>
+</div>
+<?php else: ?>
+<div class="error"><?php echo $this->__('Oops! there is no store with this ID.'); ?></div>
+<?php endif; ?>

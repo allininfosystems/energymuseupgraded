@@ -1,0 +1,38 @@
+<?php
+/**
+ * @category    Fishpig
+ * @package     Fishpig_Wordpress
+ * @license     http://fishpig.co.uk/license.txt
+ * @author      Ben Tideswell <help@fishpig.co.uk>
+ */
+?>
+<?php if (($posts = $this->getPostCollection()) !== false): ?>
+<?php if (count($posts) > 0): ?>
+	<div class="box-collateral box-related-posts">
+		<?php if ($title = $this->getTitle()): ?>
+			<!--<h2><?php echo $this->__($title) ?></h2>-->
+			<h3 style="margin-top:0;" class="section-title">Learn More on our Blog</h2>
+		<?php endif; ?>
+		<div class="std">
+			<ul>
+			<?php foreach($posts as $post): ?>
+				<li style="float:left; text-align:center; width:300px; margin: 0 15px; 20px 15pxx">
+
+						<a href="<?php echo $post->getPermalink() ?>" >
+						<?php if ($image = $post->getFeaturedImage()) {
+							echo "<img src=" . $image->getMediumImage() . ">"; 
+						}
+						 ?></a>
+
+
+					<div>
+						<h3 class="product-name" style="padding-top:10px;"><a href="<?php echo $post->getPermalink() ?>"><?php echo $this->escapeHtml($post->getPostTitle()) ?></a></h3>
+					</div>
+
+				</li>
+			<?php endforeach; ?>
+			</ul>
+		</div>
+	</div>
+<?php endif; ?>
+<?php endif; ?>

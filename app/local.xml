@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Core
+ * @copyright   Copyright (c) 2006-2016 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <global>
+        <install>
+            <date><![CDATA[Thu, 03 Mar 2016 17:18:29 +0000]]></date>
+        </install>
+        <crypt>
+            <key><![CDATA[ee9ac67b179790f4671cd6c7f0bbaf8f]]></key>
+        </crypt>
+        <disable_local_modules>false</disable_local_modules>
+        <resources>
+            <db>
+                <table_prefix><![CDATA[]]></table_prefix>
+            </db>
+            <default_setup>
+                <connection>
+                    <host><![CDATA[localhost]]></host>
+                    <username><![CDATA[energymu_magdev]]></username>
+                    <password><![CDATA[EightLamelyPunchyStoles45]]></password>
+                    <dbname><![CDATA[energymu_magdev]]></dbname>
+                    <initStatements><![CDATA[SET NAMES utf8]]></initStatements>
+                    <model><![CDATA[mysql4]]></model>
+                    <type><![CDATA[pdo_mysql]]></type>
+                    <pdoType><![CDATA[]]></pdoType>
+                    <active>1</active>
+                </connection>
+            </default_setup>
+        </resources>
+       <session_save><![CDATA[memcache]]></session_save>
+       <cms>
+        <layouts>
+          <redirect>
+            <label>Landing Page</label>
+            <template>page/landing.phtml</template>
+          </redirect>
+        </layouts>
+      </cms>
+       <session_save_path>
+         <![CDATA[tcp://127.0.0.1:11212?persistent=1&weight=2&timeout=8&retry_interval=8]]>
+       </session_save_path>
+       <cache>      
+         <backend><![CDATA[Mage_Cache_Backend_Redis]]></backend>
+         <backend_options>
+           <server><![CDATA[127.0.0.1]]></server>
+           <port><![CDATA[6380]]></port>
+           <persistent></persistent>
+           <database><![CDATA[0]]></database>
+           <force_standalone><![CDATA[0]]></force_standalone>
+           <connect_retries><![CDATA[1]]></connect_retries>
+           <read_timeout><![CDATA[10]]></read_timeout>
+           <automatic_cleaning_factor><![CDATA[0]]></automatic_cleaning_factor>
+           <compress_data><![CDATA[1]]></compress_data>
+           <compress_tags><![CDATA[1]]></compress_tags>
+           <compress_threshold><![CDATA[20480]]></compress_threshold>
+           <compression_lib><![CDATA[gzip]]></compression_lib>
+           <lifetimelimit><![CDATA[43200]]></lifetimelimit>
+           <use_lua><![CDATA[0]]></use_lua>
+         </backend_options>
+       </cache>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <frontName><![CDATA[dumortierite]]></frontName>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+</config>

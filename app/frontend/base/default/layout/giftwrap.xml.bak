@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<checkout_cart_index>
+		<reference name="head">
+		  <action method="addJs"><script>magestore/giftwrap.js</script></action>
+				<action method="addJs"><script>magestore/tooltip/tooltip.js</script></action>
+				<action method="addCss"><stylesheet>css/giftwrap.css</stylesheet></action>           
+		</reference>
+		<update handle="checkout.cart"  />
+		<reference name="checkout.cart">			
+			<action method="setCartTemplate" ifconfig="giftwrap/general/active"><value>giftwrap/checkout/cart.phtml</value></action>
+			<action method="setEmptyTemplate"><value>checkout/cart/noItems.phtml</value></action>
+			<action method="chooseTemplate"/>
+			<action method="addItemRender" ifconfig="giftwrap/general/active"><type>simple</type><block>checkout/cart_item_renderer</block><template>giftwrap/checkout/cart/item/default.phtml</template></action>
+			<action method="addItemRender" ifconfig="giftwrap/general/active"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>giftwrap/checkout/cart/item/default.phtml</template></action>
+			<action method="addItemRender" ifconfig="giftwrap/general/active"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>giftwrap/checkout/cart/item/default.phtml</template></action>
+			<block type="giftwrap/styleselection"  ifconfig="giftwrap/general/active" name="giftwrap.styleselection" as="styleselection" template="giftwrap/styleselection.phtml" />
+		</reference>
+		<reference name="checkout.cart.methods.onepage">
+			<action method="setTemplate"><template>giftwrap/checkout/onepage/link.phtml</template></action>
+		</reference>
+	</checkout_cart_index>
+	<giftwrap_index_styleselection>		
+		<remove name="right"/>
+		<remove name="left"/>		
+		<block type="giftwrap/styleselection" name="giftwrap.styleselection" output="toHtml" template="giftwrap/styleselection.phtml"/>
+	</giftwrap_index_styleselection>
+	<!--Order-->
+	<sales_order_view>
+		<reference name="order_totals">
+			<block type="giftwrap/sales_order_totals_giftwrap" name="giftwrap" />
+			<block type="giftwrap/sales_order_totals_giftwraptax" name="giftwraptax" />
+		</reference>
+	</sales_order_view>
+	<sales_order_invoice>
+		<reference name="invoice_totals">
+			<block type="giftwrap/sales_order_totals_giftwrap" name="giftwrap" />
+			<block type="giftwrap/sales_order_totals_giftwraptax" name="giftwraptax" />
+		</reference>
+	</sales_order_invoice>
+	<sales_order_print>
+		<reference name="order_totals">
+			<block type="giftwrap/sales_order_totals_giftwrap" name="giftwrap" />
+			<block type="giftwrap/sales_order_totals_giftwraptax" name="giftwraptax" />
+		</reference>
+	</sales_order_print>
+	<sales_order_printinvoice>
+		<reference name="invoice_totals">
+			<block type="giftwrap/sales_order_totals_giftwrap" name="giftwrap" />
+			<block type="giftwrap/sales_order_totals_giftwraptax" name="giftwraptax" />
+		</reference>
+	</sales_order_printinvoice>
+	<!--Email-->
+	<sales_email_order_items>
+		<reference name="order_totals">
+			<block type="giftwrap/sales_order_totals_giftwrap" name="giftwrap" />
+			<block type="giftwrap/sales_order_totals_giftwraptax" name="giftwraptax" />
+		</reference>
+	</sales_email_order_items>
+	<sales_email_order_invoice_items>
+		<reference name="invoice_totals">
+			<block type="giftwrap/sales_order_totals_giftwrap" name="giftwrap" />
+			<block type="giftwrap/sales_order_totals_giftwraptax" name="giftwraptax" />
+		</reference>
+	</sales_email_order_invoice_items>
+	
+	<catalog_product_view>
+		<reference name="head">
+			<action method="addJs"><script>magestore/tooltip/tooltip.js</script></action>
+			<action method="addCss"><stylesheet>css/giftwrap.css</stylesheet></action>
+		</reference>		
+		<reference name="product.info">			
+			<action method="setTemplate" ifconfig="giftwrap/general/show_icon"><template>giftwrap/catalog/product/view.phtml</template></action>
+			<block type="giftwrap/catalog_product_giftwrap" name="giftwrap" as="giftwrap" template="giftwrap/catalog/product/view/giftwrap.phtml"/>
+		</reference>
+	</catalog_product_view>
+	<giftwrap_index_pagers>
+		<reference name="root">
+			<action method="setTemplate"><template>page/1column.phtml</template></action>
+		</reference>
+		<reference name="head">			
+			<action method="addCss"><stylesheet>css/giftwrap.css</stylesheet></action>
+		</reference>	
+		<reference name="content">
+			<block type="giftwrap/pagers" name="giftwrap.pagers" template="giftwrap/pagers.phtml"/>
+		</reference>
+	</giftwrap_index_pagers>
+</layout> 

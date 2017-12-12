@@ -1,0 +1,120 @@
+<?php
+	if(Mage::registry("questions"))
+	{
+                $style_show=Mage::getStoreConfig('faq/general/style_show');
+		$store_id = Mage::helper("faq")->getStoreId();
+		$category_id = Mage::registry("category_id");
+		$faq_id = Mage::registry("faq_id");
+		
+		
+		$questions = Mage::registry("questions");
+		$category = Mage::getModel("faq/category")
+						->setStoreId($store_id)
+						->load($category_id);
+		
+		$categories = Mage::getModel("faq/category")
+							->setStoreId($store_id)
+							->getCollection()
+						//->addFieldToFilter("status",1)
+						//->setOrder("name","ASC")
+						;
+		$page_title = $this->getPageTitle();
+		
+		$faq = $this->getFaq();		
+?>
+
+<div class="faq clearfix">
+	
+	<div class="page-title">
+		<h1><?php echo $page_title; ?></h1>
+	</div>
+	<form method="get" action="<?php echo(Mage::getBaseUrl() . "faq/search/result/"); ?>" name="faqsearch">
+	<div id="searchform">
+		<label for="keyword"><?php echo $this->__('Search FAQ') ?></label><input type="text" name="keyword" id="keyword" size="30" maxlength="30" onfocus="this.value='';"/><a href="javascript:faq_search();" class="btnSearch" title="GO"><ins>GO</ins></a>
+	</div>
+	</form>
+		
+	<br>
+	<?php
+	    
+		if($faq)
+		{
+				echo("<div class='faq_view'>");								
+				echo("<h5>".$faq->getTitle()."</h5>");
+				echo("<div class='faq_conent'>". $this->getDescriptionHtml($faq->getDescription())."</div>");
+				echo("</div>");
+			
+		}
+	?>
+	<?php
+		if($faq_id && $questions->getsize() > 1)
+		{		
+		?>
+		<h3><?php echo($this->__('Other Answers in the Category'). ' "'.$category->getName() . '"');?></h3>
+		<?php
+		}
+		else if(!$faq_id)
+		{
+		?>
+		<h3><?php echo($this->__('Answers in the Category'). ' "'.$category->getName() . '"');?></h3>
+		<?php
+		}
+		?>
+		
+<div id="list_category" class="clearfix">
+<ul>
+	
+	<?php
+		$index = 1;
+		foreach($questions as $question)
+		{
+			if($question->getFaqId() != $faq_id)
+			{
+                            if(!$style_show){
+				echo("<div id=question-".$question->getUrlKey().">");
+					echo("<h5>".$index . ". <a id=title href='". $this->helper('core/url')->getCurrentUrl().'#'.$question->getUrlKey() ."'>". $question->getTitle() . "</a></h5>" );
+						$index++;
+				echo("</div>");
+                            }else{
+         ?>
+<p><h5><?php echo $index.". "?><a id="title" href="javascript:void(0)" onclick="show_hide('<?php echo "catogory-".$question->getUrlKey() ?>')"><?php echo $question->getTitle() ?></a></h5></p>
+<div style="display: none" class="hide-show"id="<?php echo "catogory-".$question->getUrlKey() ?>">
+    <div class="view-hide-show">
+   <div class="faq_conent" ><?php echo $this->getDescriptionHtml($question->getDescription()) ?></div>
+   <a href="javascript:void(0)" onclick="$('<?php echo "catogory-".$question->getUrlKey() ?>').hide();"><?php echo $this->__('Close') ?></a>
+   </div>
+</div>
+<?php   
+    $index++;
+                            }
+			}
+		}	
+	?>
+<?php if(!$style_show){ ?>
+    </br>
+    <div class="page-title"></div>
+    <div>
+    <?php     //phudu25
+	$count = 0;
+	foreach($questions as $question)
+	{            
+            if($question->getFaqId() != $faq_id)
+            {
+                $count=$count+1;
+		echo("<div class='faq_view' id=".$question->getUrlKey().">");								
+		echo("<h5>".$count.'. '.$question->getTitle()."</h5>");
+		echo("<div class='faq_conent'>". $this->getDescriptionHtml($question->getDescription()));//<a href='". Mage::getBaseUrl() .$category->getUrl_key().'#question-'.$question->getUrlKey() ."' title='".$question->getTitle()."'>".$this->__('Back')."</a></div>");
+                echo("<a  href='". $this->helper('core/url')->getCurrentUrl().'#question-'.$question->getUrlKey() ."' title='".$question->getTitle()."'>".$this->__('Back')."</a>");
+                
+		echo("</div></div>");
+            }
+        }
+    ?>
+    </div>
+<?php } ?>
+</ul>
+</div>
+</div>
+<?php		
+	}
+?>

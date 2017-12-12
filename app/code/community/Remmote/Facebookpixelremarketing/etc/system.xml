@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @extension   Remmote_Facebookpixelremarketing
+ * @author      Remmote    
+ * @copyright   2016 - Remmote.com
+ * @descripion  Module admin panel settings
+ */
+-->
+<config>
+    <tabs>
+        <remmote_extensions translate="label" module="remmote_facebookpixelremarketing">
+          <label>Remmote Extensions</label>
+          <sort_order>250</sort_order>
+        </remmote_extensions>
+    </tabs>
+    <sections>
+        <remmote_facebookpixelremarketing translate="label" module="remmote_facebookpixelremarketing">
+            <label>Facebook Pixel Remarketing Settings</label>
+            <tab>remmote_extensions</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>1</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <info>
+                    <frontend_model>Remmote_Facebookpixelremarketing_Block_Adminhtml_System_Config_Fieldset_Info</frontend_model>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                </info>
+                <general translate="label">
+                    <label>General Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[This extension will install Facebook Pixel in your Magento store. Test in real time using the Google Chrome extension: <a href="https://chrome.google.com/webstore/detail/facebook-pixel-helper/fdgfkebogiimcoedlicjlajpkdmockpc" target="_blank">Facebook Pixel Helper</a>]]>
+                    </comment>
+                    <fields>
+                        <enabled translate="label">
+                            <label>Module Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Enable Facebook Pixel Remarketing Extension?</comment>
+                        </enabled>
+
+                        <pixel_id translate="label">
+                            <label>Facebook Pixel ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Your Facebook Pixel ID</comment>
+                        </pixel_id>
+                    </fields>
+                </general>
+        
+                <events translate="label">
+                    <label>Facebook Pixel Standard Events</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[You can choose to enable standard events separately. Find more information about Facebook Standard Events <a href="https://web.facebook.com/business/help/952192354843755" target="_blank">here</a> 
+                    <br/> You might also find useful our extension <a href="https://www.magentocommerce.com/magento-connect/facebook-product-catalogs.html" target="_blank">Facebook Product Catalogs </a> that helps you to export your products to Facebook.]]>
+                    </comment>
+                    <fields>
+                        <view_content translate="label">
+                            <label>Enable ViewContent Event</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Event triggers when someone visits the product page view.</comment>
+                        </view_content>
+
+                        <search translate="label">
+                            <label>Enable Search Event</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Event triggers when someone searches for something using the search feature. Compatible with Advanced Search.</comment>
+                        </search>
+
+                        <add_to_cart translate="label">
+                            <label>Enable AddToCart Event</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Event triggers when someone adds a product to the cart (e.g. click on 'Add To Cart' button).</comment>
+                        </add_to_cart>
+
+                        <add_to_wishlist translate="label">
+                            <label>Enable AddToWishlist Event</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Event triggers when someone adds a product to the wishlist (e.g. click on 'Add To Wishlist' button).</comment>
+                        </add_to_wishlist>
+
+                        <initiate_checkout translate="label">
+                            <label>Enable InitiateCheckout Event</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Event triggers when someone lands in the checkout process page. Compatible with One Step Checkout.</comment>
+                        </initiate_checkout>
+
+                        <add_payment_info translate="label">
+                            <label>Enable AddPaymentInfo Event</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Event triggers when someone selects a payment method in the checkout process page. </comment>
+                        </add_payment_info>
+
+                        <purchase translate="label">
+                            <label>Enable Purchase Event</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Event triggers when someone places an order (success page view).</comment>
+                        </purchase>
+
+                        <lead translate="label">
+                            <label>Enable Lead Event</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Event triggers when someone signup to the newsletter.</comment>
+                        </lead>
+
+                        <complete_registration translate="label">
+                            <label>Enable CompleteRegistration Event</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Event triggers when someone creates an account or signup to the newsletter.</comment>
+                        </complete_registration>
+                    </fields>
+                </events>
+            </groups>
+        </remmote_facebookpixelremarketing> 
+    </sections>
+</config>

@@ -1,0 +1,331 @@
+<?php
+
+$item = $this->getEvents();
+
+
+
+?>
+
+<?php if (!empty($item) && isset($item['event_id'])): ?>
+    
+<script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "dc20c671-3d88-4c19-b79b-7a996fe07904"});</script>
+<?php if (Mage::helper('events')->isEnableMapShow()) : ?>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            var cursorX;
+            var cursorY;
+            if (window.Event) {
+                document.captureEvents(Event.MOUSEMOVE);
+            }
+            document.onmousemove = getCursorXY;
+            jQuery(".mapThis").each(function() {
+                var dPlace = jQuery(this).attr("place");
+                var dZoom = jQuery(this).attr("zoom");
+                var dText = jQuery(this).html();
+                jQuery(this).html('<a onmouseover="mapThis.show(this);" style="text-decoration:none; border-bottom:1px dotted #999" href="https://maps.google.com/maps?q=' + dPlace + '&z=' + dZoom + '">' + dText + '</a>');
+            });
+        });
+        var mapThis = function() {
+            var tt;
+            var errorBox;
+            return{
+                show: function(v) {
+                    if (tt == null) {
+                        var pNode = v.parentNode;
+                        pPlace = jQuery(pNode).attr("place");
+                        pZoom = parseInt(jQuery(pNode).attr("zoom"));
+                        pText = jQuery(v).html();
+                        tt = document.createElement('div');
+                        jQuery(tt).html('<a href="https://maps.google.com/maps?q=' + pPlace + '&z=11" target="new"><img border=0 src="https://maps.google.com/maps/api/staticmap?center=' + pPlace + '&zoom=' + pZoom + '&size=300x300&sensor=false&format=png&markers=color:blue|' + pPlace + '"></a>');
+                        tt.addEventListener('mouseover', function() {
+                            mapHover = 1;
+                        }, true);
+                        tt.addEventListener('mouseout', function() {
+                            mapHover = 0;
+                        }, true);
+                        tt.addEventListener('mouseout', mapThis.hide, true);
+                        document.body.appendChild(tt);
+                    }
+                    fromleft = cursorX;
+                    fromtop = cursorY;
+                    fromleft = fromleft - 25;
+                    fromtop = fromtop - 25;
+                    tt.style.cssText = "position:absolute; left:" + fromleft + "px; top:" + fromtop + "px; z-index:999; display:block; padding:1px; margin-left:5px; background-color:#333; width:302px; -moz-box-shadow:0 1px 10px rgba(0, 0, 0, 0.5);";
+                    tt.style.display = 'block';
+                },
+                hide: function() {
+                    tt.style.display = 'none';
+                    tt = null;
+                }
+            };
+        }();
+        function getCursorXY(e) {
+            cursorX = (window.Event) ? e.pageX : event.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+            cursorY = (window.Event) ? e.pageY : event.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+        }
+
+    </script>
+<?php endif; ?>
+    
+    
+    <?php 
+        $baseURL = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA). 'events';
+        $dateType = Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM; //Mage::app ()->getLocale ()->getDateTimeFormat ( Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM );
+        $isExpiredEvent = Mage::helper('events')->isExpiredEvent($item['event_id']);
+        $product = $this->getEventProduct();
+        $catalog = Mage::getModel('catalog/product');
+        $_product = $catalog->load($product); //echo '<pre>';print_r($_product);exit;
+        $typeProduct = $_product['type_id'];
+        $stockLevel = (int) Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product)->getQty(); //echo $stockLevel;exit;
+        /* @param int $stockLevel @return int stock level in number */
+        $prefix = $this->getRequest()->getParam('pfx');
+
+        $expiredStatus = Mage::helper('events')->getNotificationType(1);
+        $stockOut = Mage::helper('events')->getNotificationType(0);
+        /* store configuration for notification types */
+        $prevUrlLink = '';
+
+        if (!Mage::helper('events')->isEnableBreadcrumbs()) {
+            //$prevUrl = $_SERVER ['HTTP_REFERER'];
+            $prevUrlLink = "<a href='" . Mage::helper('events')->clientUrl() . "'>" . $this->__('Back') . " << </a>";
+        }
+    
+    ?>
+    
+    
+    <div class="eventviewDIV">
+
+
+    <ul>
+    <li style="float:left; padding-right:20px;">
+            <span style="float: left">
+               <?php  
+                $resized_url="";
+                if($item['event_image']):
+                    $resized_url = Mage::helper('events')->getResizedUrl($item['event_image'],300);
+               endif; ?>
+                <img src="<?php echo ($item['event_image'])? $resized_url: ''; ?>" alt="<?php echo $item['event_title'] ?>"
+                     width = "100%"
+                     style="border: 1px solid #d5d5d5;padding:3px;margin-right: 10px;" />
+            </span>
+</li>
+    <li style="float:left">
+        <h3 style="margin-top:0;"><?php echo $item['event_title']; ?></h3>
+
+        <?php
+            $fromDate = new Zend_Date(strtotime($item['event_start_date']));
+            $toDate = new Zend_Date(strtotime($item['event_end_date']));
+            
+            if (strtotime($this->getRequest()->getParam('repeat'))) {
+                
+                $fromDate = new Zend_Date(strtotime($item['recurring_info']['recurring_start_dates']));
+                $toDate = new Zend_Date(strtotime($item['recurring_info']['recurring_end_dates']));
+            }
+        ?>
+        <p style="font-size: 14px;color: #777">
+        <strong><?php echo $this->__('From') ?> :</strong> <?php echo $this->formatDate($fromDate, $dateType, true)//date('M jS, Y - h:i a', strtotime($item['event_start_date']));  ?><br />
+        <strong><?php echo $this->__('To') ?> :</strong> <?php echo $this->formatDate($toDate, $dateType, true) ?><br />
+        <strong> <?php echo $this->__('Location') ?> : </strong> <span class="mapThis" place="<?php echo stripslashes($item['event_venu']) ?>" zoom="10"><?php echo $item['event_venu'] ?></span></p>
+
+        <?php if ($item["contact_fax"] != '') : ?>
+                <div class="ticketButton"><a href="<?php echo $item['contact_fax']; ?>" target="_blank">GET TICKETS</a></div>
+        <?php endif; ?>
+
+
+        <?php if (!$isExpiredEvent): ?>
+            <!-- Ticket section begins -->
+            <?php if ($product > 0 AND $stockLevel > 0 OR $typeProduct == 'configurable'): ?>
+                <div style="width:100%; text-align: right;">
+                    <strong><?php echo $this->__('Buy Tickets') ?> : </strong>
+                    <?php
+                    $model = Mage::getModel('catalog/product')->load($product);
+                    $name = $model->getName();
+                    ?>
+                    <a href="<?php echo $this->getAddToCartUrl($model); //Mage::getUrl('checkout/cart/add', array('product' => $product))   ?>"><?php echo $name; ?></a>&nbsp;
+                </div>
+            <?php elseif ($product > 0 AND $stockLevel == 0): ?>
+                <div style="width:100%; text-align: right;">
+                    <strong><?php echo  $this->__('Buy Tickets') ?> : </strong>
+                    <p><?php echo $stockOut; ?></p>
+                </div>
+            <?php endif; ?>
+            <!-- Ticket section ends -->
+        <?php else: ?>
+            <div style="width:100%; text-align: right;">
+                <strong><?php echo $expiredStatus; ?></strong>
+            </div>
+        <?php endif; ?>
+
+
+        <p style="font-size: small;color: #777">
+            <?php if ($item["contact_name"] != '') { ?><strong><?php echo  $this->__('Contact') ?> :</strong> <?php echo $item['contact_name'];
+    }
+            ?><br />
+            <?php if ($item["contact_phone"] != '') { ?><strong> <?php echo  $this->__('Phone') ?> : </strong> <?php echo $item['contact_phone'];
+    }
+            ?><br />
+            <?php if ($item["contact_email"] != '') { ?><br /><strong><?php echo  $this->__('Email') ?> :</strong> <?php echo $item['contact_email'];
+    }
+    ?><br />
+        <?php if ($item["contact_address"] != '') { ?><strong> <?php echo  $this->__('Address') ?> : </strong> <?php echo $item['contact_address'];
+    }
+        ?>
+        </p>
+        <br style="clear: both;"/>
+
+
+</li>
+
+</ul>
+
+        <!-- Main Image begins -->
+
+        <div class="event-contents">
+
+            <br style="clear: both;"/>
+            <span>
+                <?php
+                    $_cmsHelper = Mage::helper('cms');
+                    $processor = $_cmsHelper->getPageTemplateProcessor();
+                ?>
+                <p style="font-size:12px;"><?php echo $processor->filter($item['event_content']); ?></p>
+            </span>
+            <p style="clear: both"></p>
+        </div>
+
+        <!-- Main Image ends -->
+        
+        <!-- Gallery section begins -->
+    <?php
+    $gallery = $this->getEventGallery();
+
+    if (!empty($gallery)):
+        ?>
+
+            <style type="text/css">
+
+                /* Generic Carousel Properties */
+                .carousel { position:relative; clear:both; left:20px; margin-top:10px; 
+                            border:2px solid #555555; background-color:#333333;
+                }
+                .carousel .navButton {
+                    cursor:pointer; display:block; text-indent:-9999px; background-repeat:none; z-index:10;
+                }
+                .carousel .container { position:absolute; overflow:hidden; }
+                .carousel .items { position:absolute; }
+                .carousel .item { position:relative;
+                                  cursor:pointer;
+                                  filter:progid:DXImageTransform.Microsoft.Alpha(opacity=70);
+                                  -moz-opacity:0.7;
+                                  opacity:0.7;
+                                  list-style-type:none; margin:0px; 
+                }
+                .carousel .item.hover, .carousel .item.selected { 
+                    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=100);
+                    -moz-opacity:1.0;
+                    opacity:1.0;    
+                }
+
+
+                /* Horizontal Carousel */
+                #Carousel2 { height:88px; width:260px; }
+                #Carousel2 .container { left:26px; top:12px; width:210px; height:100px; }        
+                #Carousel2 .items { top:0; left:2px; width:1000px;}
+                #Carousel2 .item { height:70px;  width:70px; float:left; clear:right; }
+                #Carousel2 .item .icon img { position:relative; left:0px; width:65px !important; height:65px; cursor:pointer;}
+                #Carousel2 .navButton { position:absolute; bottom:0px; width:24px; height:87px; }
+                #Carousel2 .navButton.previous {  left:0px;background-repeat: no-repeat; background-position:center;  background-image:url('<?php echo Mage::getBaseUrl('js') . 'events' . DS; ?>images/interface/button.left.png'); }
+                #Carousel2 .navButton.next { right:0px;  background-position:center; background-repeat: no-repeat;background-image:url('<?php echo Mage::getBaseUrl('js') . 'events' . DS; ?>images/interface/button.right.png'); }
+                /* Hide data items from selector */
+                #Carousel2 .item .key { display:none;}
+                #Carousel2 .item .picture { display:none;}
+
+
+            </style>
+            <div id="Carousel2" class="carousel">
+                <div class="navButton previous" style="display:none;"><?php echo  $this->__('Back') ?></div>
+                <div class="navButton next" style="display:none;"><?php echo  $this->__('More') ?></div>
+                <div class="container">
+                    <div class="items">
+                        <?php foreach ($gallery as $g): ?>
+                            <div class="item">
+                                <div class="key caption"><?php echo  $this->__('Top') ?></div>
+                                <div class="icon">
+                                    <a class="noclass" href="<?php echo $baseURL . DS . $g['image_file']; ?>" rel="lightbox[gallery]">
+                                        <?php 
+                                        
+                                            $galleryFilePath = explode('/', $g['image_file']); 
+                                            
+                                            $fileName = array_pop($galleryFilePath);
+                                        
+                                            $makePath = implode('/', $galleryFilePath); 
+                                        ?>
+                                        <img alt="<?php echo $g['image_name']; ?>" src="<?php echo Mage::helper('events')->resizeImage($fileName, 150, 90, 'events'.$makePath) ?>"  width = "150px" height ="90px"/>
+                                    </a>
+                                </div>
+                                <div class="picture">
+                                    <a class="noclass" href="<?php echo $baseURL . DS . $g['image_file']; ?>" rel="">
+                                        <img alt="<?php echo $g['image_name']; ?>" src="<?php echo $baseURL . DS . $g['image_file']; ?>"  width = "150px" height ="90px"/>
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+            <script language="javascript" type="text/javascript" src="<?php echo Mage::getBaseUrl('js') . 'events' . DS; ?>clientscript/os.js"></script>
+            <script language="javascript" type="text/javascript" src="<?php echo Mage::getBaseUrl('js') . 'events' . DS; ?>clientscript/model/carousel.js"></script>
+            <script language="javascript" type="text/javascript" src="<?php echo Mage::getBaseUrl('js') . 'events' . DS; ?>clientscript/behavior/application.js"></script>
+        <?php endif; ?>
+        <!-- Gallery section ends -->
+        <!-- Video section begins -->
+        <?php
+        if ($item['event_video'] != ''):
+            $videoId = '';
+            $explode = explode('=', $item['event_video']);
+            $videoId = $explode[1];
+            ?>
+
+
+
+
+
+            <p style="clear: both"></p>
+            <!--<h3><?php //echo  $this->__('Event Video') ?></h3>-->
+            <style>
+.videocontainer {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+}
+.video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+</style>
+<div class="videocontainer">
+            <iframe class="video" type="text/html" width="458" height="385" src="https://www.youtube.com/embed/<?php echo stripslashes($videoId); ?>" frameborder="0">
+            </iframe>
+            </div>
+    <?php endif; ?>
+        <!-- Video section ends -->
+        <p style="clear: both;"></p>
+        <!-- Social section -->
+
+        <div class = "event_social_wdgt">
+            <span class='st_fblike_hcount'></span><span class='st_twitter_hcount'></span><span class='st_plusone_hcount'></span><span class='st_email_hcount'></span><span class='st_sharethis_hcount'></span>
+        </div>
+
+    </div>
+    <p style="clear: both;"></p>
+    <?php echo $prevUrlLink; ?>
+<?php else: ?>
+    
+    <?php echo Mage::helper('events')->__('This event does not exist.'); ?>
+    
+<?php endif; ?>

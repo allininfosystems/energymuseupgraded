@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <magestore translate="label">
+            <label>Magestore Extension</label>
+            <sort_order>400</sort_order>
+        </magestore>
+    </tabs>
+
+    <sections>
+        <faq translate="label" module="faq">
+            <class>separator-top</class>
+            <label>FAQ</label>
+            <tab>magestore</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>300</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>FAQ Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>   
+                        <active translate="label">
+                            <label>Enable FAQ</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </active>                    
+                        <page_size_number translate="label">
+                            <label>Number of questions per page</label>
+                            <frontend_type>text</frontend_type>                            
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>The number of questions shown on one page. If the value is empty or 0, default will be 20</comment>
+                        </page_size_number>		
+                        <sidebar_position translate="label">
+                            <label>Display on sidebar</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>faq/optionarray_listposition</source_model>
+                            <sort_order>17</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sidebar_position>
+                        <sidebar_question_number_left translate="label">
+                            <label>Number of questions on sidebar</label>
+                            <frontend_type>text</frontend_type>                            
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>The number of Most Frequently Asked Questions shown on sidebar. If the value is empty or 0, default will be 5</comment>
+                            <depends>
+                                <sidebar_position>sidebar-left</sidebar_position>
+                            </depends>
+                        </sidebar_question_number_left>
+                        <sidebar_question_number_right translate="label">
+                            <label>Number of questions on sidebar</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>The number of Most Frequently Asked Questions shown on sidebar. If the value is empty or 0, default will be 5</comment>
+                            <depends>
+                                <sidebar_position>sidebar-right</sidebar_position>
+                            </depends>
+                        </sidebar_question_number_right>
+                         <tag_number translate="label">
+                            <label>Number of tags show in sidebar</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>The number of questions shown on one page. If the value is empty or 0, default will be 20</comment>
+                        </tag_number>
+                        <meta_keywords translate="label">
+                            <label>Meta Keywords</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>201</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </meta_keywords>
+                        <meta_description translate="label">
+                            <label>Meta Description</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>202</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </meta_description>
+                    </fields>	
+                </general>
+			
+				
+            </groups>
+
+        </faq>        
+
+    </sections>
+
+</config>

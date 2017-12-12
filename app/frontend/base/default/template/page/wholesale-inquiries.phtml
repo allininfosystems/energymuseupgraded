@@ -1,0 +1,178 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+
+$is_sent = Mage::getSingleton('core/session')->getInfoSent();
+	if(isset($_POST['hideit'])):
+	$params = Mage::app()->getRequest()->getParams();
+	$countError = 0;
+	$contactname = $params['contactname'];
+	$emailcontact = $params['emailcontact'];
+	$storename = $params['storename'];
+	$city = $params['city'];
+	$state = $params['state'];
+	$zipcode = $params['zipcode'];
+	$phone = $params['phone'];
+	$taxid = $params['taxid'];
+	$aboutus = $params['aboutus'];
+
+	$subject = "Energy Muse Wholesale Inquiries";
+	$body.="\r\n\tContact Name: ".$contactname;
+	$body.="\r\n\tEmail Contact: ".$emailcontact;
+	$body.="\r\n\tStore Name: ".$storename;
+	$body.="\r\n\tCity: ".$city;
+	$body.="\r\n\tState: ".$state;
+	$body.="\r\n\tZip Code: ".$zipcode;
+	$body.="\r\n\tPhone Number: ".$phone;
+	$body.="\r\n\tTax Id: ".$taxid;
+	$body.="\r\n\tHow did you hear about us?: ".$aboutus;
+	if(eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $emailcontact)){
+		$mail = new Zend_Mail();
+		$mail->setBodyText($body);
+		$mail->setFrom($emailcontact, $contactname);
+		//$mail->addTo("alphy@incrediblemarketing.com","Alphy");
+		//$mail->addCc("dave@incrediblemarketing.com","Dave Sveen");
+		//$mail->addTo("sales@energymuse.com");
+		$mail->addTo("kevin.dodge@yahoo.com");
+		//$mail->addBcc("c.alphe@gmail.com","Alphy");
+		$mail->setSubject($subject);
+		if($mail->send()){
+			echo "Mail Sent";
+			header("location:".$this->getUrl('wholesale-inquiries-success'));
+			exit();
+		}
+	}else{
+		echo "Mail Not Sent";
+		Mage::getSingleton('core/session')->setInfoSent('0');
+	}
+	endif; 
+?>
+<h4>If you would like information about our Wholesaler program, please fill in all fields below and a representative will contact you</h4>
+<form action="<?php echo $this->getUrl('wholesale-inquiries'); ?>" enctype="multipart/form-data" method="post" id="WholesaleInquiriesForm">
+<div class="form-info wholesale-inquiries">
+	<div class="bg_input1">
+		<input value="<?php echo !empty($contactname)?$contactname:'Contact Name*'; ?>" type="text" onfocus="this.value == 'Contact Name*' ? this.value = '' : '';clearthis(this);" onblur="this.value == '' ? this.value = 'Contact Name*' : ''" title="Contact Name" value="Contact Name*" name="contactname" id="contactname" class="required-entry">
+	</div>
+	<div class="bg_input1">
+		<input value="<?php echo !empty($emailcontact)?$emailcontact:'Email Contact*'; ?>" type="text" onfocus="this.value == 'Email Contact*' ? this.value = '' : '';clearthis(this);" onblur="this.value == '' ? this.value = 'Email Contact*' : ''" title="Email Contact" value="Email Contact*" name="emailcontact" id="emailcontact" class="required-entry">
+	</div>
+	<div class="bg_input1">
+		<input value="<?php echo !empty($storename)?$storename:'Store Name*'; ?>" type="text" onfocus="this.value == 'Store Name*' ? this.value = '' : '';clearthis(this);" onblur="this.value == '' ? this.value = 'Store Name*' : ''" title="Store Name" value="Store Name*" name="storename" id="storename" class="required-entry">
+	</div>
+	<div class="bg_input1">
+		<input value="<?php echo !empty($city)?$city:'City*'; ?>" type="text" onfocus="this.value == 'City*' ? this.value = '' : '';clearthis(this);" onblur="this.value == '' ? this.value = 'City*' : ''" title="City" value="City*" name="city" id="city" class="required-entry">
+	</div>
+	<div class="bg_input1">
+		<input value="<?php echo !empty($state)?$state:'State*'; ?>" type="text" onfocus="this.value == 'State*' ? this.value = '' : '';clearthis(this);" onblur="this.value == '' ? this.value = 'State*' : ''" title="State" value="State*" name="state" id="state" class="required-entry">
+	</div>
+	<div class="bg_input1">
+		<input value="<?php echo !empty($zipcode)?$zipcode:'Zip Code*'; ?>" type="text" onfocus="this.value == 'Zip Code*' ? this.value = '' : '';clearthis(this);" onblur="this.value == '' ? this.value = 'Zip Code*' : ''" title="Zip Code" value="Zip Code*" name="zipcode" id="zipcode" class="required-entry">
+	</div>
+	<div class="bg_input1">
+		<input value="<?php echo !empty($phone)?$phone:'Phone Number*'; ?>" type="text" onfocus="this.value == 'Phone Number*' ? this.value = '' : '';clearthis(this);" onblur="this.value == '' ? this.value = 'Phone Number*' : ''" title="Phone Number" value="Phone #*" name="phone" id="phone" class="required-entry">
+	</div>
+	<div class="bg_input1">
+		<input value="<?php echo !empty($taxid)?$taxid:'Tax Id*'; ?>" type="text" onfocus="this.value == 'Tax Id*' ? this.value = '' : '';clearthis(this);" onblur="this.value == '' ? this.value = 'Tax Id*' : ''" title="Tax Id" value="Tax Id*" name="taxid" id="taxid" class="required-entry">
+	</div>
+	<div class="bg_input1">
+	<label>How did you hear about us?*</label><br />
+		<select name="aboutus" class="required-entry">
+		<option value="">Select Option</option>
+		  <option value="Search Engine">Search Engine</option>
+		  <option value="Email Marketing">Email Marketing</option>
+		  <option value="Employeer">Employeer</option>
+		  <option value="Family or Friends">Family or Friends</option>
+		  <option value="Other">Other</option>
+		</select> 
+	</div>
+	<div class="clear"></div>
+	<input type="text" style="display:none !important;" value="" id="hideit" name="hideit">
+	<div class="clear"></div>
+	<div class="bg_submit">
+	<input type="submit" value="Submit" class="submit-button" id="wholesale-inquiries-submit" />
+	</div>
+</div>
+
+</form>
+<div class="clear"></div>
+<div id="procprogress" style="display:none" class="veterans-notifications">
+</div>
+<script type="text/javascript">
+//< ![CDATA[
+	jQuery('#wholesale-inquiries-submit').click(function(e){
+		var the_err = 0;
+		e.preventDefault();
+		jQuery('#WholesaleInquiriesForm :input').each(function(){
+				if(jQuery(this).attr('type') == 'submit') return;
+				if(jQuery(this).val() == jQuery(this).attr('title')+'*'){
+					if(jQuery(this).val() == 'Email Contact*'){
+						jQuery(this).addClass('validate-email validation-failed');
+						jQuery(this).after('<div style="" id="advice-validate-email-email" class="validation-advice">'+jQuery(this).attr("title")+'.</div>');
+						the_err++;
+						return;
+					}
+				jQuery(this).addClass('validation-failed');
+				jQuery(this).after('<div style="" id="advice-required-entry-name" class="validation-advice">'+jQuery(this).attr("title")+'.</div>');
+				the_err++;
+				}
+				if(jQuery(this).attr('name')=='emailcontact'){
+						if(!isValidEmailAddress(jQuery(this).val())){
+							jQuery(this).addClass('validate-email validation-failed');
+							if(jQuery('#advice-validate-email-email').length>0) jQuery('#advice-validate-email-email').remove();
+							jQuery(this).after('<div style="" id="advice-validate-email-email" class="validation-advice">Invalid email</div>');
+							the_err++;
+							return;	
+						}
+				}
+			});
+		if(the_err==0){
+			jQuery('#WholesaleInquiriesForm').submit();
+		}else{
+			jQuery('#procprogress').html('');
+			jQuery('#procprogress').html('<div class="notify-msg">Some required field are required.</div>');
+			jQuery('#procprogress').show();
+			setTimeout(function(){
+				  jQuery('#procprogress').fadeOut("slow", function () {
+				  jQuery('#procprogress').hide();
+					  });
+				}, 3000);
+		}
+	});	
+	function clearthis(el){
+		jQuery(el).removeClass('validation-failed');
+		if(jQuery(el).next().hasClass('validation-advice')){
+			jQuery(el).next().remove();
+		}
+	}
+	function isValidEmailAddress(emailAddress) {
+    var pattern = new RegExp(/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
+    // alert( pattern.test(emailAddress) );
+    return pattern.test(emailAddress);
+	}
+		
+//]]>
+</script>

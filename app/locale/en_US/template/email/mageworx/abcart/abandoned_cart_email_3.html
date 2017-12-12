@@ -1,0 +1,48 @@
+<!--@subject Hurry! Last chance to complete your order and get a {{var coupon_amount}} discount!    @-->
+
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+
+<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+<div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+    <table cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+            <td align="center" valign="top" style="padding:20px 0 20px 0">
+                <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+                    <tr>
+                        <td valign="top">
+                            <a href="{{store url=""}}"><img src="{{var logo_url}}" alt="{{var logo_alt}}" style="margin-bottom:10px;" border="0"/></a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;"">Hello, {{var cart.customer_name}}</h1>
+                            <p style="font-size:12px; line-height:16px; margin:0;">
+                            <p>How is it going?</p>
+                            <p>This is the last reminder that the items we are holding in your shopping cart will expire in 3 days. But you can still purchase
+                                the merchandise in your cart and even get {{var coupon_amount}} off!</p>
+                            <p>Your order items are listed below: </p>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{var cart_items}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <p style="font-size:12px; line-height:16px; margin:0;">
+                                <p><a href="{{var recovery_url}}">Click here</a> to complete your order. </p>
+                                <p>And hurry! This special offer expires on {{var coupon_expiration}}. </p>
+                                <p>In case you faced any issues with checking out or found something confusing, please contact our customer service by email at
+                                    <a href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a> or by phone at <span class="nobr">{{config path='general/store_information/phone'}}</span>. We will gladly assist you and help to complete your order.</p>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>

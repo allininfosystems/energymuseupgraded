@@ -1,0 +1,104 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+<div class="sitemap-view">
+	<h3>Pages</h3>
+	<ul>
+		<li><a href="https://www.energymuse.com/company/aboutus">About Us</a></li>
+		<li><a href="https://www.energymuse.com/company/affiliates">Affiliates</a></li>
+		<li><a href="https://www.energymuse.com/store/top-customer-picks.html">Bestsellers</a></li>
+		<li><a href="https://www.energymuse.com/company/catalog">Catalog</a></li>
+		<li><a href="https://www.energymuse.com/company/contact">Contact</a></li>
+		<li><a href="https://www.energymuse.com/store/ugiftcert/customer/balance">Gift Cert. Balance</a></li>
+		<li><a href="https://www.energymuse.com/resources/faq">Help/FAQ</a></li>
+		<li><a href="https://www.energymuse.com/">Home</a></li>
+		<li><a href="https://www.energymuse.com/store/men-s-jewelry.html">Men</a></li>
+		<li><a href="https://www.energymuse.com/company/newsletter">Newsletter</a></li>
+		<li><a href="https://www.energymuse.com/company/press">Press</a></li>
+		<li><a href="https://www.energymuse.com/company/privacy">Privacy</a></li>
+		<li><a href="https://www.energymuse.com/company/repairs">Repairs</a></li>
+		<li><a href="https://www.energymuse.com/store/treasures/limited-finds.html">Sale</a></li>
+		<li><a href="https://www.energymuse.com/company/Sales">Sales &amp; Promos</a></li>
+		<li><a href="https://www.energymuse.com/store/sitemap">Sitemap</a></li>
+		<li><a href="https://www.energymuse.com/store/storelocator">Store Locations</a></li>
+		<li><a href="https://www.energymuse.com/company/testimonials">Testimonials</a></li>
+		<li><a href="https://www.energymuse.com/celebrities">Who's Wearing Us</a></li>
+		<li><a href="https://www.energymuse.com/store/women-s-jewelry.html">Women</a></li>								
+	</ul>
+	<h3>Catalog</h3>
+<?php $_helper = Mage::helper('catalog/category') ?>
+<?php $_categories = $_helper->getStoreCategories() ?>
+<?php $currentCategory = Mage::registry('current_category') ?>
+<?php if (count($_categories) > 0): ?>
+    <ul class="products"><li>
+        <?php foreach($_categories as $_category): ?>
+            <h4>
+                <a href="<?php echo $_helper->getCategoryUrl($_category) ?>">
+                    <?php echo $_category->getName() ?>
+                </a>                
+            </h4>		
+    
+	<?php $_category = Mage::getModel('catalog/category')->load($_category->getId()) ?>
+                <?php $_subcategories = $_category->getChildrenCategories() ?>
+                <?php if (count($_subcategories) > 0): ?>
+                    <ul class="sub-categories">
+                        <?php foreach($_subcategories as $_subcategory): ?>	
+                            <li>
+                                <a href="<?php echo $_helper->getCategoryUrl($_subcategory) ?>">
+                                    <?php echo $_subcategory->getName() ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+        <?php endforeach; ?>
+<?php endif; ?></li></ul>
+<h3>Products</h3>
+	<?php $collection = Mage::getModel('catalog/product')->getCollection()
+			->addFieldToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
+			//->addFieldToFilter('stock_status', Mage_CatalogInventory_Model_Stock_Status::STATUS_IN_STOCK)
+			//->addAttributeToFilter('is_in_stock', 0)
+			//->addAttributeToFilter('qty', ">0")			
+			->addAttributeToSort('name', 'ASC'); 
+	?>
+	<?php //$collection .= Mage::getModel('cataloginventory/stock_item')->getCollection()
+        //->addFieldToFilter('is_in_stock', 1);
+		?>
+	<?php //Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection( $_productCollection);  ?>
+	<?php //Mage::getSingleton(’catalog/product_visibility’)->addVisibleInCatalogFilterToCollection($collection); ?>
+	<ul>
+	<?php foreach($collection as $product): ?>
+		<li><?php echo '<a href="'.$product->getProductUrl().'" class="product" target="_blank" >'.$product->getName().'</a><br />'; ?></li>
+	<?php endforeach; ?>
+	</ul>
+</div>

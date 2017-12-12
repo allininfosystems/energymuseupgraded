@@ -1,0 +1,42 @@
+<h1><?php echo $this->getCategory()->getTitle(); ?></h1>
+
+<style>
+<?php 
+$thisCategory = $this->getCategory()->getIdentifier();
+if($thisCategory == "print"): ?>
+.aw-blog-read-more {display:block; color:#3ec2df;}
+<?php else: ?>
+.aw-blog-read-more {display:none; color:#3ec2df;}
+<?php endif; ?>
+</style>
+
+<?php $posts = $this->getPosts(); ?>
+<?php if (count($posts)): ?>
+    <?php foreach ($posts as $post): ?>
+        <div class="postWrapper">
+            <div class="postContent"><?php echo $post->getPostContent(); ?></div>
+        </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <?php echo Mage::helper('blog')->__('No Posts in this Category.'); ?>
+<?php endif; ?>
+
+<div style="clear:both"></div>
+
+<?php 
+switch ($thisCategory) {
+	case "celebs":
+		echo $this->getLayout()->createBlock('cms/block')->setBlockId('press-celebs')->toHtml(); 
+        break;
+    case "print":
+        echo $this->getLayout()->createBlock('cms/block')->setBlockId('press-print')->toHtml();
+        break;
+    case "online":
+        echo $this->getLayout()->createBlock('cms/block')->setBlockId('press-online')->toHtml();
+        break;
+    case "video":
+        echo $this->getLayout()->createBlock('cms/block')->setBlockId('press-video')->toHtml();
+        break;
+    default:
+        //echo "Your favorite color is neither red, blue, nor green!";
+}

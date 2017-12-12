@@ -1,0 +1,1007 @@
+<?php
+/**
+ * @see Magestore_Storelocator_Block_Storelocator
+ */
+?>
+<?php
+$storeViewId = Mage::app()->getStore()->getStoreId();
+$defaultCountry = Mage::getStoreConfig('storelocator/general/default_country', $storeViewId);
+$countries = $this->getListCountry1();
+$search_config = $this->getSearchConfig();
+$unit = $this->getUnitRadius();
+$deaultRadius = $this->chekRadiusDefault();
+$mapStyles = Mage::getModel('storelocator/gmap')->getMapStyle();
+$storeCollection = $this->getListStore1();
+if (Mage::getStoreConfig('storelocator/style_config/use_available_style', $storeViewId)) {
+    $mapStyles = Mage::getModel('storelocator/gmap')->getMapStyle();
+    $mapStyle = $mapStyles[Mage::getStoreConfig('storelocator/style_config/map_style', $storeViewId)];
+} else {
+    $mapStyle = Mage::getStoreConfig('storelocator/style_config/map_custom_style', $storeViewId);
+}
+$searchByArea = ($search_config != NULL) && (count($search_config)) && (!in_array(5, $search_config));
+$btnGetDirectionColor = Mage::getStoreConfig('storelocator/style_config/background_show_btn_direction', $storeViewId);
+$mcOptions= array (
+    array (
+        "height" => 53,
+        "url" => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA). "storelocator/images/markerclusterer/m1.png",
+        "width" => 53
+    ),
+    array (
+        "height" => 56,
+        "url" => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA). "storelocator/images/markerclusterer/m2.png",
+        "width" => 56
+    ),
+    array (
+        "height" => 66,
+        "url" => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA). "storelocator/images/markerclusterer/m3.png",
+        "width" => 66
+    ),
+    array (
+        "height" => 78,
+        "url" => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA). "storelocator/images/markerclusterer/m4.png",
+        "width" => 78
+    ),
+    array (
+        "height" => 90,
+        "url" => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA). "storelocator/images/markerclusterer/m5.png",
+        "width" => 90
+    )
+);
+?>
+<style type="text/css">
+    .btn-go-direction {
+        background-color: #<?php echo $btnGetDirectionColor ?> !important;
+    }
+</style>
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=<?php echo $this->getGoogleApiKey(); ?>&sensor=false&libraries=geometry,places"></script>
+
+<div class="storelocator-page">
+    <h2 class="text-left"><?php echo $this->__('Store Locator') ?></h2>
+    <div class="search-button">
+        <a class="search search-distance active" id="search-distance" onclick="showDistance()"><span><?php echo $this->__('Search by distance') ?></span></a>
+        <?php if (($search_config != NULL) && (count($search_config)) && (!in_array(5, $search_config))): ?>
+            <a class="search search-area-magestore" id="search-area-magestore" onclick="showArea()"><span><?php echo $this->__('Search by area') ?></span></a>
+        <?php endif; ?>
+    </div>
+    <div class="search-content">
+        <div class="container-search">
+            <div class="row search-by-distance" id="form-search-distance" style="margin: 0;">
+                <div class="col-md-5 input-location">
+                    <input type="text" class="form-control" placeholder="<?php echo $this->__('Please enter a location') ?>"/>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="row">
+                        <div class="col-md-3 hidden-sm hidden-xs label-radius"><label><?php echo $this->__('Radius') ?></label></div>
+
+                        <div id="track1" class="track col-md-7 col-sm-8 col-xs-9">
+                            <div id="handle1" class="handle" style="width: 0.5em;" ></div>
+                        </div>
+                        <div class="" style="padding: 0px"><span class="range-slider-label" id="range-slider-label"><?php echo $deaultRadius ?> <?php echo $unit ?></span></div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12 search-type">
+                    <div class="">
+                        <button class="button reset"><span><span><?php echo $this->__('Reset') ?></span></span></button>
+                        <button class="button search-distance"><span><span><?php echo $this->__('Search') ?></span></span></button>
+                    </div>
+                </div>
+            </div>
+            <?php if ($searchByArea): ?>
+                <div class="hide" id="form-search-area-magestore">
+                    <div class="seach-by-area col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-input">
+                            <?php if (in_array(1, $search_config)): ?>
+                                <div class="col col-sm-6 col-xs-12">
+                                    <select class="form-control" searchType="country">
+                                        <option value=""><?php echo $this->__('Select country') ?></option>
+                                        <?php foreach ($countries as $key => $value): ?>
+                                            <option <?php echo ($defaultCountry==$key) ? 'selected="selected"': '' ?> value="<?php echo $key ?>"><?php echo $value ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            <?php endif; ?>
+                            <?php if (in_array(2, $search_config)): ?>
+                                <div class="col col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control input-text" searchType="state" placeholder="<?php echo $this->__('State/Province') ?>"/>
+                                    <select class="form-control" searchType="state" style="display:none;">
+                                        <option value=""><?php echo $this->__('Select State/Province') ?></option>
+                                    </select>
+                                </div>
+                            <?php endif; ?>
+                            <?php if (in_array(3, $search_config)): ?>
+                                <div class="col col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control input-text" searchType="city" placeholder="<?php echo $this->__('City') ?>"/>
+                                </div>
+                            <?php endif; ?>
+                            <?php if (in_array(4, $search_config)): ?>
+                                <div class="col col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control input-text" searchType="zipcode" placeholder="<?php echo $this->__('Zip code') ?>"/>
+                                </div>
+                            <?php endif; ?>
+                            <?php if (in_array(0, $search_config)): ?>
+                                <div class="col col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control input-text" searchType="name" placeholder="<?php echo $this->__('Store Name') ?>"/>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 search-type-area search-type">
+                        <div class="">
+                            <button class="button reset"><span><span><?php echo $this->__('Reset') ?></span></span></button>
+                            <button class="button search-area-magestore"><span><span><?php echo $this->__('Search') ?></span></span></button>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <?php $taglist = $this->getTagList(); ?>
+        <?php if (count($taglist)>1):?>
+            <div class="search-filter">
+                <ul class="list-inline list-tag-ul" id="list-tag-ul">
+                    <li> <label><?php echo $this->__('Filter by Tag: ') ?></label></li>
+                        <?php foreach ($taglist as $tag): ?>
+                            <?php if(!$tag['value']) continue; ?>
+                            <li><label><input type="checkbox" value="<?php echo $tag['ids'] ?>" /><?php echo $tag['value']; ?></label></li>
+                        <?php endforeach; ?>
+                </ul>
+                <button id="storelocator_tag_check_all" class="button tag_active btn-show" ><span><span><?php echo $this->__('Select All') ?></span></span></button>
+            </div>
+        <?php endif; ?>
+    </div>
+    <div class="locator-content">
+        <div class="container-locator">
+            <div class="col-xs-12 col-md-8 col-sm-8 " id="map" style="float: right"></div>
+            <div class="col-md-4 col-sm-4 col-xs-12 info-locator">
+                <div class="box">
+                    <div class="title-list"><h2><?php echo $this->__('Store List') ?><p><span></span></p></h2></div>
+                    <p style="display:none; text-align: center" id="result-search"><?php echo $this->__('No store is found!') ?></p>
+                    <ul id="list-store-detail">
+                        <?php $sv = $this->__('Street View');
+                        $d = $this->__('Direction');
+                        $arrayImage = $this->getArrayImage();?>
+                        <?php foreach ($storeCollection as $store): ?>
+                            <li class="el-content">
+                                <div class="top-box col-xs-12" style="padding: 0;">
+                                    <div class="col-sm-3 col-xs-3 tag-store"><a href="<?php echo $this->getUrl($store->getData('rewrite_request_path')) ?>"><img src="<?php echo ($arrayImage[$store->getId()])?Mage::getBaseUrl('media').'storelocator/images'.$arrayImage[$store->getId()]:$this->getSkinUrl('images/storelocator/image-default.png'); ?>"/></a><span></span></div>
+                                    <div class="col-sm-9 col-xs-9 tag-content">
+                                        <h4><a href="<?php echo $this->getUrl($store->getData('rewrite_request_path')) ?>" class="view-detail"><?php echo $store->getName() ?></a></h4>
+										<p><?php echo $store->getData('address'); ?></p>
+										<p><?php echo $store->getData('city') . ", " . $store->getState() . "&nbsp;" . $store->getZipcode(); ?></p>
+										<p><?php echo $store->getCountryName(); ?></p>
+										<span class="address-store" style="display:none"><?php echo $store->getData('address'),' ',$store->getData('city') . ' ' . $store->getState() . ' ' . $store->getZipcode(),' ',$store->getCountryName(); ?></span>
+                                        <p class="phone-store"><?php echo $store->getPhone() ?></p>
+                                        <span class="btn btn-link street-view"><?php echo $sv ?></span>
+                                        <span class="btn btn-link direction"><?php echo $d ?></span>
+                                    </div>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="direction_controller" style="display:none">
+    <div class="custom-popup col-xs-12" id="option-direction" style="padding: 0; display: none">
+        <ul class="vertical">
+            <li class="travel car active" value="DRIVING"><span>A</span></li>
+            <li class="travel bus" value="TRANSIT"><span>A</span></li>
+            <li class="travel walk" value="WALKING"><span>A</span></li>
+            <li class="travel bicycle" value="BICYCLING"><span>A</span></li>
+        </ul>
+        <div id="directions-el" class="col-xs-12">
+            <div class="widget-directions-searchbox-handle">
+                <div class="widget-directions-icon waypoint-handle"><label for="origin">A</label></div>
+                <div class="widget-directions-icon waypoint-to"><label for="origin">C</label></div>
+                <div class="widget-directions-icon waypoint-bullet"><label for="origin">B</label></div>
+            </div>
+            <div class="form-inputs">
+                <input class="form-control customer-location start" type="text" autocomplete="off">
+                <input class="form-control store-location end" readonly="true" type="text" autocomplete="off">
+            </div>
+            <div class="widget-directions-right-overlay"><button type="button" class="swap-locations" title="<?php echo $this->__('Swap locations A-B') ?>"><?php echo $this->__('Swap locations A-B') ?></button></div>
+            <div class="directions-panel"></div>
+        </div>
+        <div class="box-input">
+            <button title="Go" class="button btn btn-show btn-go-direction">
+                <span><?php echo $this->__('Go') ?></span>
+            </button>
+        </div>
+    </div>
+</div>
+<div id="box-view">
+    <div class="widget-mylocation">
+        <button id="widget-mylocation-button" class="widget-mylocation-button" title="<?php echo $this->__('Show My Location') ?>" onclick="mapManager.currentPosition()">
+            <div class="widget-mylocation-cookieless"></div>
+        </button>
+        <div class="widget-mylocation-tooltip widget-mylocation-tooltip-invisible">
+            <div class="widget-mylocation-tooltip-label-wrapper">
+                <div class="widget-mylocation-tooltip-label" style="display:none">
+                    <label><?php echo $this->__('Show My Location') ?></label>
+                </div>
+            </div>
+            <div class="widget-mylocation-tooltip-pointer"></div>
+        </div>
+    </div>
+</div>
+<script>
+    var storeTranslate = {
+        noneStore   : '<?php echo $this->__('0 store') ?>',
+        oneStore    : '<?php echo $this->__('1 store') ?>',
+        moreStore   : '<?php echo $this->__(' stores') ?>',
+        geocodeMissuccess   : '<?php echo $this->__('Geocode was not successful for the following reason: ') ?>',
+        enterLocation       : '<?php echo $this->__('Please enter a location to search!') ?>',
+        streetNotFound      : '<?php echo $this->__('Street View data cannot found for this location.') ?>',
+        directionFailded    : '<?php echo $this->__('Directions request failed due to ') ?>',
+        geoLocationFailded  : '<?php echo $this->__('Error: The Geolocation service failed.') ?>',
+        geoLocationBrower   : '<?php echo $this->__("Error: Your browser doesn\'t support geolocation.") ?>',
+    };
+    var mapManager;
+    var mcOptions = JSON.parse('<?php echo Mage::helper('core')->jsonEncode($mcOptions) ?>');
+    var radius = <?php echo $deaultRadius ?>;
+    window.onload = function () {
+        mapManager = new MapManager({
+                map         :$('map'),
+                mcOption	: mcOptions,
+                unit        :{label:'<?php echo $unit ?>',value:'<?php echo $unit=='km'?1000:1602 ?>'},
+                url_icon    :'<?php echo Mage::getBaseUrl('media') . 'storelocator/images/icon/resize/{icon}' ?>',
+                listInfo    :$$('#list-store-detail li'),
+                circleMarkerIcont:'<?php echo $this->getSkinUrl("images/storelocator/center.png") ?>',
+                mapStyle    :<?php echo $mapStyle ?>,
+                stores      :<?php echo Mage::helper('core')->jsonEncode($this->getListStore1()->getData()) ?>,
+                countLabel  : $$('.locator-content .title-list span').first()
+        });
+        mapManager.map.controls[google.maps.ControlPosition.LEFT_TOP].push($('box-view'));
+        <?php if ($defaultCountry && $searchByArea): ?>
+            mapManager.filterByArea();
+        <?php endif; ?>
+        var array = [1];
+        for (i = 1; i <= 200; i++){array.push(i);}
+        var unit = '<?php echo $unit ?>';
+        var deaultRadius = <?php echo $deaultRadius ?>;
+        new Control.Slider('handle1', 'track1', {
+            range: $R(1, 200), values: array, sliderValue: deaultRadius,
+            onChange: function (v) {
+                $('range-slider-label').update(v + unit);
+                radius = v;
+                mapManager.changeRadius(v);
+            },
+            onSlide: function (v) {
+                $('range-slider-label').update(v + unit);
+                radius = v;
+                mapManager.changeRadius(v);
+            }
+        });
+    };
+    google.maps.event.addDomListener(window,'load',function  () {
+        var autocomplete =  new google.maps.places.Autocomplete($$('#form-search-distance input.form-control').first());
+
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            mapManager.codeAddress($$('#form-search-distance input.form-control').first().value,radius);
+        });
+
+    });
+
+    var defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.innerHTML = '<?php echo $this->__("Select State/Province") ?>';
+    if($('form-search-area-magestore')&&$('form-search-area-magestore').down('select[searchtype=country]')){
+        $('form-search-area-magestore').down('select[searchtype=country]').observe('change',function(){
+            if (this.value !== 'Select country') {
+                var inputState = $('form-search-area-magestore').down('input[searchtype=state]');
+                var selectState = $('form-search-area-magestore').down('select[searchtype=state]');
+                var states = mapManager.getStateByCountry(this.value);
+                if (states.length > 0 ) {
+                    inputState.hide();
+                    selectState.show();
+                    selectState.innerHTML = '';
+                    selectState.appendChild(defaultOption);
+                    for (var i = 0; i < states.length; i++) {
+                        var option = document.createElement('option');
+                        option.value = states[i];
+                        option.innerHTML = states[i];
+                        option.setAttribute('title',states[i]);
+                        selectState.appendChild(option);
+                    };
+                } else {
+                    inputState.show();
+                    selectState.hide();
+                }
+            }
+        });
+    }
+
+    $$('#list-tag-ul input:checkbox').invoke('observe','click',function () {
+        mapManager.filterbyTag();
+    });
+
+    $$('.container-search .button.reset').invoke('observe','click',function () {
+        mapManager.resetMap();
+    });
+    if($('storelocator_tag_check_all'))
+        $('storelocator_tag_check_all').observe('click',function(){
+            $$('#list-tag-ul input:checkbox').each(function(el) {
+                el.checked = true;
+                mapManager.filterbyTag();
+            });
+        });
+
+    $$('button.search-distance').first().observe('click',function(){
+        mapManager.codeAddress($$('#form-search-distance input.form-control').first().value,radius);
+    });
+
+
+    //Search by are
+    $$('#form-search-area-magestore .reset').invoke('observe','click',function(){
+        mapManager.resetMap();
+    });
+    $$('#form-search-area-magestore .search-area-magestore').invoke('observe','click',function(){
+        mapManager.filterByArea();
+    });
+</script>
+<script type="text/javascript">
+    var MapManager = Class.create();
+MapManager.prototype = {
+    initialize: function(option) {
+
+        this.map = new google.maps.Map(option.map, {
+            zoom: 5,
+            center: new google.maps.LatLng(0, 0),
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            styles: option.mapStyle
+        });
+
+        this.markers = [];
+        var mcOptionjs = {
+            styles: mcOptions,
+            gridSize: 10,
+            maxZoom: 15
+        };
+        this.markerClusterer = new MarkerClusterer(this.map, [], mcOptionjs); 
+        this.unit = option.unit;
+        this.url_icon = option.url_icon;
+        this.listInfo = option.listInfo;
+        this.infoPopup = new google.maps.InfoWindow({
+            content: "",
+            maxWidth: 450,
+            minWidth: 350
+        });
+
+        this.bounds = new google.maps.LatLngBounds();
+        this.boundsAllStore = new google.maps.LatLngBounds();
+        this.count = 0;
+        this.numAllStore = option.stores.length;
+        this.countLabel = option.countLabel;
+
+        //for search Direction
+        this.dirService = new google.maps.DirectionsService();
+        this.dirDisplay = new google.maps.DirectionsRenderer({
+            draggable: true,
+            map: this.map
+        });
+
+        //for search Street View
+        this.panorama = new google.maps.StreetViewPanorama(option.map, {
+            enableCloseButton: true,
+            visible: false
+        });
+
+        this.streetViews = new google.maps.StreetViewService();
+        //for search Ditance
+        this.geocoder = new google.maps.Geocoder();
+        this.circle = new google.maps.Circle({
+            map: null,
+            radius: 0,
+            fillColor: '#cd003a',
+            fillOpacity: 0.1,
+            strokeColor: "#000000",
+            strokeOpacity: 0.3,
+            strokeWeight: 1
+        });
+
+        this.circleMarker = new google.maps.Marker({
+            icon: option.circleMarkerIcont
+        });
+
+        this.directionHandleListener = this.directionHandleListener.bindAsEventListener(this);
+        
+        this.createMarkers(option.stores);
+        this.fitBounds();
+        this.map.controls[google.maps.ControlPosition.LEFT_TOP].push($('box-view'));
+    },
+    getDirectionDom: function() {
+        if (this.directionDom) {
+            return this.directionDom;
+        } else {
+            var directionDom = $('option-direction');
+            directionDom.show();
+            var autocomplete = new google.maps.places.Autocomplete(directionDom.down('.form-control.start'));
+
+            directionDom.down('.swap-locations').observe('click', (function() {
+                var start = directionDom.down('.form-control.start'),
+                    end = directionDom.down('.form-control.end');
+
+                start.insert({
+                    before: end
+                });
+
+                start.removeClassName('start');
+                start.addClassName('end');
+                end.removeClassName('end');
+                end.addClassName('start');
+
+            }).bind(this));
+
+            var directionHandleListener = this.directionHandleListener;
+
+            directionDom.select('.travel').invoke('observe', 'click', function() {
+                if (!this.hasClassName('active')) {
+                    directionDom.select('.travel').invoke('removeClassName', 'active');
+                    this.addClassName('active');
+                };
+                directionHandleListener();
+            });
+
+            directionDom.down('.btn-go-direction').observe('click', this.directionHandleListener);
+            google.maps.event.addListener(autocomplete, 'place_changed', this.directionHandleListener);
+            directionDom.down('.swap-locations').observe('click', this.directionHandleListener);
+
+            this.directionDom = directionDom;
+            return this.directionDom;
+        }
+    },
+    directionHandleListener: function() {
+        var directionDom = this.getDirectionDom(),
+            start = directionDom.down('.form-control.start'),
+            end = directionDom.down('.form-control.end'),
+            travelMode = directionDom.down('.travel.active').getAttribute('value'),
+            panelElement = directionDom.down('.directions-panel');
+        var directionStart, directionEnd;
+
+        if (start.hasAttribute('latitude')) {
+            directionStart = new google.maps.LatLng(start.getAttribute('latitude'), start.getAttribute('longtitude'));
+            directionEnd = end.value;
+            if (end.value == '') {
+                return;
+            }
+        } else {
+            directionStart = start.value;
+            directionEnd = new google.maps.LatLng(end.getAttribute('latitude'), end.getAttribute('longtitude'));
+            if (start.value == '') {
+                return;
+            }
+        }
+
+        this.getDirection(directionStart, directionEnd, travelMode, panelElement);
+    },
+    createMarkers: function(stores) {
+        stores.each(function(el, index) {
+            var pinIcon = (el.image_icon != null && el.image_icon != '') ?new google.maps.MarkerImage(
+                this.url_icon.replace('{id}', el.storelocator_id).replace('{icon}', el.image_icon),
+                null, /* size is determined at runtime */
+                null, /* origin is 0,0 */
+                null, /* anchor is bottom center of the scaled image */
+                new google.maps.Size(30, 45)
+            ) : null; 
+            var marker = new google.maps.Marker({
+                map: this.map,
+                position: new google.maps.LatLng(el.latitude, el.longtitude),
+                icon: pinIcon,
+                country: el.country,
+                state: el.state,
+                state_id: el.state_id,
+                zipcode: el.zipcode,
+                city: el.city,
+                name:el.name,
+                radius: null,
+                isShow: true,
+                element: this.listInfo[index],
+                storelocator_id: el.storelocator_id
+            });
+
+            marker.element.down('.street-view').observe('click', (function() {
+                this.streetView(marker);
+            }).bind(this));
+
+            var directionDom = this.getDirectionDom();
+            marker.element.down('.direction').observe('click', (function() {
+                if (!marker.element.down('#option-direction')) {
+                    marker.element.down('.top-box').insert({
+                        after: directionDom
+                    });
+                    this.dirDisplay.setMap(null);
+                    directionDom.down('.directions-panel').update('');
+                    directionDom.down('.customer-location').value = '';
+                } else if (directionDom.style.display == 'none') {
+                    directionDom.show();
+                } else {
+                    directionDom.hide();
+                }
+                directionDom.down('.store-location').value = marker.element.down('.address-store').innerHTML;
+                directionDom.down('.store-location').setAttribute('latitude', marker.getPosition().lat());
+                directionDom.down('.store-location').setAttribute('longtitude', marker.getPosition().lng());
+
+            }).bind(this));
+            marker.element.setAttribute('index', index);
+            google.maps.event.addListener(marker, 'click', function() {
+                this.showPopup(marker);
+            }.bind(this));
+            marker.element.observe('click', function() {
+                this.showPopup(marker);
+            }.bind(this));
+            this.boundsAllStore.extend(marker.getPosition());
+            this.markers.push(marker);
+            this.markerClusterer.addMarker(marker);
+            this.count++;
+        }.bind(this));
+        this.updateCountLabel();
+        this.map.fitBounds(this.boundsAllStore);
+    },
+    clearMarker: function() {
+        this.count = 0;
+        this.markerClusterer.clearMarkers();
+        this.markers.each(function(marker) {
+            if (marker.isShow) {
+                marker.isShow = false;
+                marker.setMap(null);
+                marker.element.hide();
+            }
+        }.bind(this));
+
+    },
+    reset: function() {
+        this.removeCycle();
+        this.markers.each(function(marker) {
+            if (!marker.isShow) {
+                this.showMarker();
+            }
+        }.bind(this));
+    },
+    resetMap: function() {
+        this.resetFilterRadius();
+        this.removeCycle();
+        this.clearMarker();
+        $$('.input-location input').invoke('setValue', '');
+        $$('#list-tag-ul input:checkbox').each(function(el) {
+            el.checked = false;
+        });
+        if (this.directionDom.parentElement) {
+            this.directionDom.remove();
+        }
+
+        this.markers.each(function(marker) {
+            this.showMarker(marker);
+        }.bind(this));
+        this.map.fitBounds(this.boundsAllStore);
+        this.updateNumnstore(this.numAllStore);
+    },
+    filterbyTag: function() {
+        /*this.removeCycle();
+        this.clearMarker();
+        var storeIds = '';
+        $$('#list-tag-ul input:checkbox:checked').each(function(el) {
+            storeIds += ',' + el.value;
+        });
+        var arrayIds = storeIds.split(',');
+        if (arrayIds.length == 1 && arrayIds[0] == "") {
+            this.resetMap();
+        } else {
+            this.markers.each((function(marker) {
+                if (arrayIds.indexOf(marker.storelocator_id) == -1) {
+                    this.hideMarker(marker);
+                } else {
+                    this.showMarker(marker);
+                }
+            }).bind(this));
+        }
+        this.fitBounds();
+        this.updateNumnstore(this.markerClusterer.getTotalMarkers());
+        this.updateNumnstore($$('.el-content').findAll(function(el) { return el.visible(); }).length);*/
+        this.resetFilterRadius();
+        this.removeCycle();
+        this.clearMarker();
+        var storeIds = '';
+        $$('#list-tag-ul input:checkbox:checked').each(function(el) {
+            storeIds += ',' + el.value;
+        });
+        var arrayIds = storeIds.split(',');
+        if (arrayIds.length == 1 && arrayIds[0] == "") {
+            this.resetMap();
+        } else {
+            if($('search-distance').hasClassName('active')){
+                if($$('#form-search-distance input.form-control').first().value!=""){
+                    this.geocoder.geocode({
+                        address: $$('#form-search-distance input.form-control').first().value
+                    }, function(results, status) {
+                        if (status === google.maps.GeocoderStatus.OK) {
+                            this.clearMarker();
+                            var radius1 = radius * this.unit.value;
+                            this.setRadius(results[0].geometry.location);
+                            this.drawCycle(results[0].geometry.location, radius1);
+                            this.filterMarker(function(el) {
+                                return el.radius <= radius1 && arrayIds.indexOf(el.storelocator_id) >= 0;
+                            });
+                            this.updateCountLabel();
+                        } else {
+                            alert(storeTranslate.geocodeMissuccess + status);
+                        }
+                    }.bind(this));
+
+                }
+            }
+            if($('search-area-magestore').hasClassName('active')){
+                var options = this.getOptionFilterByArea();
+                this.markers.each((function(marker) {
+                    if (this.checkShowFilterByArea(options, marker) && arrayIds.indexOf(marker.storelocator_id) >= 0) {
+                        this.showMarker(marker);
+                    } else {
+                        this.hideMarker(marker);
+                    }
+                }).bind(this));
+            } else {
+                this.markers.each((function(marker) {
+                    if (arrayIds.indexOf(marker.storelocator_id) == -1) {
+                        this.hideMarker(marker);
+                    } else {
+                        this.showMarker(marker);
+                    }
+                }).bind(this));
+
+            }
+
+        }
+        this.fitBounds();
+        this.updateNumnstore(this.markerClusterer.getTotalMarkers());
+        this.updateNumnstore($$('.el-content').findAll(function(el) { return el.visible(); }).length);
+    },
+    filterByArea: function() {
+        this.resetFilterRadius();
+        this.removeCycle();
+        this.clearMarker();
+        $$('#list-tag-ul input:checkbox').each(function(el) {
+            el.checked = false;
+        });
+        var options = this.getOptionFilterByArea();
+        this.markers.each((function(marker) {
+            if (this.checkShowFilterByArea(options, marker)) {
+                this.showMarker(marker);
+            } else {
+                this.hideMarker(marker);
+            }
+        }).bind(this));
+        this.fitBounds();
+        this.updateNumnstore(this.markerClusterer.getTotalMarkers());
+        this.updateNumnstore($$('.el-content').findAll(function(el) { return el.visible(); }).length);
+    },
+    checkShowFilterByArea: function(options, marker) {
+
+        if (options['country'] && options['country'] != marker['country']) {
+            return false;
+        }
+        if (options['name'] && marker['name'].toLowerCase().indexOf(options['name'].toLowerCase()) == -1) {
+            return false;
+        }
+        if (options['state'] && marker['state'] && marker['state'].toLowerCase().indexOf(options['state'].toLowerCase()) == -1) {
+            return false;
+        }
+        if (options['city'] && marker['city'].toLowerCase().indexOf(options['city'].toLowerCase()) == -1) {
+            return false;
+        }
+        if (options['zipcode'] && marker['zipcode'].toLowerCase().indexOf(options['zipcode'].toLowerCase()) == -1) {
+            return false;
+        }
+        return true;
+    },
+    getOptionFilterByArea: function() {
+        var critia = ['country', 'city', 'zipcode','name'],
+            options = {};
+
+        for (var i = 0; i < critia.length; i++) {
+            var input = $('form-search-area-magestore').down('[searchtype=' + critia[i] + ']');
+            if (input && input.value != '') {
+                options[critia[i]] = input.value;
+            }
+        }
+        var inputState = $('form-search-area-magestore').down('input[searchtype=state]'),
+            selectState = $('form-search-area-magestore').down('select[searchtype=state]');
+
+        if (inputState && inputState.style.display!="none") {
+            options['state'] = inputState.value;
+        }
+        if (selectState && selectState.style.display!="none") {
+            options['state'] = selectState.value;
+        }
+        return options;
+    },
+    fitBounds: function() {
+        this.bounds = new google.maps.LatLngBounds();
+        this.markers.each(function(marker) {
+            if (marker.isShow)
+                this.bounds.extend(marker.getPosition());
+        }.bind(this));
+        this.map.fitBounds(this.bounds);
+        if(this.map.getZoom()>15)
+            this.map.setZoom(15);
+    },
+    showPopup: function(marker) {
+        var element = marker.element.clone(true);
+        element.addClassName('inforwindow');
+
+        if (element.down('.custom-popup')) {
+            element.down('.custom-popup').remove();
+        }
+        element.down('.street-view').observe('click', (function() {
+            this.streetView(marker);
+        }).bind(this));
+
+        var directionDom = this.getDirectionDom();
+        element.down('.direction').observe('click', (function() {
+            if (!element.down('#option-direction')) {
+                element.down('.top-box').insert({
+                    after: directionDom
+                });
+                this.dirDisplay.setMap(null);
+                directionDom.down('.directions-panel').update('');
+                directionDom.down('.customer-location').value = '';
+            } else if (directionDom.style.display == 'none') {
+                directionDom.show();
+            } else {
+                directionDom.hide();
+            }
+        }).bind(this));
+        directionDom.down('.store-location').value = element.down('.address-store').innerHTML;
+        directionDom.down('.store-location').setAttribute('latitude', marker.getPosition().lat());
+        directionDom.down('.store-location').setAttribute('longtitude', marker.getPosition().lng());
+
+        marker.setMap(this.map);
+        this.infoPopup.setContent(element);
+        this.infoPopup.open(this.map, marker);
+    },
+    showMarker: function(marker) {
+        if (!marker.isShow) {
+            marker.isShow = true;
+            marker.setMap(this.map)
+            marker.element.show();
+            marker.element.up().insert({
+                top: marker.element
+            });
+            this.markerClusterer.addMarker(marker);
+            this.count++;
+        }
+    },
+    hideMarker: function(marker) {
+        if (marker.isShow) {
+            marker.setMap(null);
+            marker.isShow = false;
+            marker.element.hide();
+            this.markerClusterer.removeMarker(marker);
+            this.count--;
+        }
+    },
+    filterMarker: function(func) {
+        this.clearMarker();
+        this.markers.each(function(el) {
+            if (func(el))
+                this.showMarker(el);
+        }.bind(this));
+    },
+    updateNumnstore: function(numstore) {
+        var countLabel = '';
+        switch (numstore) {
+            case 0:
+                countLabel = storeTranslate.noneStore;
+                break;
+            case 1:
+                countLabel = storeTranslate.oneStore;
+                break;
+            default:
+                countLabel = numstore + storeTranslate.moreStore;
+                break;
+        }
+        this.countLabel.update(countLabel);
+    },
+    updateCountLabel: function() {
+        var countLabel = '';
+        switch (this.count) {
+            case 0:
+                countLabel = storeTranslate.noneStore;
+                break;
+            case 1:
+                countLabel = storeTranslate.oneStore;
+                break;
+            default:
+                countLabel = this.count + storeTranslate.moreStore;
+                break;
+        }
+        this.countLabel.update(countLabel);
+    },
+    //search by radius
+    drawCycle: function(center, radius) {
+        this.removeCycle();
+        this.circleMarker.setPosition(center);
+        this.circleMarker.setMap(this.map);
+        this.circle.setMap(this.map);
+        this.circle.setRadius(radius);
+        this.circle.bindTo('center', this.circleMarker, 'position');
+        this.map.setCenter(center);
+        this.map.setZoom(Math.round(15 - Math.log(radius / this.unit.value) / Math.LN2));
+    },
+    removeCycle: function() {
+        if (this.circle.getMap()) {
+            this.circleMarker.setMap(null);
+            this.circle.setMap(null);
+        }
+    },
+    codeAddress: function(address, radius) {
+        if (address === '') {
+            alert(storeTranslate.enterLocation);
+        } else {
+            this.geocoder.geocode({
+                address: address
+            }, function(results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    this.clearMarker();
+                    var radius1 = radius * this.unit.value;
+                    this.setRadius(results[0].geometry.location);
+                    this.drawCycle(results[0].geometry.location, radius1);
+                    this.filterMarker(function(el) {
+                        return el.radius <= radius1;
+                    });
+                    this.updateCountLabel();
+                } else {
+                    alert(storeTranslate.geocodeMissuccess + status);
+                }
+            }.bind(this));
+        }
+
+    },
+    changeRadius: function(radius) {
+        if (this.circle.getMap()) {
+            var radius1 = radius * this.unit.value;
+            this.circle.setRadius(radius1);
+            this.clearMarker();
+            this.filterMarker(function(el) {
+                return el.radius <= radius1;
+            });
+            this.updateCountLabel();
+        }
+    },
+    setRadius: function(location) {
+        this.markers.each(function(marker) {
+            marker.radius = google.maps.geometry.spherical.computeDistanceBetween(location, marker.getPosition());
+            marker.element.down('.tag-store span').update(Math.round(marker.radius / this.unit.value * 100) / 100 + ' ' + this.unit.label);
+        }.bind(this));
+        this.markers.sort(function(a, b) {
+            return b.radius - a.radius;
+        });
+    },
+    //street view
+    streetView: function(marker) {
+        this.streetViews.getPanorama({
+            location: marker.position,
+            radius: 50
+        }, this.processSVData.bind(this));
+    },
+    processSVData: function processSVData(data, status) {
+        this.panorama.setVisible(false);
+        if (status === google.maps.StreetViewStatus.OK) {
+            this.panorama.setPano(data.location.pano);
+            this.panorama.setPov({
+                heading: 270,
+                pitch: 0
+            });
+            this.panorama.setVisible(true);
+        } else {
+            window.alert(storeTranslate.streetNotFound);
+        }
+    },
+    getDirection: function(start, end, travelMode, panelElement) {
+        this.dirDisplay.setMap(this.map);
+        this.dirDisplay.setPanel(panelElement);
+        this.dirService.route({
+            origin: start,
+            destination: end,
+            travelMode: google.maps.TravelMode[travelMode],
+            unitSystem: (this.unit.label == 'km') ? google.maps.UnitSystem.METRIC : google.maps.UnitSystem.IMPERIAL
+        }, function(response, status) {
+            if (status === google.maps.DirectionsStatus.OK) {
+                this.dirDisplay.setDirections(response);
+            } else {
+                window.alert(storeTranslate.directionFailded + status);
+            }
+        }.bind(this));
+        if($$('.adp-directions').length)
+            $$('.adp-directions').first().up().style.width ='101px';
+    },
+    currentPosition: function() {
+        var map = this.map;
+        infoPopup = new google.maps.InfoWindow({
+            content: "",
+            maxWidth: 293
+        });
+        geocoder = new google.maps.Geocoder();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                infoPopup.setPosition(pos);
+                geocoder.geocode({
+                    latLng: latlng
+                }, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        infoPopup.setContent(results[0]['formatted_address']);
+                        if($('form-search-distance'))
+                            $$('#form-search-distance input.form-control').first().value = results[0]['formatted_address'];
+                    }
+                });
+                infoPopup.setMap(this.map);
+                this.map.setZoom(13);
+                this.map.setCenter(pos);
+            }.bind(this)),
+            function() {
+                infoPopup.setPosition(this.map.getCenter());
+                infoPopup.setContent(true ?storeTranslate.geoLocationFailded :storeTranslate.geoLocationBrower);
+            };
+        }
+    },
+    getStateByCountry:function(country){
+        var states = [];
+        this.markers.each(function(marker){
+            if(marker.country==country&&marker.state!=''&&states.indexOf(marker.state)==-1){
+                states.push(marker.state);
+            }
+        });
+        return states;
+    },
+    resetFilterRadius: function(){
+        this.markers.sort(function(a, b) {
+            return b.element.attributes['index'].value - a.element.attributes['index'].value;
+        });
+    }
+};
+
+function showDistance() {
+    if (!$('search-distance').hasClassName('active')) {
+        $('search-distance').addClassName('active');
+        $('form-search-distance').removeClassName('hide');
+        $('form-search-area-magestore').addClassName('hide');
+        $('search-area-magestore').removeClassName('active');
+    }
+}
+
+function showArea() {
+    if (!$('search-area-magestore').hasClassName('active')) {
+        $('search-area-magestore').addClassName('active');
+        $('form-search-area-magestore').removeClassName('hide');
+        $('form-search-distance').addClassName('hide');
+        $('search-distance').removeClassName('active');
+    }
+}
+(function(){var d=null;function e(a){return function(b){this[a]=b}}function h(a){return function(){return this[a]}}var j;
+function k(a,b,c){this.extend(k,google.maps.OverlayView);this.c=a;this.a=[];this.f=[];this.ca=[53,56,66,78,90];this.j=[];this.A=!1;c=c||{};this.g=c.gridSize||60;this.l=c.minimumClusterSize||2;this.J=c.maxZoom||d;this.j=c.styles||[];this.X=c.imagePath||this.Q;this.W=c.imageExtension||this.P;this.O=!0;if(c.zoomOnClick!=void 0)this.O=c.zoomOnClick;this.r=!1;if(c.averageCenter!=void 0)this.r=c.averageCenter;l(this);this.setMap(a);this.K=this.c.getZoom();var f=this;google.maps.event.addListener(this.c,
+"zoom_changed",function(){var a=f.c.getZoom();if(f.K!=a)f.K=a,f.m()});google.maps.event.addListener(this.c,"idle",function(){f.i()});b&&b.length&&this.C(b,!1)}j=k.prototype;j.Q="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m";j.P="png";j.extend=function(a,b){return function(a){for(var b in a.prototype)this.prototype[b]=a.prototype[b];return this}.apply(a,[b])};j.onAdd=function(){if(!this.A)this.A=!0,n(this)};j.draw=function(){};
+function l(a){if(!a.j.length)for(var b=0,c;c=a.ca[b];b++)a.j.push({url:a.X+(b+1)+"."+a.W,height:c,width:c})}j.S=function(){for(var a=this.o(),b=new google.maps.LatLngBounds,c=0,f;f=a[c];c++)b.extend(f.getPosition());this.c.fitBounds(b)};j.z=h("j");j.o=h("a");j.V=function(){return this.a.length};j.ba=e("J");j.I=h("J");j.G=function(a,b){for(var c=0,f=a.length,g=f;g!==0;)g=parseInt(g/10,10),c++;c=Math.min(c,b);return{text:f,index:c}};j.$=e("G");j.H=h("G");
+j.C=function(a,b){for(var c=0,f;f=a[c];c++)q(this,f);b||this.i()};function q(a,b){b.s=!1;b.draggable&&google.maps.event.addListener(b,"dragend",function(){b.s=!1;a.L()});a.a.push(b)}j.q=function(a,b){q(this,a);b||this.i()};function r(a,b){var c=-1;if(a.a.indexOf)c=a.a.indexOf(b);else for(var f=0,g;g=a.a[f];f++)if(g==b){c=f;break}if(c==-1)return!1;b.setMap(d);a.a.splice(c,1);return!0}j.Y=function(a,b){var c=r(this,a);return!b&&c?(this.m(),this.i(),!0):!1};
+j.Z=function(a,b){for(var c=!1,f=0,g;g=a[f];f++)g=r(this,g),c=c||g;if(!b&&c)return this.m(),this.i(),!0};j.U=function(){return this.f.length};j.getMap=h("c");j.setMap=e("c");j.w=h("g");j.aa=e("g");
+j.v=function(a){var b=this.getProjection(),c=new google.maps.LatLng(a.getNorthEast().lat(),a.getNorthEast().lng()),f=new google.maps.LatLng(a.getSouthWest().lat(),a.getSouthWest().lng()),c=b.fromLatLngToDivPixel(c);c.x+=this.g;c.y-=this.g;f=b.fromLatLngToDivPixel(f);f.x-=this.g;f.y+=this.g;c=b.fromDivPixelToLatLng(c);b=b.fromDivPixelToLatLng(f);a.extend(c);a.extend(b);return a};j.R=function(){this.m(!0);this.a=[]};
+j.m=function(a){for(var b=0,c;c=this.f[b];b++)c.remove();for(b=0;c=this.a[b];b++)c.s=!1,a&&c.setMap(d);this.f=[]};j.L=function(){var a=this.f.slice();this.f.length=0;this.m();this.i();window.setTimeout(function(){for(var b=0,c;c=a[b];b++)c.remove()},0)};j.i=function(){n(this)};
+function n(a){if(a.A)for(var b=a.v(new google.maps.LatLngBounds(a.c.getBounds().getSouthWest(),a.c.getBounds().getNorthEast())),c=0,f;f=a.a[c];c++)if(!f.s&&b.contains(f.getPosition())){for(var g=a,u=4E4,o=d,v=0,m=void 0;m=g.f[v];v++){var i=m.getCenter();if(i){var p=f.getPosition();if(!i||!p)i=0;else var w=(p.lat()-i.lat())*Math.PI/180,x=(p.lng()-i.lng())*Math.PI/180,i=Math.sin(w/2)*Math.sin(w/2)+Math.cos(i.lat()*Math.PI/180)*Math.cos(p.lat()*Math.PI/180)*Math.sin(x/2)*Math.sin(x/2),i=6371*2*Math.atan2(Math.sqrt(i),
+Math.sqrt(1-i));i<u&&(u=i,o=m)}}o&&o.F.contains(f.getPosition())?o.q(f):(m=new s(g),m.q(f),g.f.push(m))}}function s(a){this.k=a;this.c=a.getMap();this.g=a.w();this.l=a.l;this.r=a.r;this.d=d;this.a=[];this.F=d;this.n=new t(this,a.z(),a.w())}j=s.prototype;
+j.q=function(a){var b;a:if(this.a.indexOf)b=this.a.indexOf(a)!=-1;else{b=0;for(var c;c=this.a[b];b++)if(c==a){b=!0;break a}b=!1}if(b)return!1;if(this.d){if(this.r)c=this.a.length+1,b=(this.d.lat()*(c-1)+a.getPosition().lat())/c,c=(this.d.lng()*(c-1)+a.getPosition().lng())/c,this.d=new google.maps.LatLng(b,c),y(this)}else this.d=a.getPosition(),y(this);a.s=!0;this.a.push(a);b=this.a.length;b<this.l&&a.getMap()!=this.c&&a.setMap(this.c);if(b==this.l)for(c=0;c<b;c++)this.a[c].setMap(d);b>=this.l&&a.setMap(d);
+a=this.c.getZoom();if((b=this.k.I())&&a>b)for(a=0;b=this.a[a];a++)b.setMap(this.c);else if(this.a.length<this.l)z(this.n);else{b=this.k.H()(this.a,this.k.z().length);this.n.setCenter(this.d);a=this.n;a.B=b;a.ga=b.text;a.ea=b.index;if(a.b)a.b.innerHTML=b.text;b=Math.max(0,a.B.index-1);b=Math.min(a.j.length-1,b);b=a.j[b];a.da=b.url;a.h=b.height;a.p=b.width;a.M=b.textColor;a.e=b.anchor;a.N=b.textSize;a.D=b.backgroundPosition;this.n.show()}return!0};
+j.getBounds=function(){for(var a=new google.maps.LatLngBounds(this.d,this.d),b=this.o(),c=0,f;f=b[c];c++)a.extend(f.getPosition());return a};j.remove=function(){this.n.remove();this.a.length=0;delete this.a};j.T=function(){return this.a.length};j.o=h("a");j.getCenter=h("d");function y(a){a.F=a.k.v(new google.maps.LatLngBounds(a.d,a.d))}j.getMap=h("c");
+function t(a,b,c){a.k.extend(t,google.maps.OverlayView);this.j=b;this.fa=c||0;this.u=a;this.d=d;this.c=a.getMap();this.B=this.b=d;this.t=!1;this.setMap(this.c)}j=t.prototype;
+j.onAdd=function(){this.b=document.createElement("DIV");if(this.t)this.b.style.cssText=A(this,B(this,this.d)),this.b.innerHTML=this.B.text;this.getPanes().overlayMouseTarget.appendChild(this.b);var a=this;google.maps.event.addDomListener(this.b,"click",function(){var b=a.u.k;google.maps.event.trigger(b,"clusterclick",a.u);b.O&&a.c.fitBounds(a.u.getBounds())})};function B(a,b){var c=a.getProjection().fromLatLngToDivPixel(b);c.x-=parseInt(a.p/2,10);c.y-=parseInt(a.h/2,10);return c}
+j.draw=function(){if(this.t){var a=B(this,this.d);this.b.style.top=a.y+"px";this.b.style.left=a.x+"px"}};function z(a){if(a.b)a.b.style.display="none";a.t=!1}j.show=function(){if(this.b)this.b.style.cssText=A(this,B(this,this.d)),this.b.style.display="";this.t=!0};j.remove=function(){this.setMap(d)};j.onRemove=function(){if(this.b&&this.b.parentNode)z(this),this.b.parentNode.removeChild(this.b),this.b=d};j.setCenter=e("d");
+function A(a,b){var c=[];c.push("background-image:url("+a.da+");");c.push("background-position:"+(a.D?a.D:"0 0")+";");typeof a.e==="object"?(typeof a.e[0]==="number"&&a.e[0]>0&&a.e[0]<a.h?c.push("height:"+(a.h-a.e[0])+"px; padding-top:"+a.e[0]+"px;"):c.push("height:"+a.h+"px; line-height:"+a.h+"px;"),typeof a.e[1]==="number"&&a.e[1]>0&&a.e[1]<a.p?c.push("width:"+(a.p-a.e[1])+"px; padding-left:"+a.e[1]+"px;"):c.push("width:"+a.p+"px; text-align:center;")):c.push("height:"+a.h+"px; line-height:"+a.h+
+"px; width:"+a.p+"px; text-align:center;");c.push("cursor:pointer; top:"+b.y+"px; left:"+b.x+"px; color:"+(a.M?a.M:"black")+"; position:absolute; font-size:"+(a.N?a.N:11)+"px; font-family:Arial,sans-serif; font-weight:bold");return c.join("")}window.MarkerClusterer=k;k.prototype.addMarker=k.prototype.q;k.prototype.addMarkers=k.prototype.C;k.prototype.clearMarkers=k.prototype.R;k.prototype.fitMapToMarkers=k.prototype.S;k.prototype.getCalculator=k.prototype.H;k.prototype.getGridSize=k.prototype.w;
+k.prototype.getExtendedBounds=k.prototype.v;k.prototype.getMap=k.prototype.getMap;k.prototype.getMarkers=k.prototype.o;k.prototype.getMaxZoom=k.prototype.I;k.prototype.getStyles=k.prototype.z;k.prototype.getTotalClusters=k.prototype.U;k.prototype.getTotalMarkers=k.prototype.V;k.prototype.redraw=k.prototype.i;k.prototype.removeMarker=k.prototype.Y;k.prototype.removeMarkers=k.prototype.Z;k.prototype.resetViewport=k.prototype.m;k.prototype.repaint=k.prototype.L;k.prototype.setCalculator=k.prototype.$;
+k.prototype.setGridSize=k.prototype.aa;k.prototype.setMaxZoom=k.prototype.ba;k.prototype.onAdd=k.prototype.onAdd;k.prototype.draw=k.prototype.draw;s.prototype.getCenter=s.prototype.getCenter;s.prototype.getSize=s.prototype.T;s.prototype.getMarkers=s.prototype.o;t.prototype.onAdd=t.prototype.onAdd;t.prototype.draw=t.prototype.draw;t.prototype.onRemove=t.prototype.onRemove;
+})();
+    
+</script>

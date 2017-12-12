@@ -1,0 +1,121 @@
+
+<?php
+$extIdentifier = Mage::helper('events')->extIdentifier();
+$dateType = Mage_Core_Model_Locale::FORMAT_TYPE_LONG;
+?>
+<div class='fme-events_land'>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <?php $collection = $this->getCollection(); ?>
+    <div class="page-title">
+        <h1><?php echo $this->__($this->getTitle()) ?></h1>
+    </div>
+    <?php echo $this->getToolbarHtml(); ?>
+    <?php if ($collection->getSize()): ?>
+
+        <?php if ($this->getMode() != 'grid'): ?>
+            <!-- List Model -->
+            <?php $_iterator = 0; ?>
+            <ol class="products-list" id="products-list">
+                <?php
+                foreach ($collection as $c) :
+                    
+                    $event = Mage::getModel('catalog/category')->load($c->getId());
+
+                    $fromDate = new Zend_Date(strtotime($c->getEventStartDate()));
+                    $toDate = new Zend_Date(strtotime($c->getEventEndDate()));
+
+                    $str = $c->getEventContent();
+                    if (strlen($str) > 150) :
+                        $str = substr($str, 0, 100) . " ...";
+                    endif;
+
+                    $resized_url="";
+                    if($c->getEventImage()):
+                    $resized_url = Mage::helper('events')->getResizedUrl($c->getEventImage(),135,135);
+                    endif;                    ?>
+                    <li
+                        class="item<?php if (++$_iterator == sizeof($collection)): ?> last<?php endif; ?>">
+
+                        <a href="<?php echo Mage::helper('events')->customUrl($c->getEventUrlPrefix()); ?>"
+                            title="<?php echo $this->stripTags($c->getEventTitle()); ?>"
+                            class="product-image"> 
+                            <img  style="width:auto; margin: 0 auto;" src="<?php echo $resized_url; ?>" alt="<?php echo $this->stripTags($c->getEventTitle()); ?>" /> 
+                        </a>
+
+                        <?php // Product description  ?>
+                        <div class="product-shop">
+                            <div class="f-fix">
+                                <?php $_eventNameStripped = $this->stripTags($c->getEventTitle(), null, true); ?>
+                                <h2 class="product-name">
+                                    <a
+                                        href="<?php echo Mage::helper('events')->customUrl($c->getEventUrlPrefix()); ?>"
+                                        title="<?php echo $_eventNameStripped; ?>"><?php echo $c->getEventTitle(); ?></a>
+                                </h2>
+                                <h2 class="product-name"><?php echo $this->__('Location') ?>: <?php echo $c->getEventVenu(); ?></h2>
+
+                                <b><?php echo $this->__('From') ?>:</b> <?php echo $this->formatDate($fromDate, $dateType, true); ?><br />
+                                <b><?php echo $this->__('To') ?>: </b><?php echo $this->formatDate($toDate, $dateType, true); ?>
+
+                                <div class="desc std">
+                                    <?php echo $str; ?>
+                                </div>
+                            </div>
+                        </div></li>
+                <?php endforeach; ?>
+            </ol>
+            <script type="text/javascript">decorateList('products-list', 'none-recursive')</script>
+        <?php else: ?>
+
+            <?php // Grid Mode  ?>
+
+            <?php $_collectionSize = $collection->count() ?>
+            <?php
+            $_columnCount = Mage::helper('events')->numOfGridColumns();
+            ?>
+            <?php
+            $i = 0;
+            foreach ($collection as $c) :
+                $c = Mage::getModel('events/events')->load($c->getEventId());
+
+                $fromDate = new Zend_Date(strtotime($c->getEventStartDate()));
+                $toDate = new Zend_Date(strtotime($c->getEventEndDate()));
+
+                
+                ?>
+                <?php if ($i++ % $_columnCount == 0): ?>
+                    <ul class="products-grid">
+                <?php endif ?>
+                    <li
+                        class="item<?php if (($i - 1) % $_columnCount == 0): ?> first<?php elseif ($i % $_columnCount == 0): ?> last<?php endif; ?>">
+
+                        <?php //$resized_url = Mage::helper('events')->getResizedUrl($c->getEventImage(),140,140); ?>
+                        <?php $resized_url = Mage::helper('events')->getResizedUrl($c->getEventImage(),465); ?>
+
+                        <a
+                            href="<?php echo Mage::helper('events')->customUrl($c->getEventUrlPrefix()) ?>"
+                            title="<?php echo $this->stripTags($c->getEventTitle()); ?>"
+                            class="product-image"> <img width="100%" style="width:auto; margin: 0 auto;" src="<?php echo  $resized_url; ?>"
+                                                    alt="<?php echo $this->stripTags($c->getEventTitle()); ?>" /> </a>
+
+                        <h2 class="product-name" style="min-height:0px;">
+                            <a
+                                href="<?php echo Mage::helper('events')->customUrl($c->getEventUrlPrefix()); ?>"><?php echo $c->getEventTitle() ?></a>
+                        </h2> 
+                        <b><?php echo $this->__('Location') ?>:</b> <?php echo $c->getEventVenu(); ?><br />
+                        <b><?php echo $this->__('From') ?>:</b> <?php echo $this->formatDate($fromDate, $dateType, false); ?><br />
+                        <b><?php echo $this->__('To') ?>: </b><?php echo $this->formatDate($toDate, $dateType, false); ?>
+                    </li>
+            <?php if ($i % $_columnCount == 0 || $i == $_collectionSize): ?>
+                    </ul>
+                    <?php endif ?>
+            <?php endforeach ?>
+            <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd', 'even', 'first', 'last'])</script>
+        <?php endif; ?>
+
+        <?php echo $this->getToolbarHtml(); ?>
+    <?php else: ?>
+        <p><?php echo Mage::helper('events')->errMsg(); ?></p>
+        <a href="<?php echo @$_SERVER['HTTP_REFERER']; ?>"><?php echo $this->__('Back') ?> << </a>
+
+<?php endif; ?>
+</div>

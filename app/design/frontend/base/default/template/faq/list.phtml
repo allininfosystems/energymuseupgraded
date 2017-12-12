@@ -1,0 +1,55 @@
+<?php $faqs = $this->getFaqCollection();
+    $id = $this->getRequest()->getParam('id');
+    $store_Id = Mage::app()->getStore()->getId();
+    $page_numner = 1;
+    if(!$id){
+       $count = $faqs->getSize();
+        $page_size = Mage::getStoreConfig('faq/general/page_size_number',$store_Id);
+        if(!$page_size) $page_size=20;
+        if($count%$page_size==0) 
+            $page_numner = $count/$page_size;
+        else 
+            $page_numner = floor($count/$page_size) +1;
+      }
+      $processor = Mage::helper('cms')->getBlockTemplateProcessor();
+?>
+<div class="faq-listing">
+    <div class="row">
+        <?php if(!$id):?>
+            <?php if($faqs->getSize()):?>
+                <?php $i=1; foreach($faqs as $faq):?>
+                    <div class="faq col-xs-12<?php if($i>=count($faqs)): ?> last<?php elseif($i==1): ?> first<?php endif; ?>">
+                        <a class="faq-question" id="faq-question-<?php echo $faq->getId(); ?>" onclick="faqOpen('<?php echo $faq->getId();?>')" title="<?php echo $this->stripTags($faq->getTitle());?>"><span class="small glyphicon glyphicon-triangle-right">&nbsp;</span><?php echo $this->stripTags($faq->getTitle());?></a>
+                        <div class="col-xs-12 faq-content" id="faq-content-<?php echo $faq->getId();  ?>" style="display: none;"><?php echo $processor->filter($faq->getDescription());?></div>
+                    </div>
+                <?php $i++; endforeach;?>
+            <?php else: ?>
+                <p class="col-xs-12"><?php echo $this->__("No FAQ found!");?></p>
+            <?php endif; ?>
+        <?php else:?>
+            <div class="faq col-xs-12">
+                <a class="faq-question active" id="faq-question-<?php echo $faqs->getId(); ?>"  title="<?php echo $this->stripTags($faqs->getTitle());?>"><span class="small glyphicon glyphicon-triangle-right">&nbsp;</span><?php echo $faqs->getTitle();?></a>
+                <div class="col-xs-12 faq-content" id="faq-content-<?php echo $faqs->getId();  ?>" ><?php echo $processor->filter($faqs->getDescription());?></div>
+            </div>
+        <?php endif;?>
+    </div>
+</div>
+<?php if($page_numner>1):?>
+<?php
+    $start = max($this->getRequest()->getParam('page')-2,1);
+    $end =  min($start+4,$page_numner); 
+    if($end == $page_numner)
+        $start = max($page_numner-4,1);
+?>
+<ul class="faq-pager">
+    <?php if($start>1): ?>
+    <li><a class="faq-page" onclick="loadpage(this,$('faqtype').value,$('faqid').value,1)">|<<</a></li>
+    <?php endif;?>
+    <?php for($i=$start;$i<=$end;$i++){ ?>
+        <li><a class="faq-page<?php if($i== $this->getRequest()->getParam('page',1)):?> active<?php endif; ?>" onclick="loadpage(this,$('faqtype').value,$('faqid').value,<?php echo $i; ?>)"><?php echo $i; ?></a></li>
+    <?php } ?>
+    <?php if($end<$page_numner): ?>
+    <li><a class="faq-page" onclick="loadpage(this,$('faqtype').value,$('faqid').value,<?php echo $page_numner;?>)">>>|</a></li>
+    <?php endif;?>
+</ul>
+<?php endif; ?>

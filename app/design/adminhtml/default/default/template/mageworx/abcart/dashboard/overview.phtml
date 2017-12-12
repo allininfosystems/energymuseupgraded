@@ -1,0 +1,42 @@
+<?php
+$stat = $this->getStatistics();
+?>
+<div class="entry-edit abcart_dashboard">
+    <div class="entry-edit-head"><h4><?php echo $this->__('Cart Overview') ?></h4></div>
+    <fieldset class="a-center content">
+       <div class="stat_box">
+           <?php echo $this->__('Carts Started') ?>
+           <div class="value"><?php echo $stat->getCartsStarted() ?></div>
+       </div>
+        <div class="stat_box">
+            <?php echo $this->__('Abandoned Carts') ?>
+            <div class="value"><?php echo $stat->getCartsAbandoned() ?></div>
+        </div>
+        <div class="stat_box">
+            <?php echo $this->__('Abandonment Rate') ?>
+            <div class="value"><?php echo $stat->getAbandonedRate() ?></div>
+        </div>
+        <div class="stat_box">
+            <?php echo $this->__('Abandoned Revenue') ?>
+            <div class="value"><?php echo $stat->getAbandonedRevenue() ?></div>
+        </div>
+        <div class="stat_box">
+            <?php echo $this->__('Recovered Carts') ?>
+            <div class="value"><?php echo $stat->getCartsRecovered() ?></div>
+        </div>
+        <div class="stat_box">
+            <?php echo $this->__('Recovered Revenue') ?>
+            <div class="value"><?php echo $stat->getRecoveredRevenue() ?></div>
+        </div>
+        <div class="stat_box">
+            <?php echo $this->__('Lost Revenue') ?>
+            <div class="value"><?php echo $stat->getLostRevenue() ?></div>
+        </div>
+    </fieldset>
+</div>
+<script type="text/javascript">
+    firstTd = $$('.dashboard-container table td')[0];
+    if (firstTd) {
+        firstTd.style.width = "33%";
+    }
+</script>

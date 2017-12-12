@@ -1,0 +1,26 @@
+<?php
+/**
+ * Mason Web Development
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2009 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+<?php
+$profile = $this->getProfile();
+?>
+<?php if ($profile->getData("is_active")):?>
+	<?php if($profile->getData("thumbnail")):?>
+		<?php $marginPosition = ($profile->getThumbnailAlign() == "left") ? "float: left; margin-right: 10px;" : "float: right; margin-left: 10px;";?>
+		<img src="<?php echo "/media/" . $profile->getData("thumbnail") ?>" align="<?php echo $profile->getThumbnailAlign(); ?>" style="<?php echo $marginPosition;?> padding: 2px;"/>
+	<?php endif; ?>
+	<h1><?php echo $profile->getData("content_heading"); ?></h1>
+	<p><?php echo $this->formatDate($profile->getData("creation_time")); ?></p><br/>	
+	<p><?php echo $profile->getContent(); ?></p>
+	<br/>
+	<a href="<?php echo $this->getUrl("*/news/"); ?>" >&lt;&lt; back</a>
+	<br/>&nbsp;
+	<br/>
+<?php endif;?>

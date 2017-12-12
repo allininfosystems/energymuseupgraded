@@ -1,0 +1,26 @@
+<?php
+/**
+ * @var Mage_Page_Block_Html_Header $this
+ */
+?>
+<?php
+    $theme = Mage::helper('ultimo');
+
+    //Search wrapper classes
+    $searchClasses = 'skip-content skip-content--style search-wrapper';
+    if (! $theme->getCfg('header/mode'))
+    {
+        //If mobile header disabled, add a class to style the search box on mobile devices
+        $searchClasses .= ' search-wrapper-mobile';
+    }
+?>
+<div id="search-wrapper-regular">
+    <?php if($this->getLayout()->createBlock('cms/block')->setBlockId('header-promotion')->toHtml()) :?>
+        <div style="clear:both; text-align:center; padding-bottom:5px; font-family: 'Bitter', georgia, serif; white-space:nowrap;"><?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('header-promotion')->toHtml(); ?></div>
+    <?php endif; ?>
+    <div style="clear:both; padding-bottom:5px; text-align:center; font-family: 'Bitter', georgia, serif; white-space:nowrap;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA); ?>wysiwyg/icon_phone.png" />Call Us Toll Free <a href="tel:866-674-4367">1-866-674-4367</a></div>
+    <div id="header-search" class="<?php echo $searchClasses; ?>">
+        <?php echo $this->getChildHtml('top.search'); ?>
+    </div>
+    <div style="clear:both; padding-top:5px; text-align:center; cursor:pointer; font-family: 'Bitter', georgia, serif; white-space:nowrap;"><a onclick="$zopim.livechat.window.toggle();return false;" /><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA); ?>wysiwyg/icon_bubble.png" /> Talk With A Crystal Specialist</a></div>
+</div>

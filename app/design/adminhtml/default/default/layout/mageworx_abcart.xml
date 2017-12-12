@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!--
+ /**
+ * MageWorx
+ * Abandoned Cart Recovery
+ *
+ * @category   MageWorx
+ * @package    MageWorx_AbCart
+ * @copyright  Copyright (c) 2015 MageWorx (http://www.mageworx.com/)
+ */
+-->
+<layout>
+    <adminhtml_mageworx_abcart_default>
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>css/mageworx/abcart/styles.css</name></action>
+        </reference>
+    </adminhtml_mageworx_abcart_default>
+
+    <adminhtml_dashboard_index>
+        <update handle="adminhtml_mageworx_abcart_default" />
+    </adminhtml_dashboard_index>
+
+    <adminhtml_mageworx_abcart_rule_index>
+        <reference name="content">
+            <block type="mageworx_abcart/adminhtml_alert_rule" name="alert_rule"></block>
+        </reference>
+    </adminhtml_mageworx_abcart_rule_index>
+    <adminhtml_mageworx_abcart_rule_edit>
+        <reference name="head">
+            <action method="setCanLoadExtJs"><flag>1</flag></action>
+            <action method="setCanLoadRulesJs"><flag>1</flag></action>
+        </reference>
+    </adminhtml_mageworx_abcart_rule_edit>
+
+    <adminhtml_mageworx_abcart_alert_index>
+        <reference name="content">
+            <block type="mageworx_abcart/adminhtml_alert" name="alert"></block>
+        </reference>
+    </adminhtml_mageworx_abcart_alert_index>
+    <adminhtml_mageworx_abcart_alert_log>
+        <reference name="content">
+            <block type="mageworx_abcart/adminhtml_Alert_log" name="alert_log"></block>
+        </reference>
+    </adminhtml_mageworx_abcart_alert_log>
+
+    <adminhtml_mageworx_abcart_include_highcharts>
+        <reference name="head">
+            <action method="addJs"><script>highChart/adapters/prototype-adapter.js</script></action>
+            <action method="addJs"><script>highChart/highcharts.src.js</script></action>
+            <action method="addItem"><type>skin_css</type><name>css/mageworx/abcart/jquery.snippet.css</name></action>
+        </reference>
+    </adminhtml_mageworx_abcart_include_highcharts>
+
+    <adminhtml_mageworx_abcart_report_customergroup>
+        <update handle="adminhtml_mageworx_abcart_include_highcharts" />
+        <reference name="content">
+            <block type="mageworx_abcart/adminhtml_report_group" template="report/grid/container.phtml" name="mageworx_abcart.report.grid.container">
+                <block type="adminhtml/store_switcher" template="report/store/switcher/enhanced.phtml" name="store.switcher">
+                    <action method="setStoreVarName"><var_name>store_ids</var_name></action>
+                </block>
+                <block type="mageworx_abcart/adminhtml_report_filter_form_date" name="grid.filter.form" />
+            </block>
+        </reference>
+    </adminhtml_mageworx_abcart_report_customergroup>
+    <adminhtml_mageworx_abcart_report_storeview>
+        <update handle="adminhtml_mageworx_abcart_include_highcharts" />
+        <reference name="content">
+            <block type="mageworx_abcart/adminhtml_report_storeview" template="report/grid/container.phtml" name="mageworx_abcart.report.grid.container">
+                <block type="mageworx_abcart/adminhtml_report_filter_form_date" name="grid.filter.form" />
+            </block>
+        </reference>
+    </adminhtml_mageworx_abcart_report_storeview>
+    <adminhtml_mageworx_abcart_report_device>
+        <update handle="adminhtml_mageworx_abcart_include_highcharts" />
+        <reference name="content">
+            <block type="mageworx_abcart/adminhtml_report_device" template="report/grid/container.phtml" name="mageworx_abcart.report.grid.container">
+                <block type="adminhtml/store_switcher" template="report/store/switcher/enhanced.phtml" name="store.switcher">
+                    <action method="setStoreVarName"><var_name>store_ids</var_name></action>
+                </block>
+                <block type="mageworx_abcart/adminhtml_report_filter_form_date" name="grid.filter.form" />
+            </block>
+        </reference>
+    </adminhtml_mageworx_abcart_report_device>
+    <adminhtml_mageworx_abcart_report_location>
+        <reference name="content">
+            <block type="mageworx_abcart/adminhtml_report_location" template="report/grid/container.phtml" name="mageworx_abcart.report.grid.container">
+                <block type="adminhtml/store_switcher" template="report/store/switcher/enhanced.phtml" name="store.switcher">
+                    <action method="setStoreVarName"><var_name>store_ids</var_name></action>
+                </block>
+                <block type="mageworx_abcart/adminhtml_report_filter_form_date" name="grid.filter.form" />
+            </block>
+        </reference>
+    </adminhtml_mageworx_abcart_report_location>
+    <adminhtml_mageworx_abcart_report_template>
+        <update handle="adminhtml_mageworx_abcart_include_highcharts" />
+        <reference name="content">
+            <block type="mageworx_abcart/adminhtml_report_template" template="report/grid/container.phtml" name="mageworx_abcart.report.grid.container">
+                <block type="mageworx_abcart/adminhtml_report_filter_form_date" name="grid.filter.form" />
+            </block>
+        </reference>
+    </adminhtml_mageworx_abcart_report_template>
+
+    <adminhtml_customer_edit>
+        <update handle="adminhtml_mageworx_abcart_default" />
+        <reference name="customer_edit_tab_view">
+            <block type="mageworx_abcart/adminhtml_dashboard_overview" name="customer_edit_abandoned" after="sales" />
+        </reference>
+    </adminhtml_customer_edit>
+</layout>

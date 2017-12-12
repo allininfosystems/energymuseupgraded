@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mason Web Development
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2009 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+-->
+<layout version="0.1.0">
+    <profile_adminhtml_profile_index>
+        <reference name="content">
+            <block type="profile/adminhtml_profile" name="profile" />
+        </reference>
+    </profile_adminhtml_profile_index>
+
+    <profile_adminhtml_profile_celebs>
+        <reference name="content">
+            <block type="profile/adminhtml_profile" name="profile" />
+        </reference>
+    </profile_adminhtml_profile_celebs>
+
+    <profile_adminhtml_profile_print>
+        <reference name="content">
+            <block type="profile/adminhtml_profile" name="profile" />
+        </reference>
+    </profile_adminhtml_profile_print>
+
+    <profile_adminhtml_profile_online>
+        <reference name="content">
+            <block type="profile/adminhtml_profile" name="profile" />
+        </reference>
+    </profile_adminhtml_profile_online>
+    
+    <profile_adminhtml_profile_videos>
+        <reference name="content">
+            <block type="profile/adminhtml_profile" name="profile" />
+        </reference>
+    </profile_adminhtml_profile_videos>
+
+    <profile_adminhtml_profile_edit>
+        <update handle="editor"/>
+        <reference name="content">
+            <block type="profile/adminhtml_profile_edit" name="profile_edit"></block>
+        </reference>
+        <reference name="left">
+            <block type="profile/adminhtml_profile_edit_tabs" name="profile_edit_tabs">
+                <block type="profile/adminhtml_profile_edit_tab_main" name="profile_edit_tab_main" />
+                <block type="profile/adminhtml_profile_edit_tab_meta" name="profile_edit_tab_meta" />
+                <action method="addTab"><name>main_section</name><block>profile_edit_tab_main</block></action>
+                <action method="addTab"><name>meta_section</name><block>profile_edit_tab_meta</block></action>
+            </block>
+        </reference>
+    </profile_adminhtml_profile_edit>
+    
+    <profile_cms_wysiwyg_images_index>
+        <remove name="footer" />
+        <remove name="head" />
+        <reference name="left">
+            <block name="wysiwyg_images.js" type="adminhtml/cms_wysiwyg_images_content" template="cms/browser/js.phtml" />
+            <block name="wysiwyg_images.tree" type="adminhtml/cms_wysiwyg_images_tree" template="cms/browser/tree.phtml" />
+        </reference>
+        <reference name="content">
+            <block name="wysiwyg_images.content"  type="adminhtml/cms_wysiwyg_images_content" template="cms/browser/content.phtml">
+                <block name="wysiwyg_images.uploader" type="adminhtml/cms_wysiwyg_images_content_uploader" template="cms/browser/content/uploader.phtml" />
+                <block name="wysiwyg_images.newfolder" type="adminhtml/cms_wysiwyg_images_content_newfolder" template="cms/browser/content/newfolder.phtml" />
+            </block>
+        </reference>
+    </profile_cms_wysiwyg_images_index>
+</layout>

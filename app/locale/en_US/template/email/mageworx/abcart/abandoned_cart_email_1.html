@@ -1,0 +1,44 @@
+<!--@subject Oops...Was there a problem with completing your order?  @-->
+
+
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+
+<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+<div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+    <table cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+            <td align="center" valign="top" style="padding:20px 0 20px 0">
+                <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+                    <tr>
+                        <td valign="top">
+                            <a href="{{store url=""}}"><img src="{{var logo_url}}" alt="{{var logo_alt}}" style="margin-bottom:10px;" border="0"/></a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;"">Hello, {{var cart.customer_name}}</h1>
+                            <p style="font-size:12px; line-height:16px; margin:0;">
+                                <p>Thanks for visiting {{var store.getFrontendName()}}.</p>
+                                <p>We have noticed that you did not complete your order during the last visit of our store. Just in case you were interrupted, we have
+                                saved your cart - <a href="{{var recovery_url}}">click here</a> to view it.</p>
+                                <p>In case you faced any issues with checking out or found something confusing, please contact our customer service by email at
+                                <a href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a> or by phone at <span class="nobr">{{config path='general/store_information/phone'}}</span>. We will gladly assist you and help to complete your order.</p>
+                                <p>The order details are listed below:</p>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{var cart_items}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;"><strong>IMPORTANT NOTICE:</strong> The items in your cart are not reserved! So be sure you head back to avoid any disappointment! </p></center></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>

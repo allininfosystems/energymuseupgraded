@@ -1,0 +1,25 @@
+<?php
+//get all Profiles 
+$testimonials = $this->getCelebs();
+//var_dump($testimonials);
+?>
+<style>
+.press li h4 {font-size:12px;}
+.press li {float:left; text-align:center;}
+</style>
+<h1>Celebrities</h1>
+<!--<div style="float: left; width: 150px;">-->
+<ul class="press">
+<?php foreach($testimonials as $n): ?>
+	<?php if ($n->getData("is_active")):?>
+	<?php //$newsUrl = $this->getUrl('*/*/read', array("id" => $n->getData("profile_id")));?>
+	<li>
+		<a href="<?php echo $n->getContent(); ?>"><div class="ColumnLeft" style="text-align:center; padding-bottom: 10px; padding-top: 10px;">
+			<p><img src ="<?php echo "/media/" . $n->getThumbnail(); ?>" /></p>
+			<h4><?php echo $n->getData("content_heading"); ?><!--<br /><?php //echo $this->formatDate($n->getData("creation_time"), 'long'); ?>--></h4>
+			<!--<p><?php //echo $n->getContent(); ?></p>-->
+		</div></a>
+	</li>
+	<?php endif; ?>
+<?php endforeach; ?>
+</ul>
