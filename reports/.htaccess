@@ -1,0 +1,4 @@
+#AuthName "Armpocket Reports"
+#AuthType Basic
+#AuthUserFile .htpasswd
+#require valid-user

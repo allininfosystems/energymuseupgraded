@@ -1,0 +1,27 @@
+.abcart_dashboard .content .stat_box {
+    text-align: center;
+    border: 1px #cccccc solid;
+    padding: 10px;
+    margin: 7px 11px;
+    float: left;
+    background-color: #ffffff;
+    width: 140px;
+}
+
+.abcart_dashboard .content .stat_box .value {
+    background-color: #dddddd;
+    text-align: center;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #EA7601;
+    margin-top: 10px;
+}
+
+#map_frame {
+    position: relative;
+    left: 15%;
+    border: none;
+    width: 70%;
+    height: 600px;
+}

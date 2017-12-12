@@ -1,0 +1,234 @@
+/*CSS Stylesheet*/
+
+
+@font-face {
+    font-family: ralewayXLight;
+    src: url(/crystal-test/css/Raleway-ExtraLight.otf);
+}
+
+@font-face {
+    font-family: ralewaySBold;
+    src: url(/crystal-test/css/Raleway-SemiBold.otf);
+}
+
+
+.crystal img{
+    width: 70px;
+    height: 70px;
+}
+
+a{
+    text-decoration: none;
+    color: #333333;
+    font-family: ralewayXLight;
+
+}
+.crystal-test-title{
+    font-size: 4.5rem;
+    color: #333333;
+    font-family: ralewayXLight;
+}
+
+.instructions{
+    max-width: 600px;
+    text-align: center;
+    margin: 0 auto;
+        padding: 2% 0 5% 0;
+        color: #888888;
+        font-family: ralewayXLight;
+}
+
+
+
+h2{
+    color: #333333;
+    font-family: ralewayXLight;
+        -webkit-margin-before: 0.33em;
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #333333;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.modal button{
+    background-color: #fff;
+    border:none;
+cursor: pointer;
+    padding: 10px 10px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 20px 0px;
+}
+
+#getcrystalized{
+    background-color: #fff;
+    border: 1px solid #333333;
+    color: #333333;
+    font-size: 1.5rem;
+cursor: pointer;
+    padding: 10px 10px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 20px 0px;
+  
+        font-family: ralewayXLight;
+}
+.color{
+    border: 1px solid black;
+}
+
+#reset, #shop{
+    background-color: #fff;
+    border: none;
+    color: #333333;
+    font-size: .75rem;
+cursor: pointer;
+    padding: 10px 10px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 20px 0px;
+    color: #888888;
+    font-family: ralewayXLight;
+}
+
+
+
+.center{
+    margin: 0 auto;
+    text-align: center;
+}
+
+.crystal-test-grid{
+    
+
+max-width: 720px;
+display: flex;
+display: -webkit-flex;
+flex-direction: row;
+flex-wrap: wrap;
+margin: 0 auto;
+}
+
+.crystalinfo{
+    text-align: center;
+        width: 100%;
+   padding: 4% 0;
+    /*border: 1px solid black;*/
+}
+
+.crystalinfo img {
+    width: 100px;
+    height: 100px;
+}
+
+.crystal{
+    margin: 10px;
+}
+
+.nickName{
+      color: #333333;
+    font-family: ralewayXLight;
+}
+
+.sub{
+    max-width: 700px;
+    min-width: 250px;
+      color: #888888;
+    font-family: ralewayXLight;
+}
+
+footer{
+    color: #888888;
+    font-family: ralewayXLight;
+    font-size: 10px;
+        text-align: center;
+}
+
+button.accordion {
+    background-color: #efefef;
+    color: #888;
+    margin-top: 20px;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: center;
+    font-family: ralewayXLight;
+    outline: none;
+    font-size: 18px;
+    transition: 0.4s;
+}
+
+button.accordion.active, button.accordion:hover {
+    background-color: #fff;
+}
+
+div.panel {
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+@media (min-width: 600px) {
+img {
+    width:100px;
+    height: 100px;
+}
+.crystalinfo{
+    width: 100%;
+    display: flex;
+   padding: 4% 0;
+   text-align: left;
+   justify-content: center;
+  /*  border: 1px solid black;*/
+}
+
+.crystal img{
+    width:100px;
+    height: 100px;
+}
+
+.crystalinfo img {
+    width: 200px;
+    height: 200px;
+}
+
+}
+
+
+
